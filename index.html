@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArchEngine AI | B2B Cloud Optimizer & Autonomous RFP Writer Platform</title>
+  <meta name="description" content="AI-Driven B2B Enterprise Growth Platform combining cloud infrastructure cost optimization with autonomous RFP proposal generation.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Header & Navigation -->
+  <header class="app-header">
+    <div class="logo-container">
+      <div class="logo-icon">⚡</div>
+      <div class="logo-text">
+        <h1>ArchEngine AI</h1>
+        <span>B2B Growth & Multi-Agent Intelligence</span>
+      </div>
+    </div>
+
+    <nav class="nav-tabs">
+      <button class="nav-tab active" data-tab="dashboard">
+        📊 Overview
+      </button>
+      <button class="nav-tab" data-tab="optimizer">
+        ☁️ Stack Optimizer
+      </button>
+      <button class="nav-tab" data-tab="proposals">
+        📝 Proposal Writer
+      </button>
+      <button class="nav-tab" data-tab="matrix">
+        ⚡ Scraper Matrix
+      </button>
+    </nav>
+
+    <div class="header-status">
+      <div class="privacy-badge">
+        <span>🔒 Zero Retention / AES-256</span>
+      </div>
+      <div class="agent-status-badge">
+        <span class="pulse-dot"></span>
+        <span>3 Agents Active</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="app-container">
+
+    <!-- Unified Multi-Agent Synergy Banner -->
+    <section class="synergy-banner">
+      <div class="synergy-header">
+        <div class="synergy-title">
+          <span style="font-size: 1.5rem;">💡</span>
+          <div>
+            <h3>The Unified Vision: "Optimize your infrastructure, win more bids."</h3>
+            <p style="font-size: 0.825rem; color: var(--text-muted);">
+              Concept 1 (Cloud & Tech Stack Optimizer) powers Concept 2 (Autonomous RFP Writer) with real-time financial blueprints and technical quotes.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="synergy-steps">
+        <div class="synergy-step-card">
+          <div class="step-num">1</div>
+          <div class="step-info">
+            <h4>Agent 1: Ingest & Scrape</h4>
+            <p>Crawls live pricing rates, rate limits, and SLAs across AWS, GCP, Azure, Snowflake & Cloudflare.</p>
+          </div>
+        </div>
+
+        <div class="synergy-step-card">
+          <div class="step-num">2</div>
+          <div class="step-info">
+            <h4>Agent 2: Cost Simulator</h4>
+            <p>Runs stress tests against client workload specs & RFP constraints to generate dynamic cost blueprints.</p>
+          </div>
+        </div>
+
+        <div class="synergy-step-card">
+          <div class="step-num">3</div>
+          <div class="step-info">
+            <h4>Agent 3: Proposal Writer</h4>
+            <p>Queries RAG past winning bids & drops a complete, technical proposal directly into owner draft review queue.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 1: OVERVIEW DASHBOARD -->
+    <section id="tab-dashboard" class="tab-content active">
+      <div class="metrics-grid">
+        <div class="card">
+          <div class="metric-header">
+            <span>Est. Cloud Savings Identified</span>
+            <span>💰</span>
+          </div>
+          <div class="metric-value" id="metric-savings">$184,200</div>
+          <div class="metric-subtext">
+            <span>▲ +38.4% vs On-Demand AWS</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="metric-header">
+            <span>Active RFP Proposals Drafted</span>
+            <span>📝</span>
+          </div>
+          <div class="metric-value" id="metric-rfps">14</div>
+          <div class="metric-subtext">
+            <span>▲ 2 ready for final review</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="metric-header">
+            <span>Historical Proposal Win Rate</span>
+            <span>🎯</span>
+          </div>
+          <div class="metric-value">94.2%</div>
+          <div class="metric-subtext">
+            <span>Based on 32 historical bids</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="metric-header">
+            <span>Proposal Turnaround Time</span>
+            <span>⚡</span>
+          </div>
+          <div class="metric-value">4.2 min</div>
+          <div class="metric-subtext">
+            <span>Down from 18.5 hours manual</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action Controls & Overview Charts -->
+      <div class="content-grid-2">
+        <div class="chart-card">
+          <div class="section-title">☁️ Multi-Cloud Price Benchmark Simulation</div>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">
+            Real-time monthly projected spend comparison for typical SaaS workload (150k MAU, 850GB DB, 2.5TB Egress)
+          </p>
+          <div class="bar-chart-container" id="overview-bar-chart">
+            <!-- Dynamic SVG Bars Rendered via JS -->
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-title">🚀 Quick Actions</div>
+          <div class="preset-pills">
+            <div class="preset-pill" onclick="window.app.switchToOptimizerPreset('preset_saas_scaleup')">
+              <div class="preset-title">⚡ Optimize High-Traffic SaaS System Logs</div>
+              <div class="preset-desc">Ingest logs & compare AWS vs GCP vs Cloudflare edge architecture.</div>
+            </div>
+            <div class="preset-pill" onclick="window.app.switchToRfpPreset('rfp_fintech_migration')">
+              <div class="preset-title">📝 Respond to FinTech Gateway RFP Bid</div>
+              <div class="preset-desc">Auto-extract requirements & generate proposal with dynamic AWS/GCP blueprint.</div>
+            </div>
+            <div class="preset-pill" onclick="window.app.switchToRfpPreset('rfp_healthcare_datalake')">
+              <div class="preset-title">🏥 Respond to Healthcare Data Lake RFP</div>
+              <div class="preset-desc">Match HIPAA RAG knowledge base & generate Snowflake vs BigQuery quote.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: CLOUD & TECH STACK OPTIMIZER -->
+    <section id="tab-optimizer" class="tab-content">
+      <div class="content-grid-2">
+        
+        <!-- Controls & Metrics Input -->
+        <div class="card">
+          <div class="section-title">📥 1. Ingest System Logs & Set Traffic Metrics</div>
+          
+          <div class="preset-pills">
+            <div class="preset-title" style="margin-bottom: 0.5rem; font-size: 0.85rem;">Select Telemetry Sample Preset:</div>
+            <div id="log-preset-list"></div>
+          </div>
+
+          <div style="margin-top: 1.5rem;">
+            <div class="section-title" style="font-size: 0.95rem;">⚙️ Agent 2 Traffic Simulator Controls</div>
+            
+            <div class="slider-group">
+              <div class="slider-label">
+                <span>Monthly Active Users (MAU)</span>
+                <span class="slider-val" id="val-mau">150,000</span>
+              </div>
+              <input type="range" id="input-mau" min="10000" max="2000000" step="10000" value="150000">
+            </div>
+
+            <div class="slider-group">
+              <div class="slider-label">
+                <span>Peak Requests / Sec (RPS)</span>
+                <span class="slider-val" id="val-rps">200</span>
+              </div>
+              <input type="range" id="input-rps" min="50" max="3000" step="50" value="200">
+            </div>
+
+            <div class="slider-group">
+              <div class="slider-label">
+                <span>Database Size (GB)</span>
+                <span class="slider-val" id="val-db">850 GB</span>
+              </div>
+              <input type="range" id="input-db" min="50" max="10000" step="50" value="850">
+            </div>
+
+            <div class="slider-group">
+              <div class="slider-label">
+                <span>Monthly Network Egress (TB)</span>
+                <span class="slider-val" id="val-egress">2.5 TB</span>
+              </div>
+              <input type="range" id="input-egress" min="0.5" max="50" step="0.5" value="2.5">
+            </div>
+
+            <button class="btn-primary" id="btn-run-simulation">
+              🚀 Run Multi-Agent Optimization Simulation
+            </button>
+          </div>
+        </div>
+
+        <!-- Simulation Output & Provider Cost Breakdown -->
+        <div class="card">
+          <div class="section-title">📊 2. Side-by-Side Cloud Cost Blueprint</div>
+          <div id="simulation-output-list" class="provider-comparison-list">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 3: AUTONOMOUS RFP & PROPOSAL WRITER -->
+    <section id="tab-proposals" class="tab-content">
+      <div class="content-grid-2">
+
+        <!-- RFP Document Selector & Raw View -->
+        <div class="card">
+          <div class="section-title">📩 1. Incoming RFP Document Inbox</div>
+          <div class="preset-pills" id="rfp-document-list">
+            <!-- Rendered by JS -->
+          </div>
+
+          <div style="margin-top: 1.5rem;">
+            <div class="section-title" style="font-size: 0.95rem;">📄 RFP Requirement Scope Extracted</div>
+            <div id="rfp-extracted-details" style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-glass); font-size: 0.85rem; color: var(--text-muted);">
+              Select an RFP to view extracted technical parameters.
+            </div>
+
+            <button class="btn-primary" id="btn-generate-proposal" style="margin-top: 1.25rem;">
+              ✨ Generate Technical Proposal Draft (Agent 3)
+            </button>
+          </div>
+        </div>
+
+        <!-- Proposal Preview Card -->
+        <div class="card">
+          <div class="section-title">📄 2. Generated Technical Proposal Draft</div>
+          <div id="proposal-preview-area" style="min-height: 250px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: var(--text-muted);">
+            <p>Click "Generate Technical Proposal Draft" to execute Agent 3.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 4: SCRAPER BENCHMARK MATRIX -->
+    <section id="tab-matrix" class="tab-content">
+      <div class="card">
+        <div class="section-title" style="justify-content: space-between;">
+          <span>🕷️ Agent 1: Live Cloud Provider Rate Limits & SLA Matrix</span>
+          <button class="btn-secondary" id="btn-trigger-crawl">🔄 Refresh Crawl Data</button>
+        </div>
+        
+        <div style="overflow-x: auto; margin-top: 1rem;">
+          <table class="proposal-table" id="matrix-table">
+            <thead>
+              <tr>
+                <th>Provider</th>
+                <th>Compute Sample Rate</th>
+                <th>Database Sample Rate</th>
+                <th>Storage Rate / GB</th>
+                <th>Egress Rate / GB</th>
+                <th>API Rate Limit</th>
+                <th>SLA Uptime</th>
+                <th>1-Yr Commitment Discount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- AI & DATA PROTECTION GOVERNANCE DISCLAIMER -->
+    <div class="disclaimer-banner" style="margin-top: 2rem;">
+      <span style="font-size: 1.1rem;">⚠️</span>
+      <div>
+        <strong>AI Generation & Data Protection Notice:</strong>
+        All proposal drafts and multi-cloud simulations are generated autonomously by ArchEngine AI for decision support. Outputs must be verified by a licensed solutions architect prior to formal submission. Ingested system telemetry logs and bid documents are encrypted using AES-256 / TLS 1.3 under a strict Zero-Data Retention policy and are never used for model training.
+      </div>
+    </div>
+
+    <!-- LIVE MULTI-AGENT LOG TERMINAL (PERSISTENT ON ALL TABS) -->
+    <div class="agent-terminal">
+      <div class="terminal-header">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div class="terminal-controls">
+            <span class="term-dot red"></span>
+            <span class="term-dot yellow"></span>
+            <span class="term-dot green"></span>
+          </div>
+          <span style="font-weight: 600;">Multi-Agent Orchestration Logs</span>
+        </div>
+        <span id="agent-active-badge">AGENT 1 & 2 & 3 DISPATCHER READY</span>
+      </div>
+      <div class="terminal-body" id="terminal-log-output">
+        <div class="log-entry">[SYSTEM] Multi-Agent Engine initialized. Standing by for logs or RFP inputs...</div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- APP FOOTER WITH LEGAL & COMPLIANCE CLAUSES -->
+  <footer class="app-footer">
+    <div>
+      © 2026 ArchEngine AI Platform. Enterprise Growth & Multi-Cloud Optimization Engine.
+    </div>
+    <div style="display: flex; gap: 1.5rem;">
+      <span>🔒 SOC2 Type II Certified Sandbox</span>
+      <span>🛡️ HIPAA BAA Compliant</span>
+      <span>⚖️ AI Governance & Human-in-the-Loop Policy</span>
+    </div>
+  </footer>
+
+  <!-- MODAL FOR FULL PROPOSAL REVIEW & EXPORT -->
+  <div class="modal-backdrop" id="proposal-modal">
+    <div class="modal-paper">
+      <div class="modal-header">
+        <h2 id="modal-title">Proposal Draft Review</h2>
+        <div style="display: flex; gap: 0.5rem;">
+          <button class="btn-secondary" onclick="window.app.exportProposalHTML()">📥 Export HTML / Print PDF</button>
+          <button class="btn-secondary" onclick="window.app.closeModal()">✕ Close</button>
+        </div>
+      </div>
+      <div class="modal-body" id="modal-content">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript App Controller & Engines -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

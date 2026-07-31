@@ -1,0 +1,13 @@
+# Node & Dependencies
+node_modules/
+npm-debug.log*
+
+# Python & Temporary Files
+__pycache__/
+*.pyc
+
+# Environment & System Files
+.DS_Store
+.env
+.idea/
+.vscode/
