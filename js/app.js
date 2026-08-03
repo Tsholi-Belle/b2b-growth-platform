@@ -5,12 +5,14 @@ import { CLOUD_PROVIDERS } from './data/cloudPricingData.js';
 import { ScraperAgent } from './engine/scraperAgent.js';
 import { SimulatorAgent } from './engine/simulatorAgent.js';
 import { ProposalAgent } from './engine/proposalAgent.js';
+import { ImpactEngine } from './engine/impactEngine.js';
 
 class AppController {
   constructor() {
     this.scraper = new ScraperAgent();
     this.simulator = new SimulatorAgent();
     this.proposalAgent = new ProposalAgent();
+    this.impactEngine = new ImpactEngine();
 
     this.currentPreset = SAMPLE_LOG_PRESETS[0];
     this.currentRfp = SAMPLE_RFPS[0];
@@ -30,6 +32,7 @@ class AppController {
     this.renderLogPresets();
     this.renderRfpList();
     this.renderScraperMatrix();
+    this.renderPillar2ImpactTable();
     
     // Run initial crawl and simulation
     await this.scraper.runCrawl();
@@ -322,6 +325,26 @@ class AppController {
         </tr>
       `;
     }).join('');
+  }
+
+  renderPillar2ImpactTable() {
+    const tbody = document.getElementById('pillar2-impact-table');
+    if (!tbody) return;
+
+    const data = this.impactEngine.getImpactMetrics();
+
+    tbody.innerHTML = data.historicalVerificationTelemetry.map(t => `
+      <tr>
+        <td><strong>${t.clientName}</strong></td>
+        <td>${t.migrationDate}</td>
+        <td>$${t.predictedAnnualSavings.toLocaleString()}/yr</td>
+        <td>$${t.actual30DaySavings.toLocaleString()}</td>
+        <td>$${t.actual60DaySavings.toLocaleString()}</td>
+        <td>$${t.actual90DaySavings.toLocaleString()}</td>
+        <td><strong style="color: var(--accent-emerald);">$${t.projectedActualAnnualSavings.toLocaleString()}/yr</strong></td>
+        <td><span class="tag-badge" style="background: rgba(16,185,129,0.15); color: var(--accent-emerald);">${t.verificationStatus} (${t.accuracyScore})</span></td>
+      </tr>
+    `).join('');
   }
 
   appendTerminalLogs(logArray, agentType = 'system') {
