@@ -35,6 +35,9 @@
       <button class="nav-tab" data-tab="matrix">
         ⚡ Scraper Matrix
       </button>
+      <button class="nav-tab" data-tab="connectors">
+        🔌 Connectors (Pillar 3)
+      </button>
     </nav>
 
     <div class="header-status">
@@ -337,6 +340,73 @@
             </tbody>
           </table>
         </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: ENTERPRISE LIVE CONNECTORS (PILLAR 3) -->
+    <section id="tab-connectors" class="tab-content">
+      <div class="content-grid-2">
+        
+        <!-- Live Cloud IAM Connectors -->
+        <div class="card">
+          <div class="section-title">☁️ Live Cloud Read-Only Telemetry APIs</div>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">
+            Direct IAM read-only connections replacing manual log uploads. Pulls live vCPU, RAM, storage, and egress metrics.
+          </p>
+
+          <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-glass);">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <strong style="color: #FF9900;">AWS CloudWatch & Cost Explorer API</strong>
+                  <div style="font-size: 0.78rem; color: var(--text-muted);">IAM Role: arn:aws:iam::123456789012:role/ArchEngineReadOnly</div>
+                </div>
+                <button class="btn-secondary" onclick="window.app.triggerAWSConnect()">⚡ Sync AWS Telemetry</button>
+              </div>
+            </div>
+
+            <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-glass);">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <strong style="color: #4285F4;">GCP Stackdriver & Billing API</strong>
+                  <div style="font-size: 0.78rem; color: var(--text-muted);">Project ID: biohealth-prod-data-lake</div>
+                </div>
+                <button class="btn-secondary" onclick="window.app.triggerGCPConnect()">⚡ Sync GCP Metrics</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live RFP Portal & Email Webhook Listeners -->
+        <div class="card">
+          <div class="section-title">📩 Public Bid Portals & Draft Push Connectors</div>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">
+            Monitors incoming email inboxes and public government bid portals (SAM.gov API).
+          </p>
+
+          <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-glass);">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <strong>SAM.gov Public Bid API & Gmail Inbox Listener</strong>
+                  <div style="font-size: 0.78rem; color: var(--accent-emerald);">Status: ACTIVE LISTENING (Polled every 5 min)</div>
+                </div>
+                <button class="btn-secondary" onclick="window.app.triggerSAMPoll()">🔍 Poll Portal Now</button>
+              </div>
+            </div>
+
+            <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-glass);">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <strong>1-Click Workspace Auto-Push</strong>
+                  <div style="font-size: 0.78rem; color: var(--text-muted);">Destination: Google Workspace / Office 365 Drafts</div>
+                </div>
+                <button class="btn-secondary" onclick="window.app.triggerDraftPush()">📤 Test Draft Push</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
 

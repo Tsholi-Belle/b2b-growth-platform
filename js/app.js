@@ -6,6 +6,7 @@ import { ScraperAgent } from './engine/scraperAgent.js';
 import { SimulatorAgent } from './engine/simulatorAgent.js';
 import { ProposalAgent } from './engine/proposalAgent.js';
 import { ImpactEngine } from './engine/impactEngine.js';
+import { EnterpriseIntegrationsEngine } from './engine/enterpriseIntegrations.js';
 
 class AppController {
   constructor() {
@@ -13,6 +14,7 @@ class AppController {
     this.simulator = new SimulatorAgent();
     this.proposalAgent = new ProposalAgent();
     this.impactEngine = new ImpactEngine();
+    this.enterpriseIntegrations = new EnterpriseIntegrationsEngine();
 
     this.currentPreset = SAMPLE_LOG_PRESETS[0];
     this.currentRfp = SAMPLE_RFPS[0];
@@ -496,6 +498,31 @@ class AppController {
   switchToRfpPreset(rfpId) {
     document.querySelectorAll('.nav-tab')[2].click();
     this.selectRfp(rfpId);
+  }
+
+  async triggerAWSConnect() {
+    const res = await this.enterpriseIntegrations.connectAWSAccount();
+    this.appendTerminalLogs(res.logs, 'scraper');
+    alert("AWS CloudWatch IAM session established! Ingested live telemetry.");
+  }
+
+  async triggerGCPConnect() {
+    const res = await this.enterpriseIntegrations.connectGCPProject();
+    this.appendTerminalLogs(res.logs, 'scraper');
+    alert("GCP Stackdriver API synced! Ingested live metrics.");
+  }
+
+  async triggerSAMPoll() {
+    const res = await this.enterpriseIntegrations.pollSAMGovPortal();
+    this.appendTerminalLogs(res.logs, 'proposal');
+    alert(`SAM.gov Bid Listener Polled! Detected: "${res.bids[0].title}"`);
+  }
+
+  async triggerDraftPush() {
+    const dummyProposal = this.latestProposal || { proposalId: 'PROP-2026-9041' };
+    const res = await this.enterpriseIntegrations.pushDraftToEnterpriseWorkspace(dummyProposal);
+    this.appendTerminalLogs(res.logs, 'proposal');
+    alert(`Proposal draft ${dummyProposal.proposalId} pushed to Google Workspace / Office 365!`);
   }
 }
 
