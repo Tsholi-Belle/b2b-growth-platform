@@ -7,6 +7,7 @@ import { SimulatorAgent } from './engine/simulatorAgent.js';
 import { ProposalAgent } from './engine/proposalAgent.js';
 import { ImpactEngine } from './engine/impactEngine.js';
 import { EnterpriseIntegrationsEngine } from './engine/enterpriseIntegrations.js';
+import { SensitivityEngine } from './engine/sensitivityEngine.js';
 
 class AppController {
   constructor() {
@@ -15,6 +16,7 @@ class AppController {
     this.proposalAgent = new ProposalAgent();
     this.impactEngine = new ImpactEngine();
     this.enterpriseIntegrations = new EnterpriseIntegrationsEngine();
+    this.sensitivityEngine = new SensitivityEngine();
 
     this.currentPreset = SAMPLE_LOG_PRESETS[0];
     this.currentRfp = SAMPLE_RFPS[0];
@@ -523,6 +525,35 @@ class AppController {
     const res = await this.enterpriseIntegrations.pushDraftToEnterpriseWorkspace(dummyProposal);
     this.appendTerminalLogs(res.logs, 'proposal');
     alert(`Proposal draft ${dummyProposal.proposalId} pushed to Google Workspace / Office 365!`);
+  }
+
+  runMonteCarloTest() {
+    const recCost = (this.latestSimulation && this.latestSimulation.recommendedProvider) 
+      ? this.latestSimulation.recommendedProvider.monthlyReserved 
+      : 1480;
+
+    const res = this.sensitivityEngine.runMonteCarloSimulation({ baseMonthlyCost: recCost, iterations: 1000 });
+    this.appendTerminalLogs(res.logs, 'simulator');
+
+    const container = document.getElementById('pillar5-monte-carlo-results');
+    if (container) {
+      container.innerHTML = `
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; text-align: center;">
+          <div style="background: rgba(255,255,255,0.03); padding: 0.5rem; border-radius: 4px;">
+            <div style="font-size: 0.7rem; color: var(--text-muted);">P50 MEDIAN SPEND</div>
+            <div style="font-size: 1.05rem; font-weight: 800; color: var(--text-main);">$${res.medianCost}/mo</div>
+          </div>
+          <div style="background: rgba(245,158,11,0.08); padding: 0.5rem; border-radius: 4px; border: 1px solid rgba(245,158,11,0.2);">
+            <div style="font-size: 0.7rem; color: var(--accent-amber);">P95 RISK LIMIT</div>
+            <div style="font-size: 1.05rem; font-weight: 800; color: var(--accent-amber);">$${res.p95Cost}/mo</div>
+          </div>
+          <div style="background: rgba(244,63,94,0.08); padding: 0.5rem; border-radius: 4px; border: 1px solid rgba(244,63,94,0.2);">
+            <div style="font-size: 0.7rem; color: var(--accent-rose);">WORST-CASE SPIKE</div>
+            <div style="font-size: 1.05rem; font-weight: 800; color: var(--accent-rose);">$${res.worstCaseCost}/mo</div>
+          </div>
+        </div>
+      `;
+    }
   }
 }
 

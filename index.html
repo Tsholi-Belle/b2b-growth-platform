@@ -274,6 +274,17 @@
           <div id="simulation-output-list" class="provider-comparison-list">
             <!-- Rendered by JS -->
           </div>
+
+          <!-- PILLAR 5: MONTE CARLO SENSITIVITY RISK ANALYSIS -->
+          <div style="margin-top: 1.5rem; background: rgba(0,0,0,0.3); padding: 1.1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-glass);">
+            <div class="section-title" style="font-size: 0.9rem; justify-content: space-between;">
+              <span>🎲 Pillar 5: Monte Carlo Risk Simulation (1,000 Scenarios)</span>
+              <button class="btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;" onclick="window.app.runMonteCarloTest()">🎲 Stress Test 1,000 Loads</button>
+            </div>
+            <div id="pillar5-monte-carlo-results" style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">
+              Click "Stress Test 1,000 Loads" to run stochastic Monte Carlo traffic simulations.
+            </div>
+          </div>
         </div>
 
       </div>
