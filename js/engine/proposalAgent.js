@@ -1,11 +1,13 @@
 // AGENT 3: RAG Retrieval & Autonomous Proposal Writer Engine
 import { PAST_WINNING_PROPOSALS } from '../data/pastWinningProposals.js';
 import { SimulatorAgent } from './simulatorAgent.js';
+import { AuditorAgent } from './auditorAgent.js';
 
 export class ProposalAgent {
   constructor() {
     this.name = "Agent 3 (The Proposal Writer)";
     this.simulator = new SimulatorAgent();
+    this.auditor = new AuditorAgent();
   }
 
   async generateProposal(rfpDocument) {
@@ -99,11 +101,16 @@ export class ProposalAgent {
       }
     };
 
-    logs.push(`[${new Date().toISOString()}] [Agent 3: Proposal Writer] Proposal draft successfully generated with compliance disclaimers and dropped into owner review queue.`);
+    // Step 4: Closed-Loop Audit & Self-Correction by Agent 4
+    logs.push(`[${new Date().toISOString()}] [Agent 3: Proposal Writer] Passing draft to Agent 4 (The Auditor & Critic) for closed-loop validation...`);
+    
+    const auditRes = await this.auditor.auditProposal(fullProposalDraft, rfpDocument);
+    logs.push(...auditRes.logs);
 
     return {
       success: true,
-      proposal: fullProposalDraft,
+      proposal: auditRes.auditedProposal,
+      auditReport: auditRes.auditReport,
       logs
     };
   }

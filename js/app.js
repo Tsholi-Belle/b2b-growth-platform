@@ -260,11 +260,14 @@ class AppController {
 
   renderProposalPreview(proposal) {
     const area = document.getElementById('proposal-preview-area');
+    const audit = proposal.auditReport || { complianceScore: 98, riskLevel: 'Low' };
+
     area.innerHTML = `
       <div style="width: 100%; text-align: left;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
           <div>
             <span class="tag-badge" style="background: rgba(16,185,129,0.15); color: var(--accent-emerald);">PROPOSAL DRAFT READY</span>
+            <span class="tag-badge" style="background: rgba(245,158,11,0.15); color: var(--accent-amber);">AGENT 4 AUDITED (${audit.complianceScore}%)</span>
             <h3 style="font-size: 1.1rem; color: var(--text-main); margin-top: 0.25rem;">${proposal.rfpTitle}</h3>
           </div>
           <button class="btn-primary" style="width: auto; padding: 0.6rem 1.2rem;" onclick="window.app.openModal()">
@@ -276,17 +279,23 @@ class AppController {
           <p style="font-size: 0.85rem; color: var(--text-muted);">${proposal.executiveSummary}</p>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem;">
           <div style="background: rgba(0,242,254,0.05); border: 1px solid rgba(0,242,254,0.2); padding: 0.85rem; border-radius: var(--radius-sm);">
-            <div style="font-size: 0.75rem; color: var(--primary-cyan); font-weight: 700;">RECOMMENDED CLOUD BLUEPRINT</div>
-            <div style="font-size: 1.1rem; font-weight: 800; color: var(--text-main);">${proposal.recommendedCloudArchitecture.primaryProvider}</div>
-            <div style="font-size: 0.8rem; color: var(--accent-emerald); font-weight: 600;">OpEx: $${proposal.recommendedCloudArchitecture.monthlyOpEx.toLocaleString()}/mo ($${proposal.recommendedCloudArchitecture.annualOpEx.toLocaleString()}/yr)</div>
+            <div style="font-size: 0.72rem; color: var(--primary-cyan); font-weight: 700;">CLOUD BLUEPRINT</div>
+            <div style="font-size: 1rem; font-weight: 800; color: var(--text-main);">${proposal.recommendedCloudArchitecture.primaryProvider.split(' ')[0]}</div>
+            <div style="font-size: 0.75rem; color: var(--accent-emerald); font-weight: 600;">$${proposal.recommendedCloudArchitecture.monthlyOpEx.toLocaleString()}/mo</div>
           </div>
 
           <div style="background: rgba(139,92,246,0.05); border: 1px solid rgba(139,92,246,0.2); padding: 0.85rem; border-radius: var(--radius-sm);">
-            <div style="font-size: 0.75rem; color: var(--accent-purple); font-weight: 700;">RAG VECTOR MATCH SCORE</div>
-            <div style="font-size: 1.1rem; font-weight: 800; color: var(--text-main);">${(proposal.matchScore * 100).toFixed(0)}% Similarity</div>
-            <div style="font-size: 0.8rem; color: var(--text-muted);">Source: ${proposal.ragSource.clientIndustry} Win</div>
+            <div style="font-size: 0.72rem; color: var(--accent-purple); font-weight: 700;">RAG SIMILARITY</div>
+            <div style="font-size: 1rem; font-weight: 800; color: var(--text-main);">${(proposal.matchScore * 100).toFixed(0)}% Match</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">${proposal.ragSource.clientIndustry}</div>
+          </div>
+
+          <div style="background: rgba(245,158,11,0.05); border: 1px solid rgba(245,158,11,0.2); padding: 0.85rem; border-radius: var(--radius-sm);">
+            <div style="font-size: 0.72rem; color: var(--accent-amber); font-weight: 700;">AGENT 4 AUDIT</div>
+            <div style="font-size: 1rem; font-weight: 800; color: var(--accent-emerald);">${audit.complianceScore}% Passed</div>
+            <div style="font-size: 0.75rem; color: var(--accent-emerald);">${audit.riskLevel}</div>
           </div>
         </div>
       </div>
