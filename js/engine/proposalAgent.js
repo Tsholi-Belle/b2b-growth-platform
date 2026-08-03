@@ -2,12 +2,14 @@
 import { PAST_WINNING_PROPOSALS } from '../data/pastWinningProposals.js';
 import { SimulatorAgent } from './simulatorAgent.js';
 import { AuditorAgent } from './auditorAgent.js';
+import { TeamingEngine } from './teamingEngine.js';
 
 export class ProposalAgent {
   constructor() {
     this.name = "Agent 3 (The Proposal Writer)";
     this.simulator = new SimulatorAgent();
     this.auditor = new AuditorAgent();
+    this.teaming = new TeamingEngine();
   }
 
   async generateProposal(rfpDocument) {
@@ -56,6 +58,11 @@ export class ProposalAgent {
     const bestMatch = matchedProposals[0];
     logs.push(`[${new Date().toISOString()}] [Agent 3: Proposal Writer] RAG match selected: ${bestMatch.clientIndustry} proposal (Match Score: ${(bestMatch.matchScore * 100).toFixed(0)}%)`);
 
+    // Step 2.5: Pillar 4 Subcontractor & Vendor Teaming Procurement
+    logs.push(`[${new Date().toISOString()}] [Agent 3: Proposal Writer] Triggering Pillar 4 (Subcontractor Teaming Engine)...`);
+    const teamingRes = this.teaming.procureSubcontractorQuotes(rfpDocument);
+    logs.push(...teamingRes.logs);
+
     // Step 3: Synthesize Complete Proposal Blueprint
     const recProvider = simulation.recommendedProvider;
 
@@ -67,6 +74,7 @@ export class ProposalAgent {
       budgetRange: rfpDocument.budgetRange,
       matchScore: bestMatch.matchScore,
       ragSource: bestMatch,
+      subcontractorTeaming: teamingRes,
 
       executiveSummary: `We are pleased to present this comprehensive technical and financial proposal for ${rfpDocument.issuingOrganization}. Leveraging our battle-tested multi-cloud deployment methodology, our solution modernizes your core infrastructure to support up to ${specs.expectedMAU.toLocaleString()} Monthly Active Users while guaranteeing strict ${rfpDocument.complianceRequirements ? rfpDocument.complianceRequirements.join(', ') : 'SOC2/HIPAA'} compliance.`,
 
