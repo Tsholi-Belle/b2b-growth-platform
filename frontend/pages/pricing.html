@@ -4,142 +4,229 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pricing | ArchEngine AI</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
+        * { box-sizing: border-box; }
         body {
             margin: 0; font-family: 'Plus Jakarta Sans', sans-serif;
             background: #0a0f1e; color: #e2e8f0;
         }
-        header { padding: 2rem 5%; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 1.5rem; font-weight: 700; color: #fff; }
-        .hero { text-align: center; padding: 4rem 1rem; }
-        .hero h1 { font-size: 3rem; color: #fff; margin-bottom: 1rem; }
-        .hero p { font-size: 1.2rem; color: #8892b0; max-width: 600px; margin: 0 auto 2rem; }
+        header { padding: 1.5rem 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .logo { font-size: 1.5rem; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 0.5rem; }
+        .logo span { color: #00d4ff; }
+        .header-nav { display: flex; align-items: center; gap: 1.5rem; }
         
-        .toggle-container { display: flex; justify-content: center; align-items: center; gap: 1rem; margin-bottom: 3rem; }
-        .toggle-label { font-weight: 600; }
-        .discount-badge { background: rgba(0, 212, 255, 0.1); color: #00d4ff; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem; }
+        .hero { text-align: center; padding: 3.5rem 1rem 2rem; }
+        .hero h1 { font-size: 3rem; color: #fff; margin-bottom: 0.75rem; font-weight: 800; }
+        .hero p { font-size: 1.15rem; color: #8892b0; max-width: 620px; margin: 0 auto 2.5rem; }
         
+        /* Modern Switch & Controls */
+        .controls-row { display: flex; flex-direction: column; align-items: center; gap: 1.25rem; margin-bottom: 3rem; }
+        
+        .currency-selector {
+            display: flex; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 30px; padding: 4px; gap: 4px;
+        }
+        .curr-btn {
+            background: transparent; border: none; color: #8892b0; padding: 0.4rem 1.2rem;
+            border-radius: 20px; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: all 0.2s;
+        }
+        .curr-btn.active { background: #00d4ff; color: #0a0f1e; }
+
+        .toggle-wrapper { display: flex; align-items: center; gap: 1rem; }
+        .toggle-label { font-weight: 700; font-size: 0.95rem; color: #8892b0; transition: color 0.2s; }
+        .toggle-label.active { color: #fff; }
+        
+        /* Custom Switch */
+        .switch { position: relative; display: inline-block; width: 56px; height: 30px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(255,255,255,0.1); transition: .3s; border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+        .slider:before {
+            position: absolute; content: ""; height: 22px; width: 22px; left: 3px; bottom: 3px;
+            background-color: #00d4ff; transition: .3s; border-radius: 50%;
+        }
+        input:checked + .slider { background-color: rgba(0, 212, 255, 0.2); border-color: #00d4ff; }
+        input:checked + .slider:before { transform: translateX(26px); }
+
+        .discount-badge {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(124, 58, 237, 0.2));
+            color: #00d4ff; border: 1px solid rgba(0, 212, 255, 0.4);
+            padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.75rem; font-weight: 700; margin-left: 0.4rem;
+        }
+        
+        /* Pricing Cards */
         .pricing-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
             gap: 2rem; max-width: 1200px; margin: 0 auto; padding: 0 5%;
         }
         .pricing-card {
-            background: rgba(15, 22, 43, 0.6); backdrop-filter: blur(12px);
-            border: 1px solid rgba(255,255,255,0.05); border-radius: 16px;
+            background: rgba(15, 22, 43, 0.7); backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,0.08); border-radius: 20px;
             padding: 2.5rem 2rem; display: flex; flex-direction: column;
-            position: relative;
+            position: relative; transition: transform 0.2s, border-color 0.2s;
         }
+        .pricing-card:hover { transform: translateY(-4px); border-color: rgba(0,212,255,0.3); }
+        
         .popular-badge {
-            position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
-            background: #00d4ff; color: #0a0f1e; padding: 0.25rem 1rem;
-            border-radius: 20px; font-weight: 700; font-size: 0.8rem;
+            position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(90deg, #00d4ff, #7c3aed); color: #fff; padding: 0.3rem 1.2rem;
+            border-radius: 20px; font-weight: 800; font-size: 0.78rem; letter-spacing: 0.05em; text-transform: uppercase;
         }
-        .pricing-card.popular { border-color: #00d4ff; box-shadow: 0 8px 32px rgba(0,212,255,0.1); }
-        .plan-name { font-size: 1.25rem; font-weight: 700; color: #fff; margin-bottom: 1rem; }
-        .plan-price { font-size: 3rem; font-weight: 700; color: #00d4ff; margin-bottom: 0.5rem; }
-        .price-period { font-size: 1rem; color: #8892b0; font-weight: 400; }
+        .pricing-card.popular { border-color: #00d4ff; box-shadow: 0 12px 40px rgba(0,212,255,0.15); }
+        
+        .plan-name { font-size: 1.35rem; font-weight: 800; color: #fff; margin-bottom: 0.75rem; }
+        .price-container { margin-bottom: 0.5rem; min-height: 70px; }
+        .original-price { text-decoration: line-through; opacity: 0.4; font-size: 1.4rem; font-weight: 600; color: #8892b0; margin-right: 0.4rem; }
+        .plan-price { font-size: 2.8rem; font-weight: 800; color: #00d4ff; display: inline-block; }
+        .price-period { font-size: 1rem; color: #8892b0; font-weight: 500; }
+        .billing-note { font-size: 0.8rem; color: #00d4ff; margin-top: 0.2rem; font-weight: 600; }
+        .billing-note.monthly { color: #8892b0; font-weight: 400; }
+
         .feature-list { list-style: none; padding: 0; margin: 2rem 0; flex-grow: 1; }
-        .feature-list li { margin-bottom: 1rem; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem; }
-        .feature-list li.cross { opacity: 0.5; }
+        .feature-list li { margin-bottom: 0.9rem; font-size: 0.92rem; display: flex; align-items: center; gap: 0.6rem; color: #cbd5e1; }
+        .feature-list li.cross { opacity: 0.4; text-decoration: line-through; }
+        
         .btn {
-            background: #00d4ff; color: #0a0f1e; border: none; padding: 1rem;
-            border-radius: 8px; font-weight: 700; cursor: pointer; text-align: center;
-            text-decoration: none; display: inline-block; transition: background 0.2s;
+            background: #00d4ff; color: #0a0f1e; border: none; padding: 0.9rem 1.25rem;
+            border-radius: 10px; font-weight: 800; cursor: pointer; text-align: center;
+            text-decoration: none; display: block; transition: all 0.2s; font-size: 0.95rem;
         }
-        .btn:hover { background: #00e5ff; }
+        .btn:hover { background: #38edf6; box-shadow: 0 0 20px rgba(0,212,255,0.4); }
         .btn-outline { background: transparent; border: 1px solid #00d4ff; color: #00d4ff; }
-        .btn-outline:hover { background: rgba(0, 212, 255, 0.1); }
+        .btn-outline:hover { background: rgba(0, 212, 255, 0.12); }
         
         .currency-note { text-align: center; color: #8892b0; font-size: 0.85rem; margin-top: 3rem; }
         
         .comparison-table, .faq { max-width: 1000px; margin: 5rem auto; padding: 0 5%; }
-        .comparison-table h2, .faq h2 { text-align: center; color: #fff; margin-bottom: 2rem; font-size: 2rem; }
-        table { width: 100%; border-collapse: collapse; background: rgba(15, 22, 43, 0.6); border-radius: 12px; overflow: hidden; }
-        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        th { background: rgba(255,255,255,0.02); color: #fff; }
+        .comparison-table h2, .faq h2 { text-align: center; color: #fff; margin-bottom: 2rem; font-size: 2rem; font-weight: 800; }
+        table { width: 100%; border-collapse: collapse; background: rgba(15, 22, 43, 0.6); border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,0.06); }
+        th, td { padding: 1.1rem 1.25rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        th { background: rgba(255,255,255,0.03); color: #fff; font-weight: 700; }
         
         .faq-item { margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1.5rem; }
-        .faq-q { font-weight: 700; color: #fff; margin-bottom: 0.5rem; }
-        .faq-a { color: #8892b0; line-height: 1.6; }
+        .faq-q { font-weight: 700; color: #fff; margin-bottom: 0.5rem; font-size: 1.05rem; }
+        .faq-a { color: #8892b0; line-height: 1.6; font-size: 0.95rem; }
 
         footer { text-align: center; padding: 3rem 0; border-top: 1px solid rgba(255,255,255,0.05); color: #8892b0; }
-        footer a { color: #8892b0; text-decoration: none; margin: 0 1rem; }
+        footer a { color: #8892b0; text-decoration: none; margin: 0 1rem; font-size: 0.9rem; }
         footer a:hover { color: #00d4ff; }
     </style>
 </head>
 <body>
     <header>
-        <div class="logo">ArchEngine AI</div>
-        <a href="index.html" style="color:#00d4ff; text-decoration:none;">Back to App</a>
+        <div class="logo">⚡ ArchEngine <span>AI</span></div>
+        <div class="header-nav">
+            <a href="../../index.html" style="color:#00d4ff; text-decoration:none; font-weight: 700; font-size: 0.9rem;">← Back to App</a>
+        </div>
     </header>
 
     <div class="hero">
         <h1>Transparent Pricing. Unbeatable ROI.</h1>
-        <p>Win more bids with AI-assisted proposals. Choose a plan that scales with your growth.</p>
+        <p>Win more bids and optimize cloud spend with autonomous multi-agent intelligence.</p>
         
-        <div class="toggle-container">
-            <span class="toggle-label">Monthly</span>
-            <input type="checkbox" id="billingToggle" style="width: 40px; height: 20px;">
-            <span class="toggle-label">Annual <span class="discount-badge">Save 20%</span></span>
+        <div class="controls-row">
+            <!-- Currency Switcher -->
+            <div class="currency-selector">
+                <button class="curr-btn active" id="btn-curr-zar" onclick="setCurrency('ZAR')">🇿🇦 ZAR (R)</button>
+                <button class="curr-btn" id="btn-curr-usd" onclick="setCurrency('USD')">🇺🇸 USD ($)</button>
+            </div>
+
+            <!-- Billing Cycle Toggle Switch -->
+            <div class="toggle-wrapper">
+                <span class="toggle-label active" id="lbl-monthly">Billed Monthly</span>
+                <label class="switch">
+                    <input type="checkbox" id="billingToggle">
+                    <span class="slider"></span>
+                </label>
+                <span class="toggle-label" id="lbl-annual">
+                    Billed Annually <span class="discount-badge">Save 20%</span>
+                </span>
+            </div>
         </div>
     </div>
 
     <div class="pricing-grid">
+        <!-- Free Plan -->
         <div class="pricing-card">
             <div class="plan-name">Free</div>
-            <div class="plan-price">$0</div>
+            <div class="price-container">
+                <div class="plan-price" id="price-free">R0</div>
+                <div class="billing-note monthly">Free forever</div>
+            </div>
             <ul class="feature-list">
                 <li>✓ 2 Proposals / month</li>
                 <li>✓ Basic AI Generation</li>
+                <li>✓ 0-100 Win Probability Score</li>
                 <li class="cross">✗ PDF Exports</li>
-                <li class="cross">✗ Live Pricing</li>
+                <li class="cross">✗ Live Pricing Connectors</li>
             </ul>
-            <a href="index.html?signup=true" class="btn btn-outline">Get Started Free</a>
+            <a href="../../index.html?signup=true" class="btn btn-outline">Get Started Free</a>
         </div>
         
+        <!-- Starter Plan -->
         <div class="pricing-card">
             <div class="plan-name">Starter</div>
-            <div class="plan-price" data-monthly="49" data-annual="39">$49<span class="price-period">/mo</span></div>
+            <div class="price-container">
+                <span class="original-price" id="orig-starter" style="display:none;">R882</span>
+                <div class="plan-price" id="price-starter">R882<span class="price-period">/mo</span></div>
+                <div class="billing-note" id="note-starter">Billed monthly</div>
+            </div>
             <ul class="feature-list">
                 <li>✓ 10 Proposals / month</li>
-                <li>✓ PDF Exports</li>
-                <li>✓ Live Pricing</li>
-                <li class="cross">✗ Monte Carlo Simulation</li>
+                <li>✓ Executive PDF Exports</li>
+                <li>✓ Live Cloud Pricing APIs</li>
+                <li>✓ 1 Cloud Provider Connector</li>
+                <li class="cross">✗ Monte Carlo Stress-Testing</li>
             </ul>
-            <a href="index.html?signup=true" class="btn btn-outline">Start 7-Day Trial</a>
+            <a href="../../index.html?signup=true" class="btn btn-outline">Start 7-Day Free Trial</a>
         </div>
 
+        <!-- Professional Plan -->
         <div class="pricing-card popular">
-            <div class="popular-badge">Most Popular</div>
+            <div class="popular-badge">★ Most Popular</div>
             <div class="plan-name">Professional</div>
-            <div class="plan-price" data-monthly="149" data-annual="119">$149<span class="price-period">/mo</span></div>
+            <div class="price-container">
+                <span class="original-price" id="orig-pro" style="display:none;">R2,682</span>
+                <div class="plan-price" id="price-pro">R2,682<span class="price-period">/mo</span></div>
+                <div class="billing-note" id="note-pro">Billed monthly</div>
+            </div>
             <ul class="feature-list">
-                <li>✓ Unlimited Proposals</li>
-                <li>✓ Monte Carlo Simulation</li>
-                <li>✓ Up to 5 team members</li>
-                <li>✓ Priority Support</li>
+                <li>✓ <strong>Unlimited</strong> Proposals</li>
+                <li>✓ Monte Carlo Risk Simulator</li>
+                <li>✓ Up to 5 Team Members (RBAC)</li>
+                <li>✓ Subcontractor Teaming Engine</li>
+                <li>✓ Priority Agent Queue</li>
             </ul>
-            <a href="index.html?signup=true" class="btn">Start 7-Day Trial</a>
+            <a href="../../index.html?signup=true" class="btn">Start 7-Day Free Trial</a>
         </div>
 
+        <!-- Enterprise Plan -->
         <div class="pricing-card">
             <div class="plan-name">Enterprise</div>
-            <div class="plan-price" data-monthly="499" data-annual="399">$499<span class="price-period">/mo</span></div>
+            <div class="price-container">
+                <span class="original-price" id="orig-enterprise" style="display:none;">R8,982</span>
+                <div class="plan-price" id="price-enterprise">R8,982<span class="price-period">/mo</span></div>
+                <div class="billing-note" id="note-enterprise">Billed monthly</div>
+            </div>
             <ul class="feature-list">
-                <li>✓ Custom Connectors</li>
-                <li>✓ Dedicated Account Manager</li>
-                <li>✓ Up to 25 team members</li>
-                <li>✓ Custom SLAs</li>
+                <li>✓ Unlimited Cloud Connectors</li>
+                <li>✓ Custom SAM.gov Search Filters</li>
+                <li>✓ Up to 25 Team Members</li>
+                <li>✓ 99.99% Guaranteed SLA</li>
+                <li>✓ Dedicated Solutions Architect</li>
             </ul>
             <a href="mailto:sales@archengine.ai" class="btn btn-outline">Contact Sales</a>
         </div>
     </div>
     
-    <div class="currency-note">Prices shown in USD. South African Rand (ZAR) and other local currencies shown at checkout — we support ZAR, EUR, GBP, AUD, NGN, KES and more.</div>
+    <div class="currency-note">All plans include full zero-data-retention privacy guarantees and AES-256 encryption.</div>
 
     <div class="comparison-table">
-        <h2>How We Compare</h2>
+        <h2>How ArchEngine AI Compares</h2>
         <table>
             <tr>
                 <th>Feature</th>
@@ -148,22 +235,28 @@
                 <th>RFPIO</th>
             </tr>
             <tr>
-                <td>AI-Native Generation</td>
-                <td style="color:#00d4ff">✓ Built from ground up</td>
+                <td>AI-Native Multi-Agent System</td>
+                <td style="color:#00d4ff; font-weight:700;">✓ Built-in (4 Agents)</td>
                 <td>✗ Add-on only</td>
                 <td>✗ Add-on only</td>
             </tr>
             <tr>
                 <td>Pricing Transparency</td>
-                <td style="color:#00d4ff">✓ Open Pricing</td>
-                <td>✗ Contact Sales</td>
-                <td>✗ Contact Sales</td>
+                <td style="color:#00d4ff; font-weight:700;">✓ Open Pricing (ZAR / USD)</td>
+                <td>✗ Contact Sales ($1,000s/mo)</td>
+                <td>✗ Contact Sales ($1,000s/mo)</td>
             </tr>
             <tr>
-                <td>Monte Carlo Simulation</td>
-                <td style="color:#00d4ff">✓ Included (Pro+)</td>
+                <td>Cloud Stack Optimizer + Monte Carlo</td>
+                <td style="color:#00d4ff; font-weight:700;">✓ Included (Pro+)</td>
                 <td>✗ Not available</td>
                 <td>✗ Not available</td>
+            </tr>
+            <tr>
+                <td>Closed-Loop Self-Correction Auditor</td>
+                <td style="color:#00d4ff; font-weight:700;">✓ Included (Agent 4)</td>
+                <td>✗ Manual review only</td>
+                <td>✗ Manual review only</td>
             </tr>
         </table>
     </div>
@@ -171,28 +264,20 @@
     <div class="faq">
         <h2>Frequently Asked Questions</h2>
         <div class="faq-item">
-            <div class="faq-q">What's included in the free trial?</div>
-            <div class="faq-a">You get 7 days of full access to the Professional plan, allowing you to generate unlimited proposals and test all premium features.</div>
+            <div class="faq-q">How does annual billing saving work?</div>
+            <div class="faq-a">When you choose annual billing, you receive a <strong>20% discount on every month</strong>. For example, the Starter plan drops from R882/mo to R702/mo (or $49/mo to $39/mo), saving you thousands of Rands each year.</div>
         </div>
         <div class="faq-item">
-            <div class="faq-q">Can I cancel anytime?</div>
-            <div class="faq-a">Yes, there are no long-term contracts for Monthly plans. You can cancel at any time and retain access until the end of your billing cycle.</div>
+            <div class="faq-q">What's included in the 7-day free trial?</div>
+            <div class="faq-a">You get 7 full days of access to the Professional plan, allowing you to generate unlimited proposals, run cloud stack optimizations, and test all premium features with zero commitment.</div>
         </div>
         <div class="faq-item">
-            <div class="faq-q">Do you support my currency?</div>
-            <div class="faq-a">Yes! While base prices are in USD, we support localized checkout and display in EUR, GBP, ZAR, AUD, CAD, INR, NGN, KES, and more.</div>
+            <div class="faq-q">Can I cancel or change plans anytime?</div>
+            <div class="faq-a">Yes! There are no long-term locks for monthly plans. You can upgrade, downgrade, or cancel at any time via your self-service billing portal.</div>
         </div>
         <div class="faq-item">
-            <div class="faq-q">What happens to my proposals if I cancel?</div>
-            <div class="faq-a">Your data remains safe. You'll be downgraded to the Free tier, and can still access and export your past proposals.</div>
-        </div>
-        <div class="faq-item">
-            <div class="faq-q">Is my data secure?</div>
-            <div class="faq-a">Absolutely. We use enterprise-grade encryption and never use your proprietary data to train our foundational models without explicit consent.</div>
-        </div>
-        <div class="faq-item">
-            <div class="faq-q">Do you offer discounts for nonprofits/startups?</div>
-            <div class="faq-a">Yes! Reach out to sales@archengine.ai to see if you qualify for our 50% impact discount.</div>
+            <div class="faq-q">Do you support South African Rand (ZAR)?</div>
+            <div class="faq-a">Yes! ArchEngine AI natively supports ZAR billing as well as USD, EUR, GBP, NGN, and KES.</div>
         </div>
     </div>
 
@@ -201,21 +286,77 @@
             <a href="#">Terms of Service</a>
             <a href="#">Privacy Policy</a>
             <a href="#">GDPR</a>
-            <a href="index.html">Back to App</a>
+            <a href="../../index.html">Back to App</a>
         </div>
-        <p style="margin-top: 1rem; font-size: 0.85rem;">© 2026 ArchEngine AI. All rights reserved.</p>
+        <p style="margin-top: 1rem; font-size: 0.85rem;">© 2026 ArchEngine AI Platform. All rights reserved.</p>
     </footer>
 
     <script>
-        document.getElementById('billingToggle').addEventListener('change', function(e) {
-            const isAnnual = e.target.checked;
-            document.querySelectorAll('.plan-price').forEach(el => {
-                if(el.dataset.monthly) {
-                    const price = isAnnual ? el.dataset.annual : el.dataset.monthly;
-                    el.innerHTML = '$' + price + '<span class="price-period">/mo</span>';
+        // Pricing Data Card Matrix
+        const pricingData = {
+            ZAR: {
+                symbol: 'R',
+                starter: { monthly: 882, annual: 702, annualTotal: 8424, save: 2160 },
+                pro: { monthly: 2682, annual: 2142, annualTotal: 25704, save: 6480 },
+                enterprise: { monthly: 8982, annual: 7182, annualTotal: 86184, save: 21600 }
+            },
+            USD: {
+                symbol: '$',
+                starter: { monthly: 49, annual: 39, annualTotal: 468, save: 120 },
+                pro: { monthly: 149, annual: 119, annualTotal: 1428, save: 360 },
+                enterprise: { monthly: 499, annual: 399, annualTotal: 4788, save: 1200 }
+            }
+        };
+
+        let currentCurrency = 'ZAR';
+
+        function setCurrency(curr) {
+            currentCurrency = curr;
+            document.getElementById('btn-curr-zar').classList.toggle('active', curr === 'ZAR');
+            document.getElementById('btn-curr-usd').classList.toggle('active', curr === 'USD');
+            updatePrices();
+        }
+
+        function updatePrices() {
+            const isAnnual = document.getElementById('billingToggle').checked;
+            const data = pricingData[currentCurrency];
+            const sym = data.symbol;
+
+            // Labels highlight
+            document.getElementById('lbl-monthly').classList.toggle('active', !isAnnual);
+            document.getElementById('lbl-annual').classList.toggle('active', isAnnual);
+
+            // Free Plan
+            document.getElementById('price-free').textContent = sym + '0';
+
+            // Helper format function
+            const fmt = num => num.toLocaleString();
+
+            ['starter', 'pro', 'enterprise'].forEach(plan => {
+                const pData = data[plan];
+                const priceEl = document.getElementById(`price-${plan}`);
+                const origEl = document.getElementById(`orig-${plan}`);
+                const noteEl = document.getElementById(`note-${plan}`);
+
+                if (isAnnual) {
+                    origEl.style.display = 'inline';
+                    origEl.textContent = `${sym}${fmt(pData.monthly)}`;
+                    priceEl.innerHTML = `${sym}${fmt(pData.annual)}<span class="price-period">/mo</span>`;
+                    noteEl.className = 'billing-note';
+                    noteEl.textContent = `Billed annually (${sym}${fmt(pData.annualTotal)}/yr — Save 20%)`;
+                } else {
+                    origEl.style.display = 'none';
+                    priceEl.innerHTML = `${sym}${fmt(pData.monthly)}<span class="price-period">/mo</span>`;
+                    noteEl.className = 'billing-note monthly';
+                    noteEl.textContent = 'Billed monthly';
                 }
             });
-        });
+        }
+
+        document.getElementById('billingToggle').addEventListener('change', updatePrices);
+        
+        // Initial setup
+        updatePrices();
     </script>
 </body>
 </html>
