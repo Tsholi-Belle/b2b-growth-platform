@@ -1,3 +1,4 @@
+import { displayCurrency } from '../frontend/js/utils/currencyFormatter.js';
 // MAIN APPLICATION CONTROLLER
 import { SAMPLE_LOG_PRESETS } from './data/sampleLogs.js';
 import { SAMPLE_RFPS } from './data/sampleRfps.js';
@@ -8,6 +9,26 @@ import { ProposalAgent } from './engine/proposalAgent.js';
 import { ImpactEngine } from './engine/impactEngine.js';
 import { EnterpriseIntegrationsEngine } from './engine/enterpriseIntegrations.js';
 import { SensitivityEngine } from './engine/sensitivityEngine.js';
+
+
+// API base URL — points to backend in production, relative in dev
+const API_BASE = window.location.hostname === 'localhost' ? 'http://localhost:3001' : '';
+
+// Helper: authenticated fetch (adds JWT token from Supabase session)
+async function apiFetch(path, options = {}) {
+  const session = window._authSession || null;
+  const headers = { 'Content-Type': 'application/json', ...options.headers };
+  if (session?.access_token) headers['Authorization'] = `Bearer ${session.access_token}`;
+  const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: res.statusText }));
+    throw new Error(err.error || `HTTP ${res.status}`);
+  }
+  return res.json();
+}
+
+// Demo mode check (users who clicked 'Try Demo')
+const IS_DEMO_MODE = sessionStorage.getItem('archengine_demo_mode') === 'true';
 
 class AppController {
   constructor() {
@@ -62,34 +83,123 @@ class AppController {
   }
 
   bindOptimizerControls() {
+    const btnLoadDemo = document.getElementById('btn-load-demo');
+    if (btnLoadDemo) {
+        btnLoadDemo.addEventListener('click', () => {
+            document.getElementById('current-provider').value = 'aws';
+            document.getElementById('monthly-spend').value = 4500;
+            document.getElementById('api-calls-millions').value = 150;
+            document.getElementById('db-size-gb').value = 850;
+            document.getElementById('egress-gb').value = 2500;
+            document.getElementById('primary-region').value = 'us-east-1';
+            document.getElementById('workload-type').value = 'saas';
+        });
+    }
+
+    const btnRunOpt = document.getElementById('btn-run-optimizer');
+    if (btnRunOpt) {
+        btnRunOpt.addEventListener('click', () => {
+            this.runSimulation();
+        });
+    }
+
+    // Attempt old bindings if they exist
     const mauInput = document.getElementById('input-mau');
-    const rpsInput = document.getElementById('input-rps');
-    const dbInput = document.getElementById('input-db');
-    const egressInput = document.getElementById('input-egress');
+    if (mauInput) {
+        const rpsInput = document.getElementById('input-rps');
+        const dbInput = document.getElementById('input-db');
+        const egressInput = document.getElementById('input-egress');
 
-    const updateSliderVals = () => {
-      document.getElementById('val-mau').innerText = parseInt(mauInput.value).toLocaleString();
-      document.getElementById('val-rps').innerText = `${rpsInput.value} req/s`;
-      document.getElementById('val-db').innerText = `${dbInput.value} GB`;
-      document.getElementById('val-egress').innerText = `${egressInput.value} TB`;
-    };
+        const updateSliderVals = () => {
+          document.getElementById('val-mau').innerText = parseInt(mauInput.value).toLocaleString();
+          document.getElementById('val-rps').innerText = `${rpsInput.value} req/s`;
+          document.getElementById('val-db').innerText = `${dbInput.value} GB`;
+          document.getElementById('val-egress').innerText = `${egressInput.value} TB`;
+        };
 
-    [mauInput, rpsInput, dbInput, egressInput].forEach(inp => {
-      inp.addEventListener('input', () => {
-        updateSliderVals();
-        this.runSimulation();
-      });
-    });
+        [mauInput, rpsInput, dbInput, egressInput].forEach(inp => {
+          if (inp) inp.addEventListener('input', () => {
+            updateSliderVals();
+            this.runSimulation();
+          });
+        });
 
-    document.getElementById('btn-run-simulation').addEventListener('click', () => {
-      this.runSimulation();
-    });
+        const btnRunSim = document.getElementById('btn-run-simulation');
+        if (btnRunSim) {
+            btnRunSim.addEventListener('click', () => {
+                this.runSimulation();
+            });
+        }
+    }
   }
 
   bindProposalControls() {
-    document.getElementById('btn-generate-proposal').addEventListener('click', async () => {
-      await this.generateProposal();
+    const btnGen = document.getElementById('btn-generate-proposal');
+    if (btnGen) {
+        btnGen.addEventListener('click', async () => {
+          await this.generateProposal();
+        });
+    }
+    
+    document.querySelectorAll('.source-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.source-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.rfp-source-panel').forEach(p => p.classList.remove('active'));
+        e.currentTarget.classList.add('active');
+        const panel = document.getElementById('panel-' + e.currentTarget.dataset.source);
+        if (panel) panel.classList.add('active');
+      });
     });
+
+    const btnSamSearch = document.getElementById('btn-sam-search');
+    if (btnSamSearch) {
+        btnSamSearch.addEventListener('click', async () => {
+            const kw = document.getElementById('sam-search-keyword').value;
+            let results;
+            try {
+                results = await apiFetch(`/api/rfp/search?keyword=${encodeURIComponent(kw)}`);
+            } catch(e) {
+                console.warn("API Search failed", e);
+                results = { items: [{title: "Mock RFP", description: "Mock Data due to API failure"}] };
+            }
+            const list = document.getElementById('sam-results-list');
+            if (list && results.items) {
+                list.innerHTML = results.items.map(r => `<div class='sam-result-item'><h5>${r.title}</h5><div class='sam-meta'>${r.description}</div></div>`).join('');
+            }
+        });
+    }
+
+    const btnExport = document.getElementById('btn-export-proposal');
+    if (btnExport) {
+        btnExport.addEventListener('click', async () => {
+            try {
+                const mod = await import('../frontend/js/proposals/proposalExporter.js');
+                mod.exportProposalToPDF(this.latestProposal);
+            } catch(e) {
+                console.error("Export failed", e);
+            }
+        });
+    }
+
+    const dropZone = document.getElementById('rfp-drop-zone');
+    if (dropZone) {
+        dropZone.addEventListener('dragover', e => e.preventDefault());
+        dropZone.addEventListener('drop', e => {
+            e.preventDefault();
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = ev => {
+                    const txt = document.getElementById('rfp-paste-text');
+                    if (txt) {
+                        txt.value = ev.target.result;
+                        document.querySelector('[data-source="manual"]').click();
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+    }
   }
 
   bindScraperControls() {
@@ -180,19 +290,45 @@ class AppController {
     `;
   }
 
-  runSimulation() {
-    const params = {
-      monthlyActiveUsers: parseInt(document.getElementById('input-mau').value),
-      requestsPerSecondPeak: parseInt(document.getElementById('input-rps').value),
-      databaseSizeGB: parseFloat(document.getElementById('input-db').value),
-      monthlyEgressTB: parseFloat(document.getElementById('input-egress').value),
-      currentMonthlySpend: this.currentPreset.metrics.currentMonthlySpend || 4500
-    };
+  async runSimulation() {
+    let params;
+    
+    // Check if new form exists
+    const mauEl = document.getElementById('input-mau');
+    if (mauEl) {
+      params = {
+        monthlyActiveUsers: parseInt(mauEl.value) || 150000,
+        requestsPerSecondPeak: parseInt(document.getElementById('input-rps').value) || 200,
+        databaseSizeGB: parseFloat(document.getElementById('input-db').value) || 850,
+        monthlyEgressTB: parseFloat(document.getElementById('input-egress').value) || 2.5,
+        currentMonthlySpend: this.currentPreset.metrics.currentMonthlySpend || 4500
+      };
+    } else {
+      params = {
+        currentProvider: document.getElementById('current-provider').value,
+        currentMonthlySpend: parseFloat(document.getElementById('monthly-spend').value) || 0,
+        apiCallsMillions: parseFloat(document.getElementById('api-calls-millions').value) || 0,
+        databaseSizeGB: parseFloat(document.getElementById('db-size-gb').value) || 0,
+        egressGB: parseFloat(document.getElementById('egress-gb').value) || 0,
+        primaryRegion: document.getElementById('primary-region').value,
+        workloadType: document.getElementById('workload-type').value,
+        monthlyActiveUsers: 150000,
+        requestsPerSecondPeak: 200,
+        monthlyEgressTB: parseFloat(document.getElementById('egress-gb').value) / 1024 || 2.5
+      };
+    }
 
-    const simRes = this.simulator.simulateCosts(params);
+    let simRes;
+    try {
+      const qs = new URLSearchParams(params).toString();
+      simRes = await apiFetch(`/api/cloud-pricing/compare?${qs}`);
+    } catch (e) {
+      console.warn("API failed, falling back to simulator", e);
+      simRes = this.simulator.simulateCosts(params);
+    }
+    
     this.latestSimulation = simRes;
-
-    this.appendTerminalLogs(simRes.logs, 'simulator');
+    this.appendTerminalLogs(simRes.logs || ['[SYSTEM] Simulation complete'], 'simulator');
     this.renderSimulationOutputs(simRes);
     this.renderOverviewBarChart(simRes);
   }
@@ -215,15 +351,15 @@ class AppController {
                 ${isRec ? `<span class="tag-badge" style="margin-left: 0.5rem; background: rgba(16, 185, 129, 0.2); color: var(--accent-emerald); border-color: var(--accent-emerald);">RECOMMENDED BEST VALUE</span>` : ''}
               </div>
               <div class="provider-details">
-                Compute: $${p.breakdown.compute}/mo | DB: $${p.breakdown.database}/mo | Egress: $${p.breakdown.egress}/mo | SLA: ${p.slaUptime}
+                Compute: ${displayCurrency(p.breakdown.compute)}/mo | DB: ${displayCurrency(p.breakdown.database)}/mo | Egress: ${displayCurrency(p.breakdown.egress)}/mo | SLA: ${p.slaUptime}
               </div>
             </div>
           </div>
 
           <div class="provider-pricing">
-            <div class="monthly-price">$${p.monthlyReserved.toLocaleString()}<span style="font-size:0.75rem; color: var(--text-muted); font-weight: normal;">/mo</span></div>
+            <div class="monthly-price">${displayCurrency(p.monthlyReserved.toLocaleString())}<span style="font-size:0.75rem; color: var(--text-muted); font-weight: normal;">/mo</span></div>
             <div class="price-subtext">
-              ${p.annualSavingsVsCurrent > 0 ? `Saves $${p.annualSavingsVsCurrent.toLocaleString()}/yr` : 'On-Demand Rate'}
+              ${p.annualSavingsVsCurrent > 0 ? `Saves ${displayCurrency(p.annualSavingsVsCurrent.toLocaleString())}/yr` : 'On-Demand Rate'}
             </div>
           </div>
         </div>
@@ -244,7 +380,7 @@ class AppController {
       const heightPct = Math.max(15, Math.round((p.monthlyReserved / maxSpend) * 100));
       return `
         <div class="bar-column">
-          <div class="bar-value">$${p.monthlyReserved}</div>
+          <div class="bar-value">${displayCurrency(p.monthlyReserved)}</div>
           <div class="bar-fill" style="height: ${heightPct}%; background: linear-gradient(180deg, ${p.badgeColor}, rgba(0,0,0,0.4));"></div>
           <div class="bar-label">${p.providerName.split(' ')[0]}</div>
         </div>
@@ -258,11 +394,19 @@ class AppController {
       `[Agent 3] Reading RFP document "${this.currentRfp.title}"`
     ], 'proposal');
 
-    const res = await this.proposalAgent.generateProposal(this.currentRfp);
+    let res;
+    try {
+      res = await apiFetch('/api/proposals/generate', { method: 'POST', body: JSON.stringify(this.currentRfp) });
+    } catch(e) {
+      console.warn("API failed, falling back to proposalAgent", e);
+      res = await this.proposalAgent.generateProposal(this.currentRfp);
+    }
     this.latestProposal = res.proposal;
 
-    this.appendTerminalLogs(res.logs, 'proposal');
+    this.appendTerminalLogs(res.logs || ['[Agent 3] Proposal generated'], 'proposal');
     this.renderProposalPreview(res.proposal);
+    
+    document.getElementById('proposal-qa-section').style.display = 'flex';
   }
 
   renderProposalPreview(proposal) {
@@ -290,7 +434,7 @@ class AppController {
           <div style="background: rgba(0,242,254,0.05); border: 1px solid rgba(0,242,254,0.2); padding: 0.85rem; border-radius: var(--radius-sm);">
             <div style="font-size: 0.72rem; color: var(--primary-cyan); font-weight: 700;">CLOUD BLUEPRINT</div>
             <div style="font-size: 1rem; font-weight: 800; color: var(--text-main);">${proposal.recommendedCloudArchitecture.primaryProvider.split(' ')[0]}</div>
-            <div style="font-size: 0.75rem; color: var(--accent-emerald); font-weight: 600;">$${proposal.recommendedCloudArchitecture.monthlyOpEx.toLocaleString()}/mo</div>
+            <div style="font-size: 0.75rem; color: var(--accent-emerald); font-weight: 600;">${displayCurrency(proposal.recommendedCloudArchitecture.monthlyOpEx.toLocaleString())}/mo</div>
           </div>
 
           <div style="background: rgba(139,92,246,0.05); border: 1px solid rgba(139,92,246,0.2); padding: 0.85rem; border-radius: var(--radius-sm);">
@@ -319,10 +463,10 @@ class AppController {
       return `
         <tr>
           <td><strong style="color: ${p.badgeColor};">${p.name}</strong></td>
-          <td>${computeSample ? `${computeSample.name} ($${computeSample.hourlyRate}/hr)` : 'N/A'}</td>
-          <td>${dbSample ? `${dbSample.name} ($${dbSample.hourlyRate}/hr)` : 'N/A'}</td>
-          <td>$${p.storageGB}/GB</td>
-          <td>${p.egressGB === 0 ? '<strong style="color: var(--accent-emerald);">FREE (0.00)</strong>' : `$${p.egressGB}/GB`}</td>
+          <td>${computeSample ? `${computeSample.name} (${displayCurrency(computeSample.hourlyRate)}/hr)` : 'N/A'}</td>
+          <td>${dbSample ? `${dbSample.name} (${displayCurrency(dbSample.hourlyRate)}/hr)` : 'N/A'}</td>
+          <td>${displayCurrency(p.storageGB)}/GB</td>
+          <td>${p.egressGB === 0 ? '<strong style="color: var(--accent-emerald);">FREE (0.00)</strong>' : `${displayCurrency(p.egressGB)}/GB`}</td>
           <td>${p.apiRateLimit}</td>
           <td><span class="tag-badge" style="background: rgba(16,185,129,0.1); color: var(--accent-emerald);">${p.slaUptime}</span></td>
           <td>${(p.reservedDiscountYear1 * 100)}% Off</td>
@@ -341,11 +485,11 @@ class AppController {
       <tr>
         <td><strong>${t.clientName}</strong></td>
         <td>${t.migrationDate}</td>
-        <td>$${t.predictedAnnualSavings.toLocaleString()}/yr</td>
-        <td>$${t.actual30DaySavings.toLocaleString()}</td>
-        <td>$${t.actual60DaySavings.toLocaleString()}</td>
-        <td>$${t.actual90DaySavings.toLocaleString()}</td>
-        <td><strong style="color: var(--accent-emerald);">$${t.projectedActualAnnualSavings.toLocaleString()}/yr</strong></td>
+        <td>${displayCurrency(t.predictedAnnualSavings.toLocaleString())}/yr</td>
+        <td>${displayCurrency(t.actual30DaySavings.toLocaleString())}</td>
+        <td>${displayCurrency(t.actual60DaySavings.toLocaleString())}</td>
+        <td>${displayCurrency(t.actual90DaySavings.toLocaleString())}</td>
+        <td><strong style="color: var(--accent-emerald);">${displayCurrency(t.projectedActualAnnualSavings.toLocaleString())}/yr</strong></td>
         <td><span class="tag-badge" style="background: rgba(16,185,129,0.15); color: var(--accent-emerald);">${t.verificationStatus} (${t.accuracyScore})</span></td>
       </tr>
     `).join('');
@@ -399,10 +543,10 @@ class AppController {
             ${Object.values(prop.multiCloudComparison).map(c => `
               <tr style="${c.providerName === prop.recommendedCloudArchitecture.primaryProvider ? 'background: rgba(16,185,129,0.15); font-weight: bold;' : ''}">
                 <td>${c.providerName}</td>
-                <td>$${c.breakdown.compute}</td>
-                <td>$${c.breakdown.database}</td>
-                <td>$${c.breakdown.egress}</td>
-                <td>$${c.monthlyReserved.toLocaleString()}</td>
+                <td>${displayCurrency(c.breakdown.compute)}</td>
+                <td>${displayCurrency(c.breakdown.database)}</td>
+                <td>${displayCurrency(c.breakdown.egress)}</td>
+                <td>${displayCurrency(c.monthlyReserved.toLocaleString())}</td>
                 <td>${c.slaUptime}</td>
               </tr>
             `).join('')}
@@ -443,7 +587,7 @@ class AppController {
           </div>
           <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
             <span>Recommended Year 1 Cloud Infrastructure OpEx (${prop.recommendedCloudArchitecture.primaryProvider}):</span>
-            <strong>$${prop.recommendedCloudArchitecture.annualOpEx.toLocaleString()} USD</strong>
+            <strong>${displayCurrency(prop.recommendedCloudArchitecture.annualOpEx.toLocaleString())} USD</strong>
           </div>
           <div style="display: flex; justify-content: space-between; color: var(--accent-emerald); font-weight: 700; font-size: 1.05rem; padding-top: 0.5rem; border-top: 1px solid var(--border-glass);">
             <span>Projected 1-Year Cost Savings vs Unoptimized AWS On-Demand:</span>
@@ -515,9 +659,17 @@ class AppController {
   }
 
   async triggerSAMPoll() {
-    const res = await this.enterpriseIntegrations.pollSAMGovPortal();
-    this.appendTerminalLogs(res.logs, 'proposal');
-    alert(`SAM.gov Bid Listener Polled! Detected: "${res.bids[0].title}"`);
+    let res;
+    try {
+      res = await apiFetch('/api/rfp/search?keyword=cloud');
+      this.appendTerminalLogs(['[SYSTEM] Fetched from SAM API'], 'proposal');
+      alert(`SAM.gov Bid Listener Polled!`);
+    } catch(e) {
+      console.warn("API failed, falling back to enterpriseIntegrations", e);
+      res = await this.enterpriseIntegrations.pollSAMGovPortal();
+      this.appendTerminalLogs(res.logs, 'proposal');
+      alert(`SAM.gov Bid Listener Polled! Detected: "${res.bids[0].title}"`);
+    }
   }
 
   async triggerDraftPush() {
@@ -541,15 +693,15 @@ class AppController {
         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; text-align: center;">
           <div style="background: rgba(255,255,255,0.03); padding: 0.5rem; border-radius: 4px;">
             <div style="font-size: 0.7rem; color: var(--text-muted);">P50 MEDIAN SPEND</div>
-            <div style="font-size: 1.05rem; font-weight: 800; color: var(--text-main);">$${res.medianCost}/mo</div>
+            <div style="font-size: 1.05rem; font-weight: 800; color: var(--text-main);">${displayCurrency(res.medianCost)}/mo</div>
           </div>
           <div style="background: rgba(245,158,11,0.08); padding: 0.5rem; border-radius: 4px; border: 1px solid rgba(245,158,11,0.2);">
             <div style="font-size: 0.7rem; color: var(--accent-amber);">P95 RISK LIMIT</div>
-            <div style="font-size: 1.05rem; font-weight: 800; color: var(--accent-amber);">$${res.p95Cost}/mo</div>
+            <div style="font-size: 1.05rem; font-weight: 800; color: var(--accent-amber);">${displayCurrency(res.p95Cost)}/mo</div>
           </div>
           <div style="background: rgba(244,63,94,0.08); padding: 0.5rem; border-radius: 4px; border: 1px solid rgba(244,63,94,0.2);">
             <div style="font-size: 0.7rem; color: var(--accent-rose);">WORST-CASE SPIKE</div>
-            <div style="font-size: 1.05rem; font-weight: 800; color: var(--accent-rose);">$${res.worstCaseCost}/mo</div>
+            <div style="font-size: 1.05rem; font-weight: 800; color: var(--accent-rose);">${displayCurrency(res.worstCaseCost)}/mo</div>
           </div>
         </div>
       `;

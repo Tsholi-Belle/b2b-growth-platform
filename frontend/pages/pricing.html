@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing | ArchEngine AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0; font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #0a0f1e; color: #e2e8f0;
+        }
+        header { padding: 2rem 5%; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: 700; color: #fff; }
+        .hero { text-align: center; padding: 4rem 1rem; }
+        .hero h1 { font-size: 3rem; color: #fff; margin-bottom: 1rem; }
+        .hero p { font-size: 1.2rem; color: #8892b0; max-width: 600px; margin: 0 auto 2rem; }
+        
+        .toggle-container { display: flex; justify-content: center; align-items: center; gap: 1rem; margin-bottom: 3rem; }
+        .toggle-label { font-weight: 600; }
+        .discount-badge { background: rgba(0, 212, 255, 0.1); color: #00d4ff; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem; }
+        
+        .pricing-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem; max-width: 1200px; margin: 0 auto; padding: 0 5%;
+        }
+        .pricing-card {
+            background: rgba(15, 22, 43, 0.6); backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.05); border-radius: 16px;
+            padding: 2.5rem 2rem; display: flex; flex-direction: column;
+            position: relative;
+        }
+        .popular-badge {
+            position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+            background: #00d4ff; color: #0a0f1e; padding: 0.25rem 1rem;
+            border-radius: 20px; font-weight: 700; font-size: 0.8rem;
+        }
+        .pricing-card.popular { border-color: #00d4ff; box-shadow: 0 8px 32px rgba(0,212,255,0.1); }
+        .plan-name { font-size: 1.25rem; font-weight: 700; color: #fff; margin-bottom: 1rem; }
+        .plan-price { font-size: 3rem; font-weight: 700; color: #00d4ff; margin-bottom: 0.5rem; }
+        .price-period { font-size: 1rem; color: #8892b0; font-weight: 400; }
+        .feature-list { list-style: none; padding: 0; margin: 2rem 0; flex-grow: 1; }
+        .feature-list li { margin-bottom: 1rem; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem; }
+        .feature-list li.cross { opacity: 0.5; }
+        .btn {
+            background: #00d4ff; color: #0a0f1e; border: none; padding: 1rem;
+            border-radius: 8px; font-weight: 700; cursor: pointer; text-align: center;
+            text-decoration: none; display: inline-block; transition: background 0.2s;
+        }
+        .btn:hover { background: #00e5ff; }
+        .btn-outline { background: transparent; border: 1px solid #00d4ff; color: #00d4ff; }
+        .btn-outline:hover { background: rgba(0, 212, 255, 0.1); }
+        
+        .currency-note { text-align: center; color: #8892b0; font-size: 0.85rem; margin-top: 3rem; }
+        
+        .comparison-table, .faq { max-width: 1000px; margin: 5rem auto; padding: 0 5%; }
+        .comparison-table h2, .faq h2 { text-align: center; color: #fff; margin-bottom: 2rem; font-size: 2rem; }
+        table { width: 100%; border-collapse: collapse; background: rgba(15, 22, 43, 0.6); border-radius: 12px; overflow: hidden; }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        th { background: rgba(255,255,255,0.02); color: #fff; }
+        
+        .faq-item { margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1.5rem; }
+        .faq-q { font-weight: 700; color: #fff; margin-bottom: 0.5rem; }
+        .faq-a { color: #8892b0; line-height: 1.6; }
+
+        footer { text-align: center; padding: 3rem 0; border-top: 1px solid rgba(255,255,255,0.05); color: #8892b0; }
+        footer a { color: #8892b0; text-decoration: none; margin: 0 1rem; }
+        footer a:hover { color: #00d4ff; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">ArchEngine AI</div>
+        <a href="index.html" style="color:#00d4ff; text-decoration:none;">Back to App</a>
+    </header>
+
+    <div class="hero">
+        <h1>Transparent Pricing. Unbeatable ROI.</h1>
+        <p>Win more bids with AI-assisted proposals. Choose a plan that scales with your growth.</p>
+        
+        <div class="toggle-container">
+            <span class="toggle-label">Monthly</span>
+            <input type="checkbox" id="billingToggle" style="width: 40px; height: 20px;">
+            <span class="toggle-label">Annual <span class="discount-badge">Save 20%</span></span>
+        </div>
+    </div>
+
+    <div class="pricing-grid">
+        <div class="pricing-card">
+            <div class="plan-name">Free</div>
+            <div class="plan-price">$0</div>
+            <ul class="feature-list">
+                <li>✓ 2 Proposals / month</li>
+                <li>✓ Basic AI Generation</li>
+                <li class="cross">✗ PDF Exports</li>
+                <li class="cross">✗ Live Pricing</li>
+            </ul>
+            <a href="index.html?signup=true" class="btn btn-outline">Get Started Free</a>
+        </div>
+        
+        <div class="pricing-card">
+            <div class="plan-name">Starter</div>
+            <div class="plan-price" data-monthly="49" data-annual="39">$49<span class="price-period">/mo</span></div>
+            <ul class="feature-list">
+                <li>✓ 10 Proposals / month</li>
+                <li>✓ PDF Exports</li>
+                <li>✓ Live Pricing</li>
+                <li class="cross">✗ Monte Carlo Simulation</li>
+            </ul>
+            <a href="index.html?signup=true" class="btn btn-outline">Start 7-Day Trial</a>
+        </div>
+
+        <div class="pricing-card popular">
+            <div class="popular-badge">Most Popular</div>
+            <div class="plan-name">Professional</div>
+            <div class="plan-price" data-monthly="149" data-annual="119">$149<span class="price-period">/mo</span></div>
+            <ul class="feature-list">
+                <li>✓ Unlimited Proposals</li>
+                <li>✓ Monte Carlo Simulation</li>
+                <li>✓ Up to 5 team members</li>
+                <li>✓ Priority Support</li>
+            </ul>
+            <a href="index.html?signup=true" class="btn">Start 7-Day Trial</a>
+        </div>
+
+        <div class="pricing-card">
+            <div class="plan-name">Enterprise</div>
+            <div class="plan-price" data-monthly="499" data-annual="399">$499<span class="price-period">/mo</span></div>
+            <ul class="feature-list">
+                <li>✓ Custom Connectors</li>
+                <li>✓ Dedicated Account Manager</li>
+                <li>✓ Up to 25 team members</li>
+                <li>✓ Custom SLAs</li>
+            </ul>
+            <a href="mailto:sales@archengine.ai" class="btn btn-outline">Contact Sales</a>
+        </div>
+    </div>
+    
+    <div class="currency-note">Prices in USD. Local currency equivalents shown at checkout.</div>
+
+    <div class="comparison-table">
+        <h2>How We Compare</h2>
+        <table>
+            <tr>
+                <th>Feature</th>
+                <th>ArchEngine AI</th>
+                <th>Loopio</th>
+                <th>RFPIO</th>
+            </tr>
+            <tr>
+                <td>AI-Native Generation</td>
+                <td style="color:#00d4ff">✓ Built from ground up</td>
+                <td>✗ Add-on only</td>
+                <td>✗ Add-on only</td>
+            </tr>
+            <tr>
+                <td>Pricing Transparency</td>
+                <td style="color:#00d4ff">✓ Open Pricing</td>
+                <td>✗ Contact Sales</td>
+                <td>✗ Contact Sales</td>
+            </tr>
+            <tr>
+                <td>Monte Carlo Simulation</td>
+                <td style="color:#00d4ff">✓ Included (Pro+)</td>
+                <td>✗ Not available</td>
+                <td>✗ Not available</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="faq">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-item">
+            <div class="faq-q">What's included in the free trial?</div>
+            <div class="faq-a">You get 7 days of full access to the Professional plan, allowing you to generate unlimited proposals and test all premium features.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">Can I cancel anytime?</div>
+            <div class="faq-a">Yes, there are no long-term contracts for Monthly plans. You can cancel at any time and retain access until the end of your billing cycle.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">Do you support my currency?</div>
+            <div class="faq-a">Yes! While base prices are in USD, we support localized checkout and display in EUR, GBP, ZAR, AUD, CAD, INR, NGN, KES, and more.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">What happens to my proposals if I cancel?</div>
+            <div class="faq-a">Your data remains safe. You'll be downgraded to the Free tier, and can still access and export your past proposals.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">Is my data secure?</div>
+            <div class="faq-a">Absolutely. We use enterprise-grade encryption and never use your proprietary data to train our foundational models without explicit consent.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">Do you offer discounts for nonprofits/startups?</div>
+            <div class="faq-a">Yes! Reach out to sales@archengine.ai to see if you qualify for our 50% impact discount.</div>
+        </div>
+    </div>
+
+    <footer>
+        <div>
+            <a href="#">Terms of Service</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">GDPR</a>
+            <a href="index.html">Back to App</a>
+        </div>
+        <p style="margin-top: 1rem; font-size: 0.85rem;">© 2026 ArchEngine AI. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.getElementById('billingToggle').addEventListener('change', function(e) {
+            const isAnnual = e.target.checked;
+            document.querySelectorAll('.plan-price').forEach(el => {
+                if(el.dataset.monthly) {
+                    const price = isAnnual ? el.dataset.annual : el.dataset.monthly;
+                    el.innerHTML = '$' + price + '<span class="price-period">/mo</span>';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

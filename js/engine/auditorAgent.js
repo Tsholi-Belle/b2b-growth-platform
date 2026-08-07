@@ -4,6 +4,43 @@ export class AuditorAgent {
     this.name = "Agent 4 (The Auditor & Critic)";
   }
 
+  calculateWinProbability(proposal, rfpText) {
+    if (!rfpText) rfpText = "";
+    const words = rfpText.split(/\s+/).filter(w => w.length > 5);
+    const keywords = [...new Set(words.map(w => w.toLowerCase()))];
+    
+    let matches = 0;
+    const propContent = JSON.stringify(proposal).toLowerCase();
+    keywords.forEach(kw => {
+        if (propContent.includes(kw)) matches++;
+    });
+    
+    const matchPct = keywords.length > 0 ? matches / keywords.length : 0;
+    const alignmentScore = Math.min(30, Math.round(matchPct * 30 * 1.5));
+    
+    let sectionScore = 0;
+    const requiredSections = ['executive summary', 'technical approach', 'past performance', 'pricing', 'qualifications'];
+    requiredSections.forEach(sec => {
+        if (propContent.includes(sec)) sectionScore += 5;
+    });
+    
+    const complianceContribution = 10;
+    
+    const totalScore = alignmentScore + sectionScore + complianceContribution;
+    let grade = 'F';
+    if (totalScore > 50) grade = 'D';
+    if (totalScore > 60) grade = 'C';
+    if (totalScore > 75) grade = 'B';
+    if (totalScore > 90) grade = 'A';
+    
+    return {
+        score: totalScore,
+        grade,
+        factors: ['Alignment', 'Section Completeness', 'Compliance Contribution'],
+        recommendations: ['Consider refining keywords', 'Ensure all required sections are present']
+    };
+  }
+
   async auditProposal(proposalDraft, rfpDocument) {
     const logs = [];
     const timestamp = new Date().toISOString();
@@ -107,6 +144,7 @@ export class AuditorAgent {
       logs.push(`[${new Date().toISOString()}] [Agent 4: Auditor] Audit passed on first pass. Compliance Score: ${complianceScore}% (Risk: Low).`);
     }
 
+    const winProb = this.calculateWinProbability(updatedProposal, JSON.stringify(rfpDocument));
     const auditReport = {
       auditedAt: new Date().toLocaleTimeString(),
       auditorName: this.name,
@@ -114,7 +152,8 @@ export class AuditorAgent {
       riskLevel,
       selfCorrected,
       auditChecks,
-      remediationsApplied: requiredRemediations
+      remediationsApplied: requiredRemediations,
+      winProbability: winProb
     };
 
     updatedProposal.auditReport = auditReport;

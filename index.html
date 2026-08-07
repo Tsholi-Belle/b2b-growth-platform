@@ -8,7 +8,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <script src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'></script>
+  <script type='module' src='frontend/js/auth/authClient.js'></script>
+  <script type='module' src='frontend/js/utils/currencyFormatter.js'></script>
+  <script type='module' src='frontend/js/billing/trialManager.js'></script>
 </head>
 <body>
 
@@ -38,6 +42,7 @@
       <button class="nav-tab" data-tab="connectors">
         🔌 Connectors (Pillar 3)
       </button>
+      <button class='nav-tab' data-tab='settings'>⚙️ Settings</button>
     </nav>
 
     <div class="header-status">
@@ -49,6 +54,8 @@
         <span>4 Agents Active</span>
       </div>
     </div>
+    <div id='currency-switcher-container'></div>
+    <div id='user-menu'></div>
   </header>
 
   <!-- Main Content Container -->
@@ -222,50 +229,65 @@
         <div class="card">
           <div class="section-title">📥 1. Ingest System Logs & Set Traffic Metrics</div>
           
-          <div class="preset-pills">
-            <div class="preset-title" style="margin-bottom: 0.5rem; font-size: 0.85rem;">Select Telemetry Sample Preset:</div>
-            <div id="log-preset-list"></div>
-          </div>
-
-          <div style="margin-top: 1.5rem;">
-            <div class="section-title" style="font-size: 0.95rem;">⚙️ Agent 2 Traffic Simulator Controls</div>
-            
-            <div class="slider-group">
-              <div class="slider-label">
-                <span>Monthly Active Users (MAU)</span>
-                <span class="slider-val" id="val-mau">150,000</span>
-              </div>
-              <input type="range" id="input-mau" min="10000" max="2000000" step="10000" value="150000">
-            </div>
-
-            <div class="slider-group">
-              <div class="slider-label">
-                <span>Peak Requests / Sec (RPS)</span>
-                <span class="slider-val" id="val-rps">200</span>
-              </div>
-              <input type="range" id="input-rps" min="50" max="3000" step="50" value="200">
-            </div>
-
-            <div class="slider-group">
-              <div class="slider-label">
-                <span>Database Size (GB)</span>
-                <span class="slider-val" id="val-db">850 GB</span>
-              </div>
-              <input type="range" id="input-db" min="50" max="10000" step="50" value="850">
-            </div>
-
-            <div class="slider-group">
-              <div class="slider-label">
-                <span>Monthly Network Egress (TB)</span>
-                <span class="slider-val" id="val-egress">2.5 TB</span>
-              </div>
-              <input type="range" id="input-egress" min="0.5" max="50" step="0.5" value="2.5">
-            </div>
-
-            <button class="btn-primary" id="btn-run-simulation">
-              🚀 Run Multi-Agent Optimization Simulation
-            </button>
-          </div>
+<div class='optimizer-input-form glass-card' id='optimizer-form'>
+  <h3>📊 Your Current Infrastructure</h3>
+  <div class='form-grid'>
+    <div class='form-group'>
+      <label>Current Cloud Provider</label>
+      <select id='current-provider'>
+        <option value=''>-- Select Provider --</option>
+        <option value='aws'>Amazon Web Services (AWS)</option>
+        <option value='gcp'>Google Cloud Platform (GCP)</option>
+        <option value='azure'>Microsoft Azure</option>
+        <option value='other'>Other / On-Premise</option>
+      </select>
+    </div>
+    <div class='form-group'>
+      <label>Monthly Cloud Spend</label>
+      <div class='input-with-prefix'>
+        <span class='input-prefix' id='spend-currency-symbol'>$</span>
+        <input type='number' id='monthly-spend' placeholder='e.g. 2500' min='0'>
+      </div>
+    </div>
+    <div class='form-group'>
+      <label>Monthly API Calls (millions)</label>
+      <input type='number' id='api-calls-millions' placeholder='e.g. 50' min='0'>
+    </div>
+    <div class='form-group'>
+      <label>Database Size (GB)</label>
+      <input type='number' id='db-size-gb' placeholder='e.g. 500' min='0'>
+    </div>
+    <div class='form-group'>
+      <label>Data Egress per Month (GB)</label>
+      <input type='number' id='egress-gb' placeholder='e.g. 200' min='0'>
+    </div>
+    <div class='form-group'>
+      <label>Primary Region</label>
+      <select id='primary-region'>
+        <option value='us-east-1'>US East (N. Virginia)</option>
+        <option value='eu-west-1'>EU West (Ireland)</option>
+        <option value='ap-southeast-1'>Asia Pacific (Singapore)</option>
+        <option value='af-south-1'>Africa (Cape Town)</option>
+        <option value='us-west-2'>US West (Oregon)</option>
+      </select>
+    </div>
+    <div class='form-group'>
+      <label>Workload Type</label>
+      <select id='workload-type'>
+        <option value='saas'>SaaS Application</option>
+        <option value='fintech'>FinTech / High-Compliance</option>
+        <option value='ai_ml'>AI / ML Workloads</option>
+        <option value='ecommerce'>E-Commerce</option>
+        <option value='api_heavy'>API-Heavy Platform</option>
+      </select>
+    </div>
+  </div>
+  <div class='form-actions'>
+    <button class='btn-secondary' id='btn-load-demo'>📂 Load Demo Data</button>
+    <button class='btn-primary' id='btn-run-optimizer'>🚀 Run AI Optimizer</button>
+  </div>
+  <div class='data-freshness' id='pricing-freshness'></div>
+</div>
         </div>
 
         <!-- Simulation Output & Provider Cost Breakdown -->
@@ -296,6 +318,53 @@
 
         <!-- RFP Document Selector & Raw View -->
         <div class="card">
+<div class='rfp-input-section glass-card' id='rfp-input-section'>
+  <h3>📋 RFP Input</h3>
+  <div class='rfp-source-toggle'>
+    <button class='source-btn active' data-source='manual'>✏️ Paste RFP Text</button>
+    <button class='source-btn' data-source='sam_gov'>🔍 Search SAM.gov</button>
+    <button class='source-btn' data-source='upload'>📎 Upload File</button>
+  </div>
+  
+  <!-- Manual paste -->
+  <div class='rfp-source-panel active' id='panel-manual'>
+    <textarea id='rfp-paste-text' placeholder='Paste the full RFP text here. The AI will analyze it and generate a tailored proposal response...' rows='8'></textarea>
+  </div>
+  
+  <!-- SAM.gov search -->
+  <div class='rfp-source-panel' id='panel-sam_gov'>
+    <div class='sam-search-bar'>
+      <input type='text' id='sam-search-keyword' placeholder='Search by keyword, agency, or NAICS code...'>
+      <button id='btn-sam-search'>🔍 Search Live Bids</button>
+    </div>
+    <div id='sam-results-list' class='sam-results'></div>
+  </div>
+  
+  <!-- Upload -->
+  <div class='rfp-source-panel' id='panel-upload'>
+    <div class='file-upload-zone' id='rfp-drop-zone'>
+      <span>📄 Drag & drop your RFP PDF or .docx here, or <label for='rfp-file-input' class='file-upload-label'>browse</label></span>
+      <input type='file' id='rfp-file-input' accept='.pdf,.docx,.txt' style='display:none'>
+    </div>
+  </div>
+  
+  <div class='rfp-context'>
+    <input type='text' id='company-context' placeholder='Your company name and 1-line description (e.g. "Acme Corp — ISO 27001 certified cloud consultancy")'>
+    <select id='proposal-tone'>
+      <option value='formal'>Formal & Technical</option>
+      <option value='consultative'>Consultative & Strategic</option>
+      <option value='aggressive'>Competitive & Value-Focused</option>
+    </select>
+  </div>
+</div>
+
+<!-- Win Probability & Checklist (shown after generation) -->
+<div class='proposal-qa-section' id='proposal-qa-section' style='display:none'>
+  <div id='win-probability-badge-container'></div>
+  <div id='win-probability-breakdown-container'></div>
+  <button class='btn-primary' id='btn-export-proposal'>📄 Export Proposal (PDF)</button>
+  <button class='btn-secondary' id='btn-push-gdocs'>📤 Push to Google Docs</button>
+</div>
           <div class="section-title">📩 1. Incoming RFP Document Inbox</div>
           <div class="preset-pills" id="rfp-document-list">
             <!-- Rendered by JS -->
@@ -418,6 +487,45 @@
           </div>
         </div>
 
+      </div>
+    </section>
+
+    <!-- TAB 6: SETTINGS -->
+    <section id="tab-settings" class="tab-content">
+      <div id="settings">
+        <div class="card glass-card" style="margin-bottom: 1.5rem;">
+          <div class="section-title">🏢 Organization Admin</div>
+          <div id="org-admin-container"></div>
+        </div>
+
+        <div class="card glass-card" style="margin-bottom: 1.5rem;">
+          <div class="section-title">👤 My Profile</div>
+          <div class="profile-form" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin: 1rem 0;">
+            <div class="form-group">
+              <label>Display Name</label>
+              <input type="text" id="profile-display-name" placeholder="Your Name">
+            </div>
+            <div class="form-group">
+              <label>Preferred Currency</label>
+              <select id="profile-currency">
+                <option value="USD">USD ($)</option>
+                <option value="EUR">EUR (€)</option>
+                <option value="GBP">GBP (£)</option>
+              </select>
+            </div>
+            <div class="form-actions" style="margin-top: auto;">
+              <button class="btn-primary" style="width: auto;">Save Changes</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card glass-card danger-zone" style="border-color: rgba(255, 95, 95, 0.25);">
+          <div class="section-title" style="color: #ff5f5f;">🛡️ Data & Privacy</div>
+          <div class="form-actions">
+            <button class="btn-secondary" onclick="apiFetch('/api/users/me/export').then(r=>r.blob())">Download My Data</button>
+            <button class="btn-secondary danger" style="color: #ff5f5f;" onclick="if(confirm('Are you sure you want to delete your account?')) apiFetch('/api/users/me', {method: 'DELETE'})">Delete Account</button>
+          </div>
+        </div>
       </div>
     </section>
 
