@@ -108,6 +108,22 @@
           </div>
         </div>
       </div>
+
+      <!-- Call To Action (CTA) Bar -->
+      <div class="hero-cta-bar" style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+        <div class="cta-headline">
+          <h4 style="font-size: 1rem; color: var(--text-primary); margin-bottom: 0.2rem;">Ready to optimize your infrastructure and win more bids?</h4>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">Get started instantly with 7 days free trial. No credit card required.</p>
+        </div>
+        <div class="cta-actions" style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+          <a href="frontend/pages/pricing.html" class="btn-primary" style="text-decoration: none; padding: 0.6rem 1.25rem; display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 700;">
+            <span>🚀</span> Start 7-Day Free Trial
+          </a>
+          <button class="btn-secondary" onclick="window.app.loadDemoData()" style="padding: 0.6rem 1.25rem; display: inline-flex; align-items: center; gap: 0.4rem;">
+            <span>📅</span> Schedule Platform Demo
+          </button>
+        </div>
+      </div>
     </section>
 
     <!-- TAB 1: OVERVIEW DASHBOARD -->
@@ -546,6 +562,22 @@
         All proposal drafts and multi-cloud simulations are generated autonomously by ArchEngine AI for decision support. Outputs must be verified by a licensed solutions architect prior to formal submission. Ingested system telemetry logs and bid documents are encrypted using AES-256 / TLS 1.3 under a strict Zero-Data Retention policy and are never used for model training.
       </div>
     </div>
+
+    <!-- BOTTOM PLATFORM CTA SECTION -->
+    <section class="card glass-card bottom-cta-card" style="margin-bottom: 2rem; padding: 2rem; background: linear-gradient(135deg, rgba(0, 212, 255, 0.08), rgba(124, 58, 237, 0.08)); border: 1px solid rgba(0, 212, 255, 0.2); text-align: center;">
+      <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; background: linear-gradient(90deg, #fff, var(--accent-primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Transform Your Cloud Spend & Win Winning RFPs Today</h3>
+      <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto 1.5rem auto; font-size: 0.9rem;">
+        Join fast-growing consultancies, IT service providers, and scale-ups using ArchEngine AI's multi-agent system.
+      </p>
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="frontend/pages/pricing.html" class="btn-primary" style="text-decoration: none; padding: 0.75rem 1.75rem; font-size: 0.95rem; font-weight: 700;">
+          🚀 Start 7-Day Free Trial (Primary CTA)
+        </a>
+        <button class="btn-secondary" onclick="window.app.loadDemoData()" style="padding: 0.75rem 1.75rem; font-size: 0.95rem;">
+          📅 Schedule Platform Demo (Secondary CTA)
+        </button>
+      </div>
+    </section>
 
     <!-- LIVE MULTI-AGENT LOG TERMINAL (PERSISTENT ON ALL TABS) -->
     <div class="agent-terminal">
