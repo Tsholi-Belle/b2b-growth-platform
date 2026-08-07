@@ -29,7 +29,7 @@ CREATE TABLE users (
     full_name VARCHAR(255),
     org_id UUID REFERENCES organisations(id) ON DELETE CASCADE,
     role user_role NOT NULL DEFAULT 'viewer',
-    preferred_currency VARCHAR(3) NOT NULL DEFAULT 'USD',
+    preferred_currency VARCHAR(3) NOT NULL DEFAULT 'ZAR',
     avatar_url TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

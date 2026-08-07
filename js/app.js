@@ -587,7 +587,7 @@ class AppController {
           </div>
           <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
             <span>Recommended Year 1 Cloud Infrastructure OpEx (${prop.recommendedCloudArchitecture.primaryProvider}):</span>
-            <strong>${displayCurrency(prop.recommendedCloudArchitecture.annualOpEx.toLocaleString())} USD</strong>
+            <strong>${displayCurrency(prop.recommendedCloudArchitecture.annualOpEx.toLocaleString())}</strong>
           </div>
           <div style="display: flex; justify-content: space-between; color: var(--accent-emerald); font-weight: 700; font-size: 1.05rem; padding-top: 0.5rem; border-top: 1px solid var(--border-glass);">
             <span>Projected 1-Year Cost Savings vs Unoptimized AWS On-Demand:</span>

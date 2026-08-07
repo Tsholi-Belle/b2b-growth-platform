@@ -74,7 +74,7 @@ function injectCSS() {
 export async function initAuth() {
     injectCSS();
     if (sessionStorage.getItem('demo_mode') === 'true') {
-        currentUser = { role: 'demo', org: 'Demo Org', currency: 'USD', name: 'Demo User' };
+        currentUser = { role: 'demo', org: 'Demo Org', currency: 'ZAR', name: 'Demo User' };
         return;
     }
     if (supabaseClient) {
@@ -174,7 +174,7 @@ function renderModal() {
 
     document.getElementById('btn-demo').onclick = () => {
         sessionStorage.setItem('demo_mode', 'true');
-        currentUser = { role: 'demo', org: 'Demo Org', currency: 'USD', name: 'Demo User' };
+        currentUser = { role: 'demo', org: 'Demo Org', currency: 'ZAR', name: 'Demo User' };
         overlay.classList.remove('show');
         setTimeout(() => overlay.remove(), 300);
     };
@@ -200,7 +200,7 @@ export async function loginWithEmail(email, password) {
         currentSession = data.session;
         currentUser = data.user;
     } else {
-        currentUser = { email, role: 'admin', name: 'Mock User', currency: 'USD' };
+        currentUser = { email, role: 'admin', name: 'Mock User', currency: 'ZAR' };
         currentSession = { access_token: 'mock_token' };
     }
     const overlay = document.getElementById('auth-overlay');
@@ -217,7 +217,7 @@ export async function signupWithEmail(email, password, fullName, orgName) {
         currentSession = data.session;
         currentUser = data.user;
     } else {
-        currentUser = { email, name: fullName, org: orgName, role: 'owner', currency: 'USD' };
+        currentUser = { email, name: fullName, org: orgName, role: 'owner', currency: 'ZAR' };
         currentSession = { access_token: 'mock_token' };
     }
     

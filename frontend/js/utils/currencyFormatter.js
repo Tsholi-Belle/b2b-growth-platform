@@ -14,7 +14,7 @@ const SUPPORTED_CURRENCIES = [
 ];
 
 let exchangeRates = { USD: 1 };
-let userCurrency = localStorage.getItem('userCurrency') || 'USD';
+let userCurrency = localStorage.getItem('userCurrency') || 'ZAR';
 
 export async function loadExchangeRates() {
     const cached = sessionStorage.getItem('exchangeRates');
@@ -31,7 +31,7 @@ export async function loadExchangeRates() {
             exchangeRates = await res.json();
         } else {
             // Mock rates if API fails
-            exchangeRates = { USD: 1, EUR: 0.9, GBP: 0.78, ZAR: 19.0, AUD: 1.5, CAD: 1.35, IND: 83.0, NGN: 1100.0, KES: 150.0, JPY: 150.0, CHF: 0.9, BRL: 5.0 };
+            exchangeRates = { USD: 1, ZAR: 19.0, EUR: 0.9, GBP: 0.78, AUD: 1.5, CAD: 1.35, IND: 83.0, NGN: 1100.0, KES: 150.0, JPY: 150.0, CHF: 0.9, BRL: 5.0 };
         }
         sessionStorage.setItem('exchangeRates', JSON.stringify(exchangeRates));
         sessionStorage.setItem('exchangeRatesTime', Date.now().toString());
