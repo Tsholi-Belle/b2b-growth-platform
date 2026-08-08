@@ -176,11 +176,52 @@ router.delete('/:id', async (req, res) => {
         .eq('org_id', req.user.org_id);
   
       if (error) throw error;
-      res.status(204).send();
-    } catch (error) {
-      console.error('Error deleting proposal:', error);
-      res.status(500).json({ error: 'Failed to delete proposal' });
+/**
+ * POST /api/proposals/outreach
+ * Researches prospect domain using Function Calling and generates personalized cold pitch
+ */
+router.post('/outreach', async (req, res) => {
+  try {
+    const { domain } = req.body;
+    if (!domain) {
+      return res.status(400).json({ error: 'domain is required' });
     }
-  });
+
+    // Lead enrichment tool function
+    const leadProfileTool = {
+      name: 'enrich_lead_profile',
+      description: 'Fetches company profile data given a domain name',
+      parameters: {
+        type: 'OBJECT',
+        properties: {
+          domain: { type: 'STRING', description: 'The prospect company domain name' }
+        },
+        required: ['domain']
+      }
+    };
+
+    const prompt = `Investigate company ${domain} and compose a personalized B2B cold outreach pitch email.`;
+    
+    // Call Gemini 1.5 Pro with Tool Definition
+    const response = await ai.models.generateContent({
+      model: 'gemini-1.5-pro',
+      contents: [{ role: 'user', parts: [{ text: prompt }] }],
+      config: {
+        systemInstruction: 'You are an expert B2B growth agent. Use the provided tools to research prospect domains before drafting compelling, highly personalized pitch emails.',
+        temperature: 0.7,
+        tools: [{ functionDeclarations: [leadProfileTool] }]
+      }
+    });
+
+    res.json({
+      domain,
+      outreach_email: response.text,
+      generated_at: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Error generating outreach email:', error);
+    res.status(500).json({ error: 'Failed to generate outreach pitch' });
+  }
+});
 
 module.exports = router;
