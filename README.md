@@ -2,7 +2,6 @@
 
 [![XPRIZE Competition Ready](https://img.shields.io/badge/XPRIZE-Competition--Ready-00d4ff?style=for-the-badge&logo=google)](https://xprize.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-purple.style=for-the-badge)](LICENSE)
-[![Currency: ZAR / USD](https://img.shields.io/badge/Currency-ZAR%20%7C%20USD-emerald?style=for-the-badge)](#multi-currency-support)
 [![Security: AES-256 Zero-Retention](https://img.shields.io/badge/Security-AES--256%20Zero%20Retention-blue?style=for-the-badge)](#security--privacy)
 
 > **"Optimize your infrastructure. Win more bids."**  
