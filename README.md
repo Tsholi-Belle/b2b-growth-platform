@@ -10,7 +10,7 @@
 
 ---
 
-## 🚀 Architecture & Multi-Agent Pipeline
+##  Architecture & Multi-Agent Pipeline
 
 ArchEngine AI operates a four-agent pipeline with a closed-loop audit engine:
 
@@ -66,7 +66,7 @@ ArchEngine AI operates a four-agent pipeline with a closed-loop audit engine:
 
 ---
 
-## 🏆 5 XPRIZE Strategic Pillars
+## 5 XPRIZE Strategic Pillars
 
 | Pillar | Focus | Implementation | Impact |
 | :--- | :--- | :--- | :--- |
@@ -78,18 +78,18 @@ ArchEngine AI operates a four-agent pipeline with a closed-loop audit engine:
 
 ---
 
-## ✨ Key Features
+##  Key Features
 
-- **🌐 Multi-Currency Native (ZAR & USD)**: Built with South African Rand (ZAR) as default display currency, converting dynamically to USD, EUR, GBP, AUD, NGN, and KES via live exchange rates.
-- **🤖 B2B Lead Enrichment & Outreach Agent**: Autonomous Python & Node.js service using Google GenAI SDK Function Calling (`enrich_lead_profile`) to research prospect domains and craft high-converting pitch emails.
-- **📊 Win Probability Scoring Engine**: Calculates an objective 0–100 Win Probability score and letter grade (A–F) based on NLP keyword alignment, past performance strength, and section completeness.
-- **🛡️ 11-Point Pre-Submission Quality Checklist**: Blocks proposal export until all mandatory quality criteria pass.
-- **📄 Executive PDF Exporter**: Generates executive PDF packages complete with cover page, TOC, audit badges, and legal disclaimers.
-- **💳 Stripe Subscription Billing**: Integrated 7-day trial manager, monthly/annual sliding toggle, self-service Customer Portal, and Stripe Webhooks.
+- ** Multi-Currency Native (ZAR & USD)**: Built with South African Rand (ZAR) as default display currency, converting dynamically to USD, EUR, GBP, AUD, NGN, and KES via live exchange rates.
+- ** B2B Lead Enrichment & Outreach Agent**: Autonomous Python & Node.js service using Google GenAI SDK Function Calling (`enrich_lead_profile`) to research prospect domains and craft high-converting pitch emails.
+- ** Win Probability Scoring Engine**: Calculates an objective 0–100 Win Probability score and letter grade (A–F) based on NLP keyword alignment, past performance strength, and section completeness.
+- ** 11-Point Pre-Submission Quality Checklist**: Blocks proposal export until all mandatory quality criteria pass.
+- ** Executive PDF Exporter**: Generates executive PDF packages complete with cover page, TOC, audit badges, and legal disclaimers.
+- ** Stripe Subscription Billing**: Integrated 7-day trial manager, monthly/annual sliding toggle, self-service Customer Portal, and Stripe Webhooks.
 
 ---
 
-## 📂 Project Structure
+##  Project Structure
 
 ```
 b2b-growth-platform/
@@ -145,7 +145,7 @@ b2b-growth-platform/
 
 ---
 
-## ⚡ Quick Start Guide
+##  Quick Start Guide
 
 ### Prerequisites
 - **Node.js**: v18+ 
@@ -222,18 +222,8 @@ python3 backend/services/lead_outreach_agent.py
 
 ---
 
-## 💳 Pricing Structure (ZAR / USD)
 
-| Plan | Monthly (ZAR) | Annual (ZAR - Save 20%) | Monthly (USD) | Proposals / mo | Features Included |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **Free** | **R0** | **R0** | **$0** | 2 | Basic Generation, Win Score |
-| **Starter** | **R882** | **R702** (/mo) | **$49** | 10 | PDF Exports, Live Cloud APIs |
-| **Professional** | **R2,682** | **R2,142** (/mo) | **$149** | **Unlimited** | Monte Carlo, Subcontractor Teaming, 5 Users |
-| **Enterprise** | **R8,982** | **R7,182** (/mo) | **$499** | **Unlimited** | Custom Connectors, 25 Users, 99.99% SLA |
-
----
-
-## 🔒 Security & Privacy
+##  Security & Privacy
 
 - **Zero-Retention AI Policy**: Proprietary business data and RFP inputs are never stored or used to train foundational AI models.
 - **AES-256 Encryption**: Encrypted data at rest and TLS 1.3 in transit.
@@ -242,7 +232,7 @@ python3 backend/services/lead_outreach_agent.py
 
 ---
 
-## 📄 License
+##  License
 
 Distributed under the MIT License. See `LICENSE` for more information.
 
