@@ -1,9 +1,5 @@
 # ArchEngine AI — B2B Growth & Multi-Agent Infrastructure Optimization Platform
 
-[![XPRIZE Competition Ready](https://img.shields.io/badge/XPRIZE-Competition--Ready-00d4ff?style=for-the-badge&logo=google)](https://xprize.org)
-[![License: MIT](https://img.shields.io/badge/License-MIT-purple.style=for-the-badge)](LICENSE)
-[![Security: AES-256 Zero-Retention](https://img.shields.io/badge/Security-AES--256%20Zero%20Retention-blue?style=for-the-badge)](#security--privacy)
-
 > **"Optimize your infrastructure. Win more bids."**  
 > ArchEngine AI is an autonomous, multi-agent AI platform built in South Africa for global enterprise growth. It unifies **Cloud Infrastructure Cost Optimization** with **Autonomous RFP Proposal Generation** powered by closed-loop AI auditing.
 
