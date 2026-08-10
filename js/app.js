@@ -497,6 +497,7 @@ class AppController {
 
   appendTerminalLogs(logArray, agentType = 'system') {
     const output = document.getElementById('terminal-log-output');
+    if (!output) return;
     logArray.forEach(log => {
       const div = document.createElement('div');
       div.className = `log-entry ${agentType}`;
