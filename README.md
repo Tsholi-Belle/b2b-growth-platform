@@ -75,12 +75,12 @@ ArchEngine AI operates a four-agent pipeline with a closed-loop audit engine:
 
 ##  Key Features
 
-- ** Multi-Currency Native (ZAR & USD)**: Built with South African Rand (ZAR) as default display currency, converting dynamically to USD, EUR, GBP, AUD, NGN, and KES via live exchange rates.
-- ** B2B Lead Enrichment & Outreach Agent**: Autonomous Python & Node.js service using Google GenAI SDK Function Calling (`enrich_lead_profile`) to research prospect domains and craft high-converting pitch emails.
-- ** Win Probability Scoring Engine**: Calculates an objective 0–100 Win Probability score and letter grade (A–F) based on NLP keyword alignment, past performance strength, and section completeness.
-- ** 11-Point Pre-Submission Quality Checklist**: Blocks proposal export until all mandatory quality criteria pass.
-- ** Executive PDF Exporter**: Generates executive PDF packages complete with cover page, TOC, audit badges, and legal disclaimers.
-- ** Stripe Subscription Billing**: Integrated 7-day trial manager, monthly/annual sliding toggle, self-service Customer Portal, and Stripe Webhooks.
+- **Multi-Currency Native (ZAR & USD)**: Built with South African Rand (ZAR) as default display currency, converting dynamically to USD, EUR, GBP, AUD, NGN, and KES via live exchange rates.
+- **B2B Lead Enrichment & Outreach Agent**: Autonomous Python & Node.js service using Google GenAI SDK Function Calling (`enrich_lead_profile`) to research prospect domains and craft high-converting pitch emails.
+- **Win Probability Scoring Engine**: Calculates an objective 0–100 Win Probability score and letter grade (A–F) based on NLP keyword alignment, past performance strength, and section completeness.
+- **11-Point Pre-Submission Quality Checklist**: Blocks proposal export until all mandatory quality criteria pass.
+- **Executive PDF Exporter**: Generates executive PDF packages complete with cover page, TOC, audit badges, and legal disclaimers.
+- **Stripe Subscription Billing**: Integrated 7-day trial manager, monthly/annual sliding toggle, self-service Customer Portal, and Stripe Webhooks.
 
 ---
 
