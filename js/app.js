@@ -795,6 +795,8 @@ class AppController {
 }
 
 // Instantiate App Controller when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => new AppController());
+} else {
   new AppController();
-});
+}
