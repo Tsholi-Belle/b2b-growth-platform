@@ -107,7 +107,7 @@ export function renderChecklistModal(proposal, rfpText, onApproved, onCancel) {
     overlay.className = 'checklist-modal-overlay';
     
     let itemsHtml = result.items.map(i => {
-        let icon = i.status === 'pass' ? '✓' : i.status === 'fail' ? '✕' : '⚠';
+        let icon = i.status === 'pass' ? '✓' : i.status === 'fail' ? '✕' : '!';
         return `
         <div class="checklist-item">
             <div class="icon ${i.status}">${icon}</div>
