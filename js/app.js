@@ -682,7 +682,6 @@ class AppController {
         <h3>SECTION 5: DATA PROTECTION, PRIVACY & AI GENERATIVE CLAUSES</h3>
         
         <div class="disclaimer-banner">
-          <span style="font-size: 1.1rem;">⚠️</span>
           <div>
             <strong>Human-in-the-Loop Review Mandatory:</strong> ${prop.aiDisclaimer}
           </div>
@@ -690,17 +689,17 @@ class AppController {
 
         <div class="legal-clause-box">
           <div class="legal-clause-item">
-            <div class="legal-clause-title">🔒 1. Data Privacy & Zero-Retention Policy</div>
+            <div class="legal-clause-title">1. Data Privacy & Zero-Retention Policy</div>
             <div class="legal-clause-text">${prop.dataProtectionClauses.privacyPolicy}</div>
           </div>
 
           <div class="legal-clause-item">
-            <div class="legal-clause-title">🛡️ 2. Regulatory Compliance & Governance Standards</div>
+            <div class="legal-clause-title">2. Regulatory Compliance & Governance Standards</div>
             <div class="legal-clause-text">${prop.dataProtectionClauses.complianceStandard}</div>
           </div>
 
           <div class="legal-clause-item">
-            <div class="legal-clause-title">⚖️ 3. Cloud Provider Rate & SLA Liability Limitation</div>
+            <div class="legal-clause-title">3. Cloud Provider Rate & SLA Liability Limitation</div>
             <div class="legal-clause-text">${prop.dataProtectionClauses.pricingLiability}</div>
           </div>
         </div>
