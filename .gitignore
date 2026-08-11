@@ -9,5 +9,7 @@ __pycache__/
 # Environment & System Files
 .DS_Store
 .env
+*.env
+backend/.env
 .idea/
 .vscode/
