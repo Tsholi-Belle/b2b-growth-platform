@@ -58,8 +58,14 @@ export function format(amountUSD, targetCurrency = userCurrency, options = {}) {
     try {
         return new Intl.NumberFormat('en-US', localeOptions).format(amount);
     } catch (e) {
-        return `${getCurrencySymbol(targetCurrency)}${amount.toFixed(2)}`;
+        const symbol = getCurrencySymbol(targetCurrency);
+        return `${symbol}${amount.toFixed(2)}`;
     }
+}
+
+export function displayCurrency(val) {
+    if (typeof val === 'string') val = parseFloat(val.replace(/,/g, '')) || 0;
+    return format(val, userCurrency);
 }
 
 export function getCurrencySymbol(currencyCode) {

@@ -68,17 +68,21 @@ class AppController {
   }
 
   bindTabNavigation() {
-    const tabs = document.querySelectorAll('.nav-tab');
-    tabs.forEach(tab => {
-      tab.addEventListener('click', (e) => {
-        const targetTab = e.currentTarget.getAttribute('data-tab');
-        
-        tabs.forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.addEventListener('click', (e) => {
+      const tabBtn = e.target.closest('.nav-tab');
+      if (!tabBtn) return;
+      
+      const targetTab = tabBtn.getAttribute('data-tab');
+      if (!targetTab) return;
 
-        e.currentTarget.classList.add('active');
-        document.getElementById(`tab-${targetTab}`).classList.add('active');
-      });
+      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+      tabBtn.classList.add('active');
+      const targetEl = document.getElementById(`tab-${targetTab}`);
+      if (targetEl) {
+        targetEl.classList.add('active');
+      }
     });
   }
 
