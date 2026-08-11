@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=2026">
   <script src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2'></script>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'></script>
   <script type='module' src='frontend/js/auth/authClient.js'></script>
@@ -301,7 +301,7 @@
           </div>
 
           <!-- PILLAR 5: MONTE CARLO SENSITIVITY RISK ANALYSIS -->
-          <div style="margin-top: 1.5rem; background: rgba(0,0,0,0.3); padding: 1.1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-glass);">
+          <div style="margin-top: 1.5rem; background: #FFFFFF; padding: 1.1rem; border-radius: var(--radius-sm); border: 1px solid #E2E8F0;">
             <div class="section-title" style="font-size: 0.9rem; justify-content: space-between;">
               <span>Pillar 5: Monte Carlo Risk Simulation (1,000 Scenarios)</span>
               <button class="btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;" onclick="window.app.runMonteCarloTest()">Stress Test 1,000 Loads</button>
@@ -375,7 +375,7 @@
 
           <div style="margin-top: 1.5rem;">
             <div class="section-title" style="font-size: 0.95rem;">RFP Requirement Scope Extracted</div>
-            <div id="rfp-extracted-details" style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-glass); font-size: 0.85rem; color: var(--text-muted);">
+            <div id="rfp-extracted-details" style="background: #FFFFFF; padding: 1rem; border-radius: var(--radius-sm); border: 1px solid #E2E8F0; font-size: 0.85rem; color: var(--text-muted);">
               Select an RFP to view extracted technical parameters.
             </div>
 
@@ -438,20 +438,20 @@
           </p>
 
           <div style="display: flex; flex-direction: column; gap: 1rem;">
-            <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-glass);">
+            <div style="background: #FFFFFF; padding: 1rem; border-radius: var(--radius-sm); border: 1px solid #E2E8F0;">
               <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div>
-                  <strong style="color: #FF9900;">AWS CloudWatch & Cost Explorer API</strong>
+                  <strong style="color: #D97706;">AWS CloudWatch & Cost Explorer API</strong>
                   <div style="font-size: 0.78rem; color: var(--text-muted);">IAM Role: arn:aws:iam::123456789012:role/ArchEngineReadOnly</div>
                 </div>
                 <button class="btn-secondary" onclick="window.app.triggerAWSConnect()">Sync AWS Telemetry</button>
               </div>
             </div>
 
-            <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-glass);">
+            <div style="background: #FFFFFF; padding: 1rem; border-radius: var(--radius-sm); border: 1px solid #E2E8F0;">
               <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div>
-                  <strong style="color: #4285F4;">GCP Stackdriver & Billing API</strong>
+                  <strong style="color: #0284C7;">GCP Stackdriver & Billing API</strong>
                   <div style="font-size: 0.78rem; color: var(--text-muted);">Project ID: biohealth-prod-data-lake</div>
                 </div>
                 <button class="btn-secondary" onclick="window.app.triggerGCPConnect()">Sync GCP Metrics</button>
@@ -468,7 +468,7 @@
           </p>
 
           <div style="display: flex; flex-direction: column; gap: 1rem;">
-            <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-glass);">
+            <div style="background: #FFFFFF; padding: 1rem; border-radius: var(--radius-sm); border: 1px solid #E2E8F0;">
               <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div>
                   <strong>SAM.gov Public Bid API & Gmail Inbox Listener</strong>
@@ -478,7 +478,7 @@
               </div>
             </div>
 
-            <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-glass);">
+            <div style="background: #FFFFFF; padding: 1rem; border-radius: var(--radius-sm); border: 1px solid #E2E8F0;">
               <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div>
                   <strong>1-Click Workspace Auto-Push</strong>
@@ -531,11 +531,11 @@
           </div>
         </div>
 
-        <div class="card glass-card danger-zone" style="border-color: rgba(255, 95, 95, 0.25);">
-          <div class="section-title" style="color: #ff5f5f;">Data & Privacy</div>
+        <div class="card glass-card danger-zone" style="border-color: rgba(239, 68, 68, 0.3);">
+          <div class="section-title" style="color: #EF4444;">Data & Privacy</div>
           <div class="form-actions">
             <button class="btn-secondary" onclick="apiFetch('/api/users/me/export').then(r=>r.blob())">Download My Data</button>
-            <button class="btn-secondary danger" style="color: #ff5f5f;" onclick="if(confirm('Are you sure you want to delete your account?')) apiFetch('/api/users/me', {method: 'DELETE'})">Delete Account</button>
+            <button class="btn-secondary danger" style="color: #EF4444;" onclick="if(confirm('Are you sure you want to delete your account?')) apiFetch('/api/users/me', {method: 'DELETE'})">Delete Account</button>
           </div>
         </div>
       </div>
@@ -550,8 +550,8 @@
     </div>
 
     <!-- BOTTOM PLATFORM CTA SECTION -->
-    <section class="card glass-card bottom-cta-card" style="margin-bottom: 2rem; padding: 2rem; background: linear-gradient(135deg, rgba(0, 212, 255, 0.08), rgba(124, 58, 237, 0.08)); border: 1px solid rgba(0, 212, 255, 0.2); text-align: center;">
-      <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; background: linear-gradient(90deg, #fff, var(--accent-primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Transform Your Cloud Spend & Win Winning RFPs Today</h3>
+    <section class="card glass-card bottom-cta-card" style="margin-bottom: 2rem; padding: 2rem; background: linear-gradient(135deg, #FFFFFF, #F1F5F9); border: 1px solid #CBD5E1; text-align: center;">
+      <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; color: #0F172A;">Transform Your Cloud Spend & Win Winning RFPs Today</h3>
       <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto 1.5rem auto; font-size: 0.9rem;">
         Join fast-growing consultancies, IT service providers, and scale-ups using ArchEngine AI's multi-agent system.
       </p>
