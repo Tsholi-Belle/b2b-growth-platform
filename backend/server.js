@@ -58,6 +58,16 @@ app.use('/api/connectors', connectorsRoutes);
 app.use('/api/org', organisationsRoutes);
 app.use('/api/exchange-rates', exchangeRatesRoutes);
 
+// Serve static frontend files if SERVE_STATIC is enabled or in single-container mode
+if (process.env.SERVE_STATIC === 'true' || process.env.SINGLE_CONTAINER === 'true') {
+    const path = require('path');
+    app.use(express.static(path.join(__dirname, '../')));
+    app.get('*', (req, res, next) => {
+        if (req.url.startsWith('/api') || req.url === '/health') return next();
+        res.sendFile(path.join(__dirname, '../index.html'));
+    });
+}
+
 // Health check
 app.get('/health', (req, res) => {
     res.json({ status: 'ok', timestamp: new Date() });

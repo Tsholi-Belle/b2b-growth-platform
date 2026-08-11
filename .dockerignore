@@ -1,0 +1,13 @@
+node_modules
+npm-debug.log
+backend/node_modules
+.git
+.gitignore
+.env
+*.env
+backend/.env
+submission
+brain
+scratch
+.ds_store
+.DS_Store
