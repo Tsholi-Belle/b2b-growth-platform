@@ -470,7 +470,6 @@ class AppController {
     const runBadgeHTML = runEvidence ? `
       <div style="background: rgba(0, 212, 255, 0.08); border: 1px solid rgba(0, 212, 255, 0.25); padding: 0.75rem 1rem; border-radius: 10px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
         <div style="display: flex; align-items: center; gap: 0.6rem;">
-          <span style="font-size: 1.1rem;">⚡</span>
           <div>
             <div style="font-size: 0.82rem; font-weight: 800; color: var(--accent-primary);">VERTEX AI RUN EVIDENCE</div>
             <div style="font-size: 0.75rem; color: var(--text-muted);">Run ID: <code style="color:#fff;">${runEvidence.id.substring(0, 18)}...</code></div>
