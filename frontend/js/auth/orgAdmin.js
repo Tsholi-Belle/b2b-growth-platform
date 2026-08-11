@@ -1,37 +1,37 @@
 const ORG_ADMIN_CSS = `
 .org-admin-panel {
-    background: rgba(10, 15, 30, 0.8); backdrop-filter: blur(12px);
-    border: 1px solid rgba(255,255,255,0.05); border-radius: 12px;
-    padding: 2rem; color: #e2e8f0; font-family: 'Plus Jakarta Sans', sans-serif;
+    background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px);
+    border: 1px solid #CBD5E1; border-radius: 12px;
+    padding: 2rem; color: #0F172A; font-family: 'Plus Jakarta Sans', sans-serif;
 }
 .org-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-.org-title { margin: 0; font-size: 1.5rem; font-weight: 700; color: #fff; }
+.org-title { margin: 0; font-size: 1.5rem; font-weight: 700; color: #0F172A; }
 .org-badge {
-    background: rgba(0, 212, 255, 0.1); color: #00d4ff; border: 1px solid rgba(0, 212, 255, 0.3);
+    background: #F1F5F9; color: #0F172A; border: 1px solid #CBD5E1;
     padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600;
 }
 .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
 .stat-card {
-    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);
+    background: #FFFFFF; border: 1px solid #E2E8F0;
     padding: 1.5rem; border-radius: 12px; text-align: center;
 }
-.stat-value { font-size: 2rem; font-weight: 700; color: #fff; margin-bottom: 0.5rem; }
-.stat-label { font-size: 0.9rem; color: #8892b0; }
+.stat-value { font-size: 2rem; font-weight: 700; color: #0F172A; margin-bottom: 0.5rem; }
+.stat-label { font-size: 0.9rem; color: #64748B; }
 .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
 .btn-primary {
-    background: #00d4ff; color: #0a0f1e; border: none; padding: 0.5rem 1rem;
+    background: #0F172A; color: #FFFFFF; border: none; padding: 0.5rem 1rem;
     border-radius: 6px; font-weight: 600; cursor: pointer; transition: background 0.2s;
 }
-.btn-primary:hover { background: #00e5ff; }
+.btn-primary:hover { background: #1E293B; }
 .btn-danger {
-    background: rgba(255, 50, 50, 0.1); color: #ff5252; border: 1px solid rgba(255, 50, 50, 0.3);
+    background: rgba(239, 68, 68, 0.08); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.3);
     padding: 0.25rem 0.75rem; border-radius: 4px; cursor: pointer; font-size: 0.8rem;
 }
 .members-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-.members-table th { text-align: left; padding: 1rem; color: #8892b0; font-weight: 600; border-bottom: 1px solid rgba(255,255,255,0.1); }
-.members-table td { padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.members-table th { text-align: left; padding: 1rem; color: #475569; font-weight: 600; border-bottom: 1px solid #E2E8F0; }
+.members-table td { padding: 1rem; border-bottom: 1px solid #E2E8F0; }
 .role-select {
-    background: rgba(10, 15, 30, 0.8); color: #fff; border: 1px solid rgba(255,255,255,0.2);
+    background: #FFFFFF; color: #0F172A; border: 1px solid #CBD5E1;
     padding: 0.25rem; border-radius: 4px;
 }
 `;
