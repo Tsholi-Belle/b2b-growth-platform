@@ -105,6 +105,33 @@ CREATE TABLE exchange_rates (
     fetched_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- AI Runs Evidence Trace Table (R4 Requirement)
+CREATE TABLE ai_runs (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    org_id UUID REFERENCES organisations(id) ON DELETE CASCADE,
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    workflow VARCHAR(100) NOT NULL DEFAULT 'proposal_generation',
+    status VARCHAR(50) NOT NULL DEFAULT 'completed',
+    model VARCHAR(100) NOT NULL,
+    provider VARCHAR(50) NOT NULL DEFAULT 'vertex_ai',
+    prompt_version VARCHAR(50) DEFAULT 'v1.0',
+    schema_version VARCHAR(50) DEFAULT 'v1.0',
+    started_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    completed_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    latency_ms INTEGER,
+    ai_call_count INTEGER DEFAULT 1,
+    input_hash VARCHAR(64),
+    output_proposal_id UUID REFERENCES proposals(id) ON DELETE SET NULL,
+    validation_status VARCHAR(50) DEFAULT 'passed',
+    error_code VARCHAR(100),
+    usage_json JSONB,
+    steps_json JSONB,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+CREATE INDEX idx_ai_runs_org_id ON ai_runs(org_id);
+CREATE INDEX idx_ai_runs_user_id ON ai_runs(user_id);
+CREATE INDEX idx_ai_runs_created_at ON ai_runs(created_at);
+
 -- Row-Level Security (RLS) Policies
 
 -- Enable RLS
@@ -113,6 +140,7 @@ ALTER TABLE users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE cloud_profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE proposals ENABLE ROW LEVEL SECURITY;
 ALTER TABLE usage_events ENABLE ROW LEVEL SECURITY;
+ALTER TABLE ai_runs ENABLE ROW LEVEL SECURITY;
 
 -- Organisations: Users can only read their own organisation
 CREATE POLICY org_read_policy ON organisations
@@ -138,4 +166,10 @@ CREATE POLICY proposals_write_policy ON proposals
 CREATE POLICY usage_events_read_policy ON usage_events
     FOR SELECT USING (org_id = (SELECT org_id FROM users WHERE id = auth.uid()));
 CREATE POLICY usage_events_write_policy ON usage_events
+    FOR INSERT WITH CHECK (org_id = (SELECT org_id FROM users WHERE id = auth.uid()));
+
+-- AI Runs: Users can read AI runs in their organisation
+CREATE POLICY ai_runs_read_policy ON ai_runs
+    FOR SELECT USING (org_id = (SELECT org_id FROM users WHERE id = auth.uid()));
+CREATE POLICY ai_runs_write_policy ON ai_runs
     FOR INSERT WITH CHECK (org_id = (SELECT org_id FROM users WHERE id = auth.uid()));
