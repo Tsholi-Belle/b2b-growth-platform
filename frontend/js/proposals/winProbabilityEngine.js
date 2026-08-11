@@ -10,7 +10,7 @@ const WPE_CSS = `
 .wp-gauge circle {
     fill: none; stroke-width: 8; stroke-linecap: round;
 }
-.wp-gauge .bg { stroke: rgba(255,255,255,0.1); }
+.wp-gauge .bg { stroke: #E2E8F0; }
 .wp-gauge .value {
     stroke: url(#wp-gradient); stroke-dasharray: 314; stroke-dashoffset: 314;
     transition: stroke-dashoffset 1.5s ease-out;
@@ -19,18 +19,18 @@ const WPE_CSS = `
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
 }
-.wp-score { font-size: 1.5rem; font-weight: 700; color: #fff; line-height: 1; }
-.wp-grade { font-size: 0.8rem; font-weight: 600; margin-top: 4px; padding: 2px 6px; border-radius: 4px; }
-.grade-A { background: rgba(0,230,118,0.2); color: #00e676; }
-.grade-B { background: rgba(0,212,255,0.2); color: #00d4ff; }
-.grade-C { background: rgba(255,234,0,0.2); color: #ffea00; }
-.grade-D { background: rgba(255,152,0,0.2); color: #ff9800; }
-.grade-F { background: rgba(255,23,68,0.2); color: #ff1744; }
+.wp-score { font-size: 1.5rem; font-weight: 800; color: #0F172A; line-height: 1; }
+.wp-grade { font-size: 0.8rem; font-weight: 700; margin-top: 4px; padding: 2px 8px; border-radius: 4px; }
+.grade-A { background: rgba(16,231,104,0.15); color: #047857; border: 1px solid rgba(16,231,104,0.4); }
+.grade-B { background: rgba(2,132,199,0.12); color: #0284C7; border: 1px solid rgba(2,132,199,0.3); }
+.grade-C { background: rgba(217,119,6,0.12); color: #D97706; border: 1px solid rgba(217,119,6,0.3); }
+.grade-D { background: rgba(245,158,11,0.12); color: #D97706; border: 1px solid rgba(245,158,11,0.3); }
+.grade-F { background: rgba(225,29,72,0.12); color: #E11D48; border: 1px solid rgba(225,29,72,0.3); }
 
-.wp-table { width: 100%; border-collapse: collapse; margin-top: 1rem; color: #e2e8f0; font-size: 0.9rem; }
-.wp-table th, .wp-table td { padding: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.05); text-align: left; }
-.wp-table th { color: #8892b0; font-weight: 600; }
-.factor-score { font-weight: 700; }
+.wp-table { width: 100%; border-collapse: collapse; margin-top: 1rem; color: #0F172A; font-size: 0.9rem; }
+.wp-table th, .wp-table td { padding: 0.75rem; border-bottom: 1px solid #E2E8F0; text-align: left; }
+.wp-table th { color: #475569; font-weight: 700; background: #F8FAFC; }
+.factor-score { font-weight: 700; color: #0F172A; }
 `;
 
 function injectCSS() {
