@@ -4,6 +4,13 @@
 **Submission Category:** Small Business Services  
 **Competition:** Build with Gemini XPRIZE  
 **Target Date:** 2026-08-17  
+**V3 Baseline Commit:** `fa201cce4e2351e91a13bf4701233f7c67ad13d4`
+
+---
+
+> [!WARNING]
+> **V3 EVIDENCE STATUS: UNVERIFIED (PENDING PHASE 5 EVAL & PHASE 7 CLOUD RUN DEPLOYMENT)**
+> Per V3 governing PRD requirements, all operational benchmarks and sample trace structures are marked as **UNVERIFIED** until observed directly from the Phase 5 executable eval runner (`EVAL_RESULTS.json`) and Phase 7 Cloud Run production execution trace.
 
 ---
 
@@ -20,7 +27,7 @@ ArchEngine AI runs on a managed Google Cloud Cloud Run backend utilizing **Verte
 
 ---
 
-## 2. Verified AI Run Evidence Trace
+## 2. Sample AI Run Evidence Trace (Format Specification)
 
 Every production proposal generation request produces a sanitized execution trace stored in the `ai_runs` table and rendered directly in the user interface:
 
@@ -36,7 +43,8 @@ Every production proposal generation request produces a sanitized execution trac
   "latency_ms": 1345,
   "ai_call_count": 1,
   "input_hash": "a4f89d31b2e591c478a2e5d19012bc4f",
-  "validation_status": "passed"
+  "validation_status": "passed",
+  "note": "FORMAT SPECIFICATION — Pending Phase 7 Cloud Run execution capture"
 }
 ```
 
@@ -51,9 +59,10 @@ Every production proposal generation request produces a sanitized execution trac
 
 ## 4. Operational & Performance Benchmarks
 
-| Metric | Measured Value | Verification Method |
-| :--- | :--- | :--- |
-| **Average End-to-End Proposal Generation Latency** | 1,240 ms | Recorded via `ai_runs.latency_ms` |
-| **Deterministic Section Coverage Pass Rate** | 98.4% | Evaluated over 8 fixed eval suite runs |
-| **Structured Output Schema Validity** | 100% | Verified via response JSON parser |
-| **Tenant Isolation & RLS Enforcement** | 100% | Tested via Supabase org_id query policy |
+| Metric | Target Value | Baseline Evidence Status | Verification Method |
+| :--- | :--- | :--- | :--- |
+| **Average End-to-End Proposal Generation Latency** | ~1,240 ms | UNVERIFIED | Recorded via `ai_runs.latency_ms` in Phase 7 |
+| **Deterministic Section Coverage Pass Rate** | ≥ 95.0% | UNVERIFIED | Evaluated via Phase 5 executable evals |
+| **Structured Output Schema Validity** | 100% | UNVERIFIED | Verified via response JSON parser in Phase 3/5 |
+| **Tenant Isolation & RLS Enforcement** | 100% | UNVERIFIED | Tested via Supabase org_id test suite in Phase 4 |
+
