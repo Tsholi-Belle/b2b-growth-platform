@@ -29,9 +29,21 @@ router.post('/generate', async (req, res) => {
   const userId = req.user ? req.user.id : null;
 
   try {
-    const result = await ProposalService.generateProposal(req.body || {});
+    const body = req.body || {};
+    const inputHash = AIRunService.hashInput(body.rfp_text || (body.rfp && body.rfp.text) || '');
 
-    const inputHash = AIRunService.hashInput(result.rfpText);
+    // 1. Persist STARTED AI trace record before Gemini execution (fails closed in production)
+    const initialRun = await AIRunService.startRun({
+      orgId,
+      userId,
+      workflow: 'proposal_generation',
+      model: process.env.GEMINI_MODEL || 'gemini-2.5-flash',
+      provider: 'vertex_ai',
+      inputHash
+    });
+
+    // 2. Execute schema-bound proposal generation
+    const result = await ProposalService.generateProposal(body);
 
     const complianceFlags = {
       passed: result.auditScore >= 80,
@@ -55,6 +67,8 @@ router.post('/generate', async (req, res) => {
       created_at: new Date().toISOString()
     };
 
+    let persistedProposalUuid = null;
+
     // Save proposal to Supabase if DB configured
     if (supabase && orgId) {
       try {
@@ -75,8 +89,15 @@ router.post('/generate', async (req, res) => {
           .select()
           .single();
 
-        if (!dbError && dbProposal) {
+        if (dbError) {
+          if (process.env.APP_MODE === 'production') {
+            const err = new Error(`Failed to persist proposal to database: ${dbError.message}`);
+            err.code = 'PROPOSAL_PERSISTENCE_FAILED';
+            throw err;
+          }
+        } else if (dbProposal) {
           proposal = dbProposal;
+          persistedProposalUuid = dbProposal.id;
           await supabase.from('usage_events').insert({
             user_id: userId,
             org_id: orgId,
@@ -86,37 +107,49 @@ router.post('/generate', async (req, res) => {
           });
         }
       } catch (dbErr) {
+        if (process.env.APP_MODE === 'production' || dbErr.code === 'PROPOSAL_PERSISTENCE_FAILED') {
+          await AIRunService.completeRun({
+            runId: initialRun.id,
+            status: 'failed',
+            latencyMs: Date.now() - startedAt,
+            errorCode: 'PROPOSAL_PERSISTENCE_FAILED'
+          });
+          const propErr = new Error(`Proposal persistence failed: ${dbErr.message}`);
+          propErr.code = 'PROPOSAL_PERSISTENCE_FAILED';
+          throw propErr;
+        }
         console.warn('[ProposalsRoute] Could not persist proposal to Supabase:', dbErr.message);
       }
+    } else if (process.env.APP_MODE === 'production') {
+      const err = new Error('Production mode requires Supabase database connection for proposal persistence');
+      err.code = 'PROPOSAL_PERSISTENCE_FAILED';
+      throw err;
     }
 
-    // Record Sanitized AI Run Evidence Trace
-    const runRecord = await AIRunService.recordRun({
-      orgId,
-      userId,
-      workflow: 'proposal_generation',
+    // 3. Complete AI Run Evidence Trace
+    const completedRun = await AIRunService.completeRun({
+      runId: initialRun.id,
       status: result.auditDecision === 'MANUAL_REVIEW' ? 'manual_review' : 'completed',
-      model: result.model,
-      provider: result.provider,
-      startedAt,
-      completedAt: new Date(),
-      latencyMs: result.latencyMs,
+      latencyMs: Date.now() - startedAt,
       aiCallCount: result.aiCallCount,
-      inputHash,
-      outputProposalId: proposal.id,
+      outputProposalId: persistedProposalUuid,
       validationStatus: complianceFlags.passed ? 'passed' : 'warning',
-      usage: result.usage
+      usage: result.usage,
+      steps: [
+        { name: 'initial_generation', status: 'success', latencyMs: result.latencyMs },
+        { name: 'semantic_audit', status: 'success', decision: result.auditDecision }
+      ]
     });
 
     res.status(201).json({
       run: {
-        id: runRecord.id,
-        provider: runRecord.provider,
-        model: runRecord.model,
-        status: runRecord.status,
-        latency_ms: runRecord.latency_ms,
-        ai_call_count: runRecord.ai_call_count,
-        validation_status: runRecord.validation_status
+        id: completedRun.id,
+        provider: result.provider,
+        model: result.model,
+        status: completedRun.status,
+        latency_ms: completedRun.latency_ms,
+        ai_call_count: completedRun.ai_call_count,
+        validation_status: completedRun.validation_status
       },
       proposal
     });
