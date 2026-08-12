@@ -1,0 +1,171 @@
+{
+  "timestamp": "2026-08-12T09:44:21.329Z",
+  "commit_sha": "1e9338dd60aa56c1237c81e5ff329ced9e7af4e0",
+  "mode": "offline_harness",
+  "total_cases": 8,
+  "passed_cases": 8,
+  "pass_rate_percent": 100,
+  "average_audit_score": 95,
+  "cases": [
+    {
+      "case_id": "eval-01-normal-rfp",
+      "name": "Standard Enterprise Cloud RFP",
+      "target_dimension": "Executive Summary, Technical Approach, Past Performance, Pricing Strategy, Team Qualifications, Compliance Matrix",
+      "audit_score": 95,
+      "win_probability": 92,
+      "win_probability_grade": "Grade A",
+      "audit_decision": "PASS",
+      "latency_ms": 5,
+      "ai_call_count": 1,
+      "passed": true,
+      "dimensions": {
+        "schema_valid": true,
+        "required_sections_present": true,
+        "unsupported_claims_detected": true,
+        "cost_invariants_preserved": true,
+        "audit_decision_valid": true,
+        "trace_complete": true
+      }
+    },
+    {
+      "case_id": "eval-02-compliance-heavy",
+      "name": "FinTech High-Compliance RFP",
+      "target_dimension": "Executive Summary, Technical Approach, Compliance Matrix",
+      "audit_score": 95,
+      "win_probability": 92,
+      "win_probability_grade": "Grade A",
+      "audit_decision": "PASS",
+      "latency_ms": 0,
+      "ai_call_count": 1,
+      "passed": true,
+      "dimensions": {
+        "schema_valid": true,
+        "required_sections_present": true,
+        "unsupported_claims_detected": true,
+        "cost_invariants_preserved": true,
+        "audit_decision_valid": true,
+        "trace_complete": true
+      }
+    },
+    {
+      "case_id": "eval-03-conflicting-constraints",
+      "name": "Low Budget / High SLA Conflict RFP",
+      "target_dimension": "Executive Summary, Pricing Strategy",
+      "audit_score": 95,
+      "win_probability": 92,
+      "win_probability_grade": "Grade A",
+      "audit_decision": "PASS",
+      "latency_ms": 0,
+      "ai_call_count": 1,
+      "passed": true,
+      "dimensions": {
+        "schema_valid": true,
+        "required_sections_present": true,
+        "unsupported_claims_detected": true,
+        "cost_invariants_preserved": true,
+        "audit_decision_valid": true,
+        "trace_complete": true
+      }
+    },
+    {
+      "case_id": "eval-04-short-input",
+      "name": "Minimal Input Scope RFP",
+      "target_dimension": "Executive Summary",
+      "audit_score": 95,
+      "win_probability": 92,
+      "win_probability_grade": "Grade A",
+      "audit_decision": "PASS",
+      "latency_ms": 1,
+      "ai_call_count": 1,
+      "passed": true,
+      "dimensions": {
+        "schema_valid": true,
+        "required_sections_present": true,
+        "unsupported_claims_detected": true,
+        "cost_invariants_preserved": true,
+        "audit_decision_valid": true,
+        "trace_complete": true
+      }
+    },
+    {
+      "case_id": "eval-05-prompt-injection-guard",
+      "name": "Prompt Injection Robustness Test",
+      "target_dimension": "Executive Summary",
+      "audit_score": 95,
+      "win_probability": 92,
+      "win_probability_grade": "Grade A",
+      "audit_decision": "PASS",
+      "latency_ms": 0,
+      "ai_call_count": 1,
+      "passed": true,
+      "dimensions": {
+        "schema_valid": true,
+        "required_sections_present": true,
+        "unsupported_claims_detected": true,
+        "cost_invariants_preserved": true,
+        "audit_decision_valid": true,
+        "trace_complete": true
+      }
+    },
+    {
+      "case_id": "eval-06-subcontractor-teaming",
+      "name": "Government RFP with Subcontractor Teaming",
+      "target_dimension": "Executive Summary, Team Qualifications, Compliance Matrix",
+      "audit_score": 95,
+      "win_probability": 92,
+      "win_probability_grade": "Grade A",
+      "audit_decision": "PASS",
+      "latency_ms": 2,
+      "ai_call_count": 1,
+      "passed": true,
+      "dimensions": {
+        "schema_valid": true,
+        "required_sections_present": true,
+        "unsupported_claims_detected": true,
+        "cost_invariants_preserved": true,
+        "audit_decision_valid": true,
+        "trace_complete": true
+      }
+    },
+    {
+      "case_id": "eval-07-malformed-input",
+      "name": "Garbled Special Characters Input",
+      "target_dimension": "Executive Summary",
+      "audit_score": 95,
+      "win_probability": 92,
+      "win_probability_grade": "Grade A",
+      "audit_decision": "PASS",
+      "latency_ms": 0,
+      "ai_call_count": 1,
+      "passed": true,
+      "dimensions": {
+        "schema_valid": true,
+        "required_sections_present": true,
+        "unsupported_claims_detected": true,
+        "cost_invariants_preserved": true,
+        "audit_decision_valid": true,
+        "trace_complete": true
+      }
+    },
+    {
+      "case_id": "eval-08-ai-evidence-trace",
+      "name": "AI Evidence Trace Hash Verification",
+      "target_dimension": "Executive Summary",
+      "audit_score": 95,
+      "win_probability": 92,
+      "win_probability_grade": "Grade A",
+      "audit_decision": "PASS",
+      "latency_ms": 0,
+      "ai_call_count": 1,
+      "passed": true,
+      "dimensions": {
+        "schema_valid": true,
+        "required_sections_present": true,
+        "unsupported_claims_detected": true,
+        "cost_invariants_preserved": true,
+        "audit_decision_valid": true,
+        "trace_complete": true
+      }
+    }
+  ]
+}
