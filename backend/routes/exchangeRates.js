@@ -3,10 +3,13 @@ const router = express.Router();
 const fetch = require('node-fetch');
 const { createClient } = require('@supabase/supabase-js');
 
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
+let supabase = null;
+if (process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+  supabase = createClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+  );
+}
 
 const APP_ID = process.env.OPEN_EXCHANGE_RATES_APP_ID;
 const REQUIRED_CURRENCIES = ['USD', 'EUR', 'GBP', 'ZAR', 'AUD', 'CAD', 'INR', 'NGN', 'KES', 'JPY', 'CHF', 'BRL'];

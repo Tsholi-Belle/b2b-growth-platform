@@ -1,17 +1,18 @@
 const { createClient } = require('@supabase/supabase-js');
 
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
+let supabase = null;
+if (process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+  supabase = createClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+  );
+}
 
 /**
  * Get a specific cached price
- * @param {string} provider 'aws', 'gcp', 'azure'
- * @param {string} serviceType eg 'Compute' or specific instance ID
- * @param {string} region eg 'us-east-1'
  */
 async function getCachedPricing(provider, serviceType, region) {
+    if (!supabase) return null;
     try {
         let query = supabase
             .from('pricing_cache')
@@ -19,17 +20,12 @@ async function getCachedPricing(provider, serviceType, region) {
             .eq('provider', provider)
             .eq('region', region);
 
-        // Allow partial match on service type for simpler queries
         if (serviceType) {
              query = query.ilike('service_type', `%${serviceType}%`);
         }
 
         const { data, error } = await query.order('fetched_at', { ascending: false }).limit(1).single();
-
-        if (error && error.code !== 'PGRST116') { // PGRST116 is no rows returned
-            throw error;
-        }
-
+        if (error && error.code !== 'PGRST116') throw error;
         return data;
     } catch (error) {
         console.error('Error in getCachedPricing:', error);
@@ -39,14 +35,10 @@ async function getCachedPricing(provider, serviceType, region) {
 
 /**
  * Bulk upsert pricing records
- * @param {Array} records 
  */
 async function upsertPricing(records) {
+    if (!supabase) return false;
     try {
-        // Delete old records for these providers/regions to keep table clean,
-        // or just insert new ones and let them be sorted by fetched_at. 
-        // We'll insert with current timestamp.
-        
         const { error } = await supabase
             .from('pricing_cache')
             .insert(records.map(r => ({
@@ -68,10 +60,9 @@ async function upsertPricing(records) {
 
 /**
  * Check how old the cache is for a provider
- * @param {string} provider 
- * @returns {number} Age in hours, or 9999 if no cache
  */
 async function getCacheAge(provider) {
+    if (!supabase) return 9999;
     try {
         const { data, error } = await supabase
             .from('pricing_cache')
@@ -92,8 +83,6 @@ async function getCacheAge(provider) {
 
 /**
  * Check if cache is stale
- * @param {string} provider 
- * @param {number} maxAgeHours 
  */
 async function isCacheStale(provider, maxAgeHours = 24) {
     const age = await getCacheAge(provider);
