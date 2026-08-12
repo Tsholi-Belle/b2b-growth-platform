@@ -9,8 +9,8 @@ WORKDIR /app
 # Copy package definitions
 COPY backend/package*.json ./
 
-# Install production dependencies
-RUN npm install --only=production
+# Install production dependencies via lockfile
+RUN npm ci --omit=dev
 
 # Copy backend source files
 COPY backend/ .
