@@ -32,6 +32,9 @@ const IS_DEMO_MODE = sessionStorage.getItem('archengine_demo_mode') === 'true';
 
 class AppController {
   constructor() {
+    // Expose window API immediately on instantiation
+    window.app = this;
+
     this.scraper = new ScraperAgent();
     this.simulator = new SimulatorAgent();
     this.proposalAgent = new ProposalAgent();
@@ -60,11 +63,17 @@ class AppController {
     this.renderPillar2ImpactTable();
     
     // Run initial crawl and simulation
-    await this.scraper.runCrawl();
-    this.runSimulation();
-
-    // Expose window API for inline onclick handlers
-    window.app = this;
+    try {
+      await this.scraper.runCrawl();
+    } catch (e) {
+      console.warn("Scraper crawl warning:", e);
+    }
+    
+    try {
+      this.runSimulation();
+    } catch (e) {
+      console.warn("Simulation run warning:", e);
+    }
   }
 
   bindTabNavigation() {
@@ -218,15 +227,19 @@ class AppController {
   }
 
   bindScraperControls() {
-    document.getElementById('btn-trigger-crawl').addEventListener('click', async () => {
-      const crawlRes = await this.scraper.runCrawl();
-      this.appendTerminalLogs(crawlRes.logs, 'scraper');
-      this.renderScraperMatrix();
-    });
+    const btn = document.getElementById('btn-trigger-crawl');
+    if (btn) {
+      btn.addEventListener('click', async () => {
+        const crawlRes = await this.scraper.runCrawl();
+        this.appendTerminalLogs(crawlRes.logs, 'scraper');
+        this.renderScraperMatrix();
+      });
+    }
   }
 
   renderLogPresets() {
     const container = document.getElementById('log-preset-list');
+    if (!container) return;
     container.innerHTML = SAMPLE_LOG_PRESETS.map(preset => `
       <div class="preset-pill ${preset.id === this.currentPreset.id ? 'active' : ''}" onclick="window.app.selectLogPreset('${preset.id}')">
         <div class="preset-title">${preset.title}</div>
@@ -242,16 +255,24 @@ class AppController {
     this.currentPreset = preset;
     this.renderLogPresets();
 
-    // Populate sliders with preset metrics
-    document.getElementById('input-mau').value = preset.metrics.monthlyActiveUsers;
-    document.getElementById('input-rps').value = preset.metrics.requestsPerSecondPeak;
-    document.getElementById('input-db').value = preset.metrics.databaseSizeGB;
-    document.getElementById('input-egress').value = preset.metrics.egressBandwidthTB;
+    // Populate sliders with preset metrics if available
+    const mauEl = document.getElementById('input-mau');
+    if (mauEl) mauEl.value = preset.metrics.monthlyActiveUsers;
+    const rpsEl = document.getElementById('input-rps');
+    if (rpsEl) rpsEl.value = preset.metrics.requestsPerSecondPeak;
+    const dbEl = document.getElementById('input-db');
+    if (dbEl) dbEl.value = preset.metrics.databaseSizeGB;
+    const egressEl = document.getElementById('input-egress');
+    if (egressEl) egressEl.value = preset.metrics.egressBandwidthTB;
 
-    document.getElementById('val-mau').innerText = preset.metrics.monthlyActiveUsers.toLocaleString();
-    document.getElementById('val-rps').innerText = `${preset.metrics.requestsPerSecondPeak} req/s`;
-    document.getElementById('val-db').innerText = `${preset.metrics.databaseSizeGB} GB`;
-    document.getElementById('val-egress').innerText = `${preset.metrics.egressBandwidthTB} TB`;
+    const valMau = document.getElementById('val-mau');
+    if (valMau) valMau.innerText = preset.metrics.monthlyActiveUsers.toLocaleString();
+    const valRps = document.getElementById('val-rps');
+    if (valRps) valRps.innerText = `${preset.metrics.requestsPerSecondPeak} req/s`;
+    const valDb = document.getElementById('val-db');
+    if (valDb) valDb.innerText = `${preset.metrics.databaseSizeGB} GB`;
+    const valEgress = document.getElementById('val-egress');
+    if (valEgress) valEgress.innerText = `${preset.metrics.egressBandwidthTB} TB`;
 
     this.appendTerminalLogs([
       `[SYSTEM] Ingested telemetry preset: "${preset.title}"`,
@@ -263,6 +284,7 @@ class AppController {
 
   renderRfpList() {
     const container = document.getElementById('rfp-document-list');
+    if (!container) return;
     container.innerHTML = SAMPLE_RFPS.map(rfp => `
       <div class="preset-pill ${rfp.id === this.currentRfp.id ? 'active' : ''}" onclick="window.app.selectRfp('${rfp.id}')">
         <div class="preset-title">${rfp.title}</div>
@@ -283,6 +305,7 @@ class AppController {
 
   renderRfpExtractedDetails() {
     const container = document.getElementById('rfp-extracted-details');
+    if (!container) return;
     const rfp = this.currentRfp;
     const specs = rfp.extractedTechnicalSpecs;
 
@@ -533,13 +556,10 @@ class AppController {
       </div>
     `;
   }
-        </div>
-      </div>
-    `;
-  }
 
   renderScraperMatrix() {
     const tbody = document.querySelector('#matrix-table tbody');
+    if (!tbody) return;
     tbody.innerHTML = Object.keys(CLOUD_PROVIDERS).map(key => {
       const p = CLOUD_PROVIDERS[key];
       const computeSample = Object.values(p.compute)[0];
@@ -929,3 +949,28 @@ if (document.readyState === 'loading') {
 } else {
   new AppController();
 }
+
+// Global window fallback shortcuts
+window.openScheduleModal = function() {
+  if (window.app && typeof window.app.openScheduleModal === 'function') {
+    window.app.openScheduleModal();
+  } else {
+    const modal = document.getElementById('schedule-modal');
+    if (modal) modal.classList.add('active');
+  }
+};
+
+window.closeScheduleModal = function() {
+  if (window.app && typeof window.app.closeScheduleModal === 'function') {
+    window.app.closeScheduleModal();
+  } else {
+    const modal = document.getElementById('schedule-modal');
+    if (modal) modal.classList.remove('active');
+  }
+};
+
+window.loadDemoData = function() {
+  if (window.app && typeof window.app.loadDemoData === 'function') {
+    window.app.loadDemoData();
+  }
+};
