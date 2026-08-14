@@ -831,3 +831,28 @@ footer.app-footer {
   font-size: 1.35rem;
   color: var(--text-main);
 }
+
+/* Universal Click & Interaction Safety */
+button, .btn, .btn-primary, .btn-secondary, .nav-tab, .preset-pill, .source-btn, a {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+
+.modal-backdrop:not(.active) {
+  display: none !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+
+.modal-backdrop.active {
+  display: flex !important;
+  pointer-events: auto !important;
+  visibility: visible !important;
+}
+
+.auth-overlay:not(.show) {
+  display: none !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+

@@ -35,6 +35,102 @@
         }
       });
     };
+
+    window.openScheduleModal = function() {
+      if (window.app && typeof window.app.openScheduleModal === 'function') {
+        window.app.openScheduleModal();
+      } else {
+        var modal = document.getElementById('schedule-modal');
+        if (modal) modal.classList.add('active');
+      }
+    };
+
+    window.closeScheduleModal = function() {
+      if (window.app && typeof window.app.closeScheduleModal === 'function') {
+        window.app.closeScheduleModal();
+      } else {
+        var modal = document.getElementById('schedule-modal');
+        if (modal) modal.classList.remove('active');
+      }
+    };
+
+    window.loadDemoData = function() {
+      if (window.app && typeof window.app.loadDemoData === 'function') {
+        window.app.loadDemoData();
+      } else {
+        var provider = document.getElementById('current-provider');
+        if (provider) provider.value = 'aws';
+        var spend = document.getElementById('monthly-spend');
+        if (spend) spend.value = 4500;
+        var api = document.getElementById('api-calls-millions');
+        if (api) api.value = 150;
+        var db = document.getElementById('db-size-gb');
+        if (db) db.value = 850;
+        var egress = document.getElementById('egress-gb');
+        if (egress) egress.value = 2500;
+        var region = document.getElementById('primary-region');
+        if (region) region.value = 'us-east-1';
+        var workload = document.getElementById('workload-type');
+        if (workload) workload.value = 'saas';
+        window.switchTab('optimizer');
+      }
+    };
+
+    window.runOptimizer = function() {
+      if (window.app && typeof window.app.runSimulation === 'function') {
+        window.app.runSimulation();
+      }
+    };
+
+    window.generateProposal = function() {
+      if (window.app && typeof window.app.generateProposal === 'function') {
+        window.app.generateProposal();
+      }
+    };
+
+    window.runMonteCarlo = function() {
+      if (window.app && typeof window.app.runMonteCarloTest === 'function') {
+        window.app.runMonteCarloTest();
+      }
+    };
+
+    window.refreshCrawl = function() {
+      if (window.app && window.app.scraper) {
+        window.app.scraper.runCrawl().then(function() {
+          window.app.renderScraperMatrix();
+        });
+      }
+    };
+
+    window.switchToOptimizerPreset = function(presetId) {
+      window.switchTab('optimizer');
+      if (window.app && typeof window.app.selectLogPreset === 'function') {
+        window.app.selectLogPreset(presetId);
+      }
+    };
+
+    window.switchToRfpPreset = function(rfpId) {
+      window.switchTab('proposals');
+      if (window.app && typeof window.app.selectRfp === 'function') {
+        window.app.selectRfp(rfpId);
+      }
+    };
+
+    window.triggerAWSConnect = function() {
+      if (window.app) window.app.triggerAWSConnect();
+    };
+
+    window.triggerGCPConnect = function() {
+      if (window.app) window.app.triggerGCPConnect();
+    };
+
+    window.triggerSAMPoll = function() {
+      if (window.app) window.app.triggerSAMPoll();
+    };
+
+    window.triggerDraftPush = function() {
+      if (window.app) window.app.triggerDraftPush();
+    };
   </script>
 </head>
 <body>
@@ -50,22 +146,22 @@
     </div>
 
     <nav class="nav-tabs">
-      <button class="nav-tab active" data-tab="dashboard" onclick="switchTab('dashboard')">
+      <button class="nav-tab active" data-tab="dashboard" onclick="window.switchTab('dashboard')">
         Overview
       </button>
-      <button class="nav-tab" data-tab="optimizer" onclick="switchTab('optimizer')">
+      <button class="nav-tab" data-tab="optimizer" onclick="window.switchTab('optimizer')">
         Cloud Advisory
       </button>
-      <button class="nav-tab" data-tab="proposals" onclick="switchTab('proposals')">
+      <button class="nav-tab" data-tab="proposals" onclick="window.switchTab('proposals')">
         RFP & Proposals
       </button>
-      <button class="nav-tab" data-tab="matrix" onclick="switchTab('matrix')">
+      <button class="nav-tab" data-tab="matrix" onclick="window.switchTab('matrix')">
         Live Telemetry
       </button>
-      <button class="nav-tab" data-tab="connectors" onclick="switchTab('connectors')">
+      <button class="nav-tab" data-tab="connectors" onclick="window.switchTab('connectors')">
         Integrations
       </button>
-      <button class='nav-tab' data-tab='settings' onclick="switchTab('settings')">Governance</button>
+      <button class='nav-tab' data-tab='settings' onclick="window.switchTab('settings')">Governance</button>
     </nav>
 
     <div class="header-status">
@@ -197,15 +293,15 @@
         <div class="card">
           <div class="section-title">Quick Actions</div>
           <div class="preset-pills">
-            <div class="preset-pill" onclick="window.app.switchToOptimizerPreset('preset_saas_scaleup')">
+            <div class="preset-pill" onclick="window.switchToOptimizerPreset('preset_saas_scaleup')">
               <div class="preset-title">Optimize High-Traffic SaaS System Logs</div>
               <div class="preset-desc">Ingest logs & compare AWS vs GCP vs Cloudflare edge architecture.</div>
             </div>
-            <div class="preset-pill" onclick="window.app.switchToRfpPreset('rfp_fintech_migration')">
+            <div class="preset-pill" onclick="window.switchToRfpPreset('rfp_fintech_migration')">
               <div class="preset-title">Respond to FinTech Gateway RFP Bid</div>
               <div class="preset-desc">Auto-extract requirements & generate proposal with dynamic AWS/GCP blueprint.</div>
             </div>
-            <div class="preset-pill" onclick="window.app.switchToRfpPreset('rfp_healthcare_datalake')">
+            <div class="preset-pill" onclick="window.switchToRfpPreset('rfp_healthcare_datalake')">
               <div class="preset-title">Respond to Healthcare Data Lake RFP</div>
               <div class="preset-desc">Match HIPAA RAG knowledge base & generate Snowflake vs BigQuery quote.</div>
             </div>
@@ -307,8 +403,8 @@
     </div>
   </div>
   <div class='form-actions'>
-    <button class='btn-secondary' id='btn-load-demo'>Load Demo Data</button>
-    <button class='btn-primary' id='btn-run-optimizer'>Run AI Optimizer</button>
+    <button class='btn-secondary' id='btn-load-demo' onclick="window.loadDemoData()">Load Demo Data</button>
+    <button class='btn-primary' id='btn-run-optimizer' onclick="window.runOptimizer()">Run AI Optimizer</button>
   </div>
   <div class='data-freshness' id='pricing-freshness'></div>
 </div>
@@ -325,7 +421,7 @@
           <div style="margin-top: 1.5rem; background: #FFFFFF; padding: 1.1rem; border-radius: var(--radius-sm); border: 1px solid #E2E8F0;">
             <div class="section-title" style="font-size: 0.9rem; justify-content: space-between;">
               <span>Pillar 5: Monte Carlo Risk Simulation (1,000 Scenarios)</span>
-              <button class="btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;" onclick="window.app.runMonteCarloTest()">Stress Test 1,000 Loads</button>
+              <button class="btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;" onclick="window.runMonteCarlo()">Stress Test 1,000 Loads</button>
             </div>
             <div id="pillar5-monte-carlo-results" style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">
               Click "Stress Test 1,000 Loads" to run stochastic Monte Carlo traffic simulations.
@@ -400,7 +496,7 @@
               Select an RFP to view extracted technical parameters.
             </div>
 
-            <button class="btn-primary" id="btn-generate-proposal" style="margin-top: 1.25rem;">
+            <button class="btn-primary" id="btn-generate-proposal" onclick="window.generateProposal()" style="margin-top: 1.25rem;">
               Generate Technical Proposal Draft (Agent 3)
             </button>
           </div>
@@ -422,7 +518,7 @@
       <div class="card">
         <div class="section-title" style="justify-content: space-between;">
           <span>Agent 1: Live Cloud Provider Rate Limits & SLA Matrix</span>
-          <button class="btn-secondary" id="btn-trigger-crawl">Refresh Crawl Data</button>
+          <button class="btn-secondary" id="btn-trigger-crawl" onclick="window.refreshCrawl()">Refresh Crawl Data</button>
         </div>
         
         <div style="overflow-x: auto; margin-top: 1rem;">
@@ -465,7 +561,7 @@
                   <strong style="color: #D97706;">AWS CloudWatch & Cost Explorer API</strong>
                   <div style="font-size: 0.78rem; color: var(--text-muted);">IAM Role: arn:aws:iam::123456789012:role/ArchEngineReadOnly</div>
                 </div>
-                <button class="btn-secondary" onclick="window.app.triggerAWSConnect()">Sync AWS Telemetry</button>
+                <button class="btn-secondary" onclick="window.triggerAWSConnect()">Sync AWS Telemetry</button>
               </div>
             </div>
 
@@ -475,7 +571,7 @@
                   <strong style="color: #0284C7;">GCP Stackdriver & Billing API</strong>
                   <div style="font-size: 0.78rem; color: var(--text-muted);">Project ID: biohealth-prod-data-lake</div>
                 </div>
-                <button class="btn-secondary" onclick="window.app.triggerGCPConnect()">Sync GCP Metrics</button>
+                <button class="btn-secondary" onclick="window.triggerGCPConnect()">Sync GCP Metrics</button>
               </div>
             </div>
           </div>
@@ -495,7 +591,7 @@
                   <strong>SAM.gov Public Bid API & Gmail Inbox Listener</strong>
                   <div style="font-size: 0.78rem; color: var(--accent-emerald);">Status: ACTIVE LISTENING (Polled every 5 min)</div>
                 </div>
-                <button class="btn-secondary" onclick="window.app.triggerSAMPoll()">Poll Portal Now</button>
+                <button class="btn-secondary" onclick="window.triggerSAMPoll()">Poll Portal Now</button>
               </div>
             </div>
 
@@ -505,7 +601,7 @@
                   <strong>1-Click Workspace Auto-Push</strong>
                   <div style="font-size: 0.78rem; color: var(--text-muted);">Destination: Google Workspace / Office 365 Drafts</div>
                 </div>
-                <button class="btn-secondary" onclick="window.app.triggerDraftPush()">Test Draft Push</button>
+                <button class="btn-secondary" onclick="window.triggerDraftPush()">Test Draft Push</button>
               </div>
             </div>
           </div>
@@ -555,8 +651,8 @@
         <div class="card glass-card danger-zone" style="border-color: rgba(239, 68, 68, 0.3);">
           <div class="section-title" style="color: #EF4444;">Data & Privacy</div>
           <div class="form-actions">
-            <button class="btn-secondary" onclick="apiFetch('/api/users/me/export').then(r=>r.blob())">Download My Data</button>
-            <button class="btn-secondary danger" style="color: #EF4444;" onclick="if(confirm('Are you sure you want to delete your account?')) apiFetch('/api/users/me', {method: 'DELETE'})">Delete Account</button>
+            <button class="btn-secondary" onclick="fetch('/api/users/me/export').then(r=>r.blob())">Download My Data</button>
+            <button class="btn-secondary danger" style="color: #EF4444;" onclick="if(confirm('Are you sure you want to delete your account?')) fetch('/api/users/me', {method: 'DELETE'})">Delete Account</button>
           </div>
         </div>
       </div>
@@ -580,7 +676,7 @@
         <a href="frontend/pages/pricing.html" class="btn-primary" style="text-decoration: none; padding: 0.75rem 1.75rem; font-size: 0.95rem; font-weight: 700;">
           Start 7-Day Free Trial (Primary CTA)
         </a>
-        <button class="btn-secondary" onclick="window.app.openScheduleModal()" style="padding: 0.75rem 1.75rem; font-size: 0.95rem;">
+        <button class="btn-secondary" onclick="window.openScheduleModal()" style="padding: 0.75rem 1.75rem; font-size: 0.95rem;">
           Schedule Platform Demo (Secondary CTA)
         </button>
       </div>
