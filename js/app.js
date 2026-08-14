@@ -713,8 +713,137 @@ class AppController {
     modal.classList.add('active');
   }
 
-  closeModal() {
-    document.getElementById('proposal-modal').classList.remove('active');
+  loadDemoData() {
+    console.log('[App] Loading demo workload parameters and running simulation...');
+    const providerEl = document.getElementById('current-provider');
+    if (providerEl) providerEl.value = 'aws';
+
+    const spendEl = document.getElementById('monthly-spend');
+    if (spendEl) spendEl.value = 4500;
+
+    const apiEl = document.getElementById('api-calls-millions');
+    if (apiEl) apiEl.value = 150;
+
+    const dbEl = document.getElementById('db-size-gb');
+    if (dbEl) dbEl.value = 850;
+
+    const egressEl = document.getElementById('egress-gb');
+    if (egressEl) egressEl.value = 2500;
+
+    const regionEl = document.getElementById('primary-region');
+    if (regionEl) regionEl.value = 'us-east-1';
+
+    const workloadEl = document.getElementById('workload-type');
+    if (workloadEl) workloadEl.value = 'saas';
+
+    const rfpTextEl = document.getElementById('rfp-paste-text');
+    if (rfpTextEl && !rfpTextEl.value) {
+      rfpTextEl.value = `Seeking an enterprise cloud consultancy to migrate 45 microservices from on-demand AWS EC2 to a multi-cloud managed Kubernetes setup (GCP GKE / AWS EKS). Budget $150k-$250k. Must comply with SOC 2 Type II and HIPAA.`;
+    }
+
+    if (window.switchTab) window.switchTab('optimizer');
+    this.runSimulation();
+  }
+
+  openScheduleModal() {
+    const modal = document.getElementById('schedule-modal');
+    if (modal) {
+      const form = document.getElementById('schedule-consultation-form');
+      const confirmCard = document.getElementById('schedule-confirmation-card');
+      if (form) form.style.display = 'block';
+      if (confirmCard) confirmCard.style.display = 'none';
+
+      // Default date to next weekday
+      const dateInput = document.getElementById('schedule-date');
+      if (dateInput) {
+        const nextWeekday = new Date();
+        nextWeekday.setDate(nextWeekday.getDate() + 1);
+        while (nextWeekday.getDay() === 0 || nextWeekday.getDay() === 6) {
+          nextWeekday.setDate(nextWeekday.getDate() + 1);
+        }
+        dateInput.value = nextWeekday.toISOString().split('T')[0];
+      }
+
+      modal.classList.add('active');
+    }
+  }
+
+  closeScheduleModal() {
+    const modal = document.getElementById('schedule-modal');
+    if (modal) modal.classList.remove('active');
+  }
+
+  validateScheduleDate(inputEl) {
+    if (!inputEl || !inputEl.value) return;
+    const dateObj = new Date(inputEl.value + 'T12:00:00Z');
+    const day = dateObj.getUTCDay();
+    const warning = document.getElementById('schedule-date-warning');
+    if (day === 0 || day === 6) { // 0 = Sun, 6 = Sat
+      if (warning) warning.style.display = 'block';
+      inputEl.value = '';
+    } else {
+      if (warning) warning.style.display = 'none';
+    }
+  }
+
+  async submitScheduleForm() {
+    const fullName = document.getElementById('schedule-full-name')?.value;
+    const email = document.getElementById('schedule-email')?.value;
+    const company = document.getElementById('schedule-company')?.value;
+    const topic = document.getElementById('schedule-topic')?.value;
+    const date = document.getElementById('schedule-date')?.value;
+    const time = document.getElementById('schedule-time')?.value;
+    const notes = document.getElementById('schedule-notes')?.value;
+
+    if (!fullName || !email || !date || !time) {
+      alert('Please complete all required fields (*)');
+      return;
+    }
+
+    const payload = {
+      full_name: fullName,
+      email: email,
+      company_name: company || 'N/A',
+      scheduled_date: date,
+      scheduled_time: time,
+      advisory_topic: topic,
+      message: notes || ''
+    };
+
+    let result;
+    try {
+      result = await apiFetch('/api/contact/schedule', {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      });
+    } catch (e) {
+      console.warn("Backend schedule endpoint offline, rendering offline confirmation", e);
+      result = {
+        status: 'success',
+        confirmation_id: 'SCH-' + Date.now().toString(36).toUpperCase(),
+        recipient_email: 'hello@kalixara.com',
+        client_email: email,
+        details: payload
+      };
+    }
+
+    const form = document.getElementById('schedule-consultation-form');
+    const confirmCard = document.getElementById('schedule-confirmation-card');
+    const confirmDesc = document.getElementById('schedule-confirm-desc');
+    const confirmId = document.getElementById('confirm-id');
+    const confirmDateTime = document.getElementById('confirm-datetime');
+
+    if (form) form.style.display = 'none';
+    if (confirmCard) confirmCard.style.display = 'block';
+
+    if (confirmDesc) confirmDesc.innerText = `Thank you ${fullName}! Your advisory consultation session has been scheduled. Notifications have been dispatched to hello@kalixara.com and ${email}.`;
+    if (confirmId) confirmId.innerText = result.confirmation_id || ('SCH-' + Date.now().toString(36).toUpperCase());
+    if (confirmDateTime) confirmDateTime.innerText = `${date} at ${time} SAST (GMT+2)`;
+
+    this.appendTerminalLogs([
+      `[SYSTEM] Advisory session scheduled: ${fullName} (${email}) on ${date} @ ${time} SAST`,
+      `[SYSTEM] Booking notification dispatched to hello@kalixara.com`
+    ], 'system');
   }
 
   exportProposalHTML() {

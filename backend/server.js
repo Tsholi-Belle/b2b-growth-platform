@@ -50,6 +50,7 @@ const rfpSearchRoutes = require('./routes/rfpSearch');
 const connectorsRoutes = require('./routes/connectors');
 const organisationsRoutes = require('./routes/organisations');
 const exchangeRatesRoutes = require('./routes/exchangeRates');
+const contactRoutes = require('./routes/contact');
 
 app.use('/api/cloud-pricing', cloudPricingRoutes);
 app.use('/api/proposals', proposalsRoutes);
@@ -57,6 +58,7 @@ app.use('/api/rfp', rfpSearchRoutes);
 app.use('/api/connectors', connectorsRoutes);
 app.use('/api/org', organisationsRoutes);
 app.use('/api/exchange-rates', exchangeRatesRoutes);
+app.use('/api/contact', contactRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {

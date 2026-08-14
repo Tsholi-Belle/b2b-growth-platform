@@ -142,7 +142,7 @@
           <a href="frontend/pages/pricing.html" class="btn-primary" style="text-decoration: none; padding: 0.6rem 1.25rem; display: inline-flex; align-items: center; font-weight: 700;">
             Start 7-Day Free Trial
           </a>
-          <button class="btn-secondary" onclick="window.app.loadDemoData()" style="padding: 0.6rem 1.25rem; display: inline-flex; align-items: center;">
+          <button class="btn-secondary" onclick="window.app.openScheduleModal()" style="padding: 0.6rem 1.25rem; display: inline-flex; align-items: center;">
             Schedule Advisory Consultation
           </button>
         </div>
@@ -580,7 +580,7 @@
         <a href="frontend/pages/pricing.html" class="btn-primary" style="text-decoration: none; padding: 0.75rem 1.75rem; font-size: 0.95rem; font-weight: 700;">
           Start 7-Day Free Trial (Primary CTA)
         </a>
-        <button class="btn-secondary" onclick="window.app.loadDemoData()" style="padding: 0.75rem 1.75rem; font-size: 0.95rem;">
+        <button class="btn-secondary" onclick="window.app.openScheduleModal()" style="padding: 0.75rem 1.75rem; font-size: 0.95rem;">
           Schedule Platform Demo (Secondary CTA)
         </button>
       </div>
@@ -599,6 +599,105 @@
       <span>AI Governance & Human-in-the-Loop Policy</span>
     </div>
   </footer>
+
+  <!-- MODAL FOR SCHEDULE ADVISORY CONSULTATION & CALENDAR -->
+  <div class="modal-backdrop" id="schedule-modal">
+    <div class="modal-paper" style="max-width: 620px;">
+      <div class="modal-header">
+        <div>
+          <h2 style="font-size: 1.25rem; font-weight: 800; color: #0F172A; margin-bottom: 0.2rem;">Schedule Advisory Consultation</h2>
+          <div style="font-size: 0.8rem; color: var(--text-muted);">Direct session with Kalixara Advisory Team (SAST / GMT+2 | Weekdays 09:00 – 16:00)</div>
+        </div>
+        <button class="btn-secondary" onclick="window.app.closeScheduleModal()" style="padding: 0.4rem 0.8rem;">✕ Close</button>
+      </div>
+      <div class="modal-body">
+        <form id="schedule-consultation-form" onsubmit="event.preventDefault(); window.app.submitScheduleForm();">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+            <div class="form-group">
+              <label style="font-size: 0.75rem; font-weight: 700; color: #475569;">Full Name *</label>
+              <input type="text" id="schedule-full-name" placeholder="e.g. Jane Smith" required style="width: 100%; padding: 0.6rem; border-radius: 8px; border: 1px solid #CBD5E1;">
+            </div>
+            <div class="form-group">
+              <label style="font-size: 0.75rem; font-weight: 700; color: #475569;">Work Email *</label>
+              <input type="email" id="schedule-email" placeholder="jane@company.com" required style="width: 100%; padding: 0.6rem; border-radius: 8px; border: 1px solid #CBD5E1;">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+            <div class="form-group">
+              <label style="font-size: 0.75rem; font-weight: 700; color: #475569;">Company Name</label>
+              <input type="text" id="schedule-company" placeholder="Acme Systems" style="width: 100%; padding: 0.6rem; border-radius: 8px; border: 1px solid #CBD5E1;">
+            </div>
+            <div class="form-group">
+              <label style="font-size: 0.75rem; font-weight: 700; color: #475569;">Advisory Focus</label>
+              <select id="schedule-topic" style="width: 100%; padding: 0.6rem; border-radius: 8px; border: 1px solid #CBD5E1;">
+                <option value="Cloud Cost Optimization">Cloud Infrastructure & Cost Optimization</option>
+                <option value="RFP & Bid Strategy">RFP Proposal & Bid Strategy</option>
+                <option value="Enterprise Architecture">Enterprise Multi-Cloud Architecture</option>
+                <option value="Platform Demo">Platform Walkthrough & Evaluation</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Calendar Date & SAST Time Picker -->
+          <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 1.1rem; border-radius: 12px; margin-bottom: 1.25rem;">
+            <h4 style="font-size: 0.85rem; font-weight: 700; color: #0F172A; margin-bottom: 0.8rem;">Select Date & Time (SAST / GMT+2)</h4>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div class="form-group">
+                <label style="font-size: 0.75rem; font-weight: 700; color: #475569;">Select Date (Weekdays Only) *</label>
+                <input type="date" id="schedule-date" required onchange="window.app.validateScheduleDate(this)" style="width: 100%; padding: 0.6rem; border-radius: 8px; border: 1px solid #CBD5E1; background: #FFFFFF;">
+                <span id="schedule-date-warning" style="font-size: 0.72rem; color: #DC2626; display: none; margin-top: 0.25rem;">Please select a weekday (Monday – Friday).</span>
+              </div>
+
+              <div class="form-group">
+                <label style="font-size: 0.75rem; font-weight: 700; color: #475569;">Select Time Slot (09:00 – 16:00 SAST) *</label>
+                <select id="schedule-time" required style="width: 100%; padding: 0.6rem; border-radius: 8px; border: 1px solid #CBD5E1; background: #FFFFFF;">
+                  <option value="">-- Choose SAST Time --</option>
+                  <option value="09:00">09:00 SAST</option>
+                  <option value="10:00">10:00 SAST</option>
+                  <option value="11:00">11:00 SAST</option>
+                  <option value="12:00">12:00 SAST</option>
+                  <option value="13:00">13:00 SAST</option>
+                  <option value="14:00">14:00 SAST</option>
+                  <option value="15:00">15:00 SAST</option>
+                  <option value="16:00">16:00 SAST</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1.25rem;">
+            <label style="font-size: 0.75rem; font-weight: 700; color: #475569;">Additional Project Details / Requirements</label>
+            <textarea id="schedule-notes" rows="3" placeholder="Briefly describe your current cloud spend, RFP timelines, or specific questions..." style="width: 100%; padding: 0.6rem; border-radius: 8px; border: 1px solid #CBD5E1; resize: vertical;"></textarea>
+          </div>
+
+          <div style="background: rgba(16, 231, 104, 0.1); border: 1px solid rgba(16, 231, 104, 0.3); padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1.25rem; font-size: 0.78rem; color: #0F172A;">
+            <strong>Recipient Notice:</strong> Booking notifications are automatically dispatched to <strong style="color: #059669;">hello@kalixara.com</strong> and your email address.
+          </div>
+
+          <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+            <button type="button" class="btn-secondary" onclick="window.app.closeScheduleModal()">Cancel</button>
+            <button type="submit" id="btn-submit-schedule" class="btn-primary" style="padding: 0.65rem 1.5rem; font-weight: 700;">
+              Confirm & Schedule Consultation
+            </button>
+          </div>
+        </form>
+
+        <div id="schedule-confirmation-card" style="display: none; padding: 1.5rem; text-align: center;">
+          <div style="width: 48px; height: 48px; background: rgba(16, 231, 104, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto; color: #059669; font-size: 1.5rem;">✓</div>
+          <h3 style="font-size: 1.2rem; font-weight: 800; color: #0F172A; margin-bottom: 0.4rem;">Consultation Session Booked!</h3>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;" id="schedule-confirm-desc"></p>
+          <div style="background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 8px; padding: 1rem; margin-bottom: 1.25rem; text-align: left; font-size: 0.82rem; color: #334155;">
+            <div><strong>Confirmation ID:</strong> <span id="confirm-id" style="font-family: monospace; font-weight: 700;"></span></div>
+            <div><strong>Recipient:</strong> hello@kalixara.com</div>
+            <div><strong>Date & Time:</strong> <span id="confirm-datetime" style="font-weight: 700;"></span></div>
+          </div>
+          <button class="btn-primary" onclick="window.app.closeScheduleModal()">Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- MODAL FOR FULL PROPOSAL REVIEW & EXPORT -->
   <div class="modal-backdrop" id="proposal-modal">
