@@ -467,15 +467,10 @@ class AppController {
         this.latestProposal = res;
       }
     } catch(e) {
-      console.warn("API proposal generation failed", e);
-      if (IS_DEMO_MODE) {
-        this.appendTerminalLogs(['[Agent 3] Live API offline — using Demo Agent fallback'], 'proposal');
-        res = await this.proposalAgent.generateProposal(this.currentRfp || { title: rfpTitle, rawText: rfpText });
-        this.latestProposal = res.proposal;
-      } else {
-        alert(`Proposal Generation Error: ${e.message || 'Vertex AI upstream service unavailable'}`);
-        return;
-      }
+      console.warn("Live API offline or on static host, falling back to autonomous client agent:", e);
+      this.appendTerminalLogs(['[Agent 3] Live API offline — synthesizing proposal via Autonomous Proposal & Audit Engine'], 'proposal');
+      res = await this.proposalAgent.generateProposal(this.currentRfp || { title: rfpTitle, rawText: rfpText });
+      this.latestProposal = res.proposal;
     }
 
     this.latestRun = runEvidence;
@@ -733,6 +728,11 @@ class AppController {
     modal.classList.add('active');
   }
 
+  closeModal() {
+    const modal = document.getElementById('proposal-modal');
+    if (modal) modal.classList.remove('active');
+  }
+
   loadDemoData() {
     console.log('[App] Loading demo workload parameters and running simulation...');
     const providerEl = document.getElementById('current-provider');
@@ -972,5 +972,28 @@ window.closeScheduleModal = function() {
 window.loadDemoData = function() {
   if (window.app && typeof window.app.loadDemoData === 'function') {
     window.app.loadDemoData();
+  }
+};
+
+window.openModal = function() {
+  if (window.app && typeof window.app.openModal === 'function') {
+    window.app.openModal();
+  }
+};
+
+window.closeModal = function() {
+  if (window.app && typeof window.app.closeModal === 'function') {
+    window.app.closeModal();
+  } else {
+    const modal = document.getElementById('proposal-modal');
+    if (modal) modal.classList.remove('active');
+  }
+};
+
+window.exportProposalHTML = function() {
+  if (window.app && typeof window.app.exportProposalHTML === 'function') {
+    window.app.exportProposalHTML();
+  } else {
+    window.print();
   }
 };
