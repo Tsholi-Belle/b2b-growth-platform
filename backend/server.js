@@ -7,8 +7,11 @@ const { scheduleNightlyRefresh } = require('./services/pricingFetcher');
 
 const app = express();
 
-// Security middleware
-app.use(helmet());
+// Security middleware with relaxed CSP for CDN dependencies
+app.use(helmet({
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false
+}));
 
 // CORS configuration
 app.use(cors({
@@ -67,8 +70,8 @@ app.get('/health', (req, res) => {
     res.json({ status: 'ok', timestamp: new Date() });
 });
 
-// Serve static frontend files if SERVE_STATIC is enabled or in single-container mode
-if (process.env.SERVE_STATIC === 'true' || process.env.SINGLE_CONTAINER === 'true') {
+// Serve static frontend files if SERVE_STATIC is enabled or in production/single-container mode
+if (process.env.SERVE_STATIC === 'true' || process.env.SINGLE_CONTAINER === 'true' || process.env.NODE_ENV === 'production') {
     const path = require('path');
     app.use(express.static(path.join(__dirname, '../')));
     app.get(/^.*$/, (req, res, next) => {
