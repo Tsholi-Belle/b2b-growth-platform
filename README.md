@@ -1,238 +1,254 @@
-# ArchEngine AI — B2B Growth & Multi-Agent Infrastructure Optimization Platform
+# Amblysomus Solutions — Enterprise Cloud Advisory & Autonomous Proposal Engine
 
-> **"Optimize your infrastructure. Win more bids."**  
-> ArchEngine AI is an autonomous, multi-agent AI platform built in South Africa for global enterprise growth. It unifies **Cloud Infrastructure Cost Optimization** with **Autonomous RFP Proposal Generation** powered by closed-loop AI auditing.
+> **"Optimize infrastructure with empirical precision. Win high-value enterprise contracts."**  
+> Amblysomus Solutions is an autonomous, multi-agent AI platform engineered in South Africa for global enterprise growth. It unifies **Multi-Cloud Financial Optimization** with **Autonomous RFP Proposal Generation** powered by closed-loop AI auditing and strict POPIA compliance.
 
 ---
 
-##  Architecture & Multi-Agent Pipeline
+## 📑 Table of Contents
+1. [Architecture & Multi-Agent Pipeline](#-architecture--multi-agent-pipeline)
+2. [Local Development Guide](#-local-development-guide)
+3. [How to Get Your API Keys (Gemini, Supabase, Stripe, PayFast)](#-how-to-get-your-api-keys)
+4. [How to Store API Keys Securely (Prevent Leaks)](#-how-to-store-api-keys-securely)
+5. [South African Payments & Data Sovereignty](#-south-african-payments--data-sovereignty)
+6. [Legal Policies & Compliance Suite](#-legal-policies--compliance-suite)
+7. [Running Tests & Evaluation Suite](#-running-tests--evaluation-suite)
+8. [License & Support](#-license--support)
 
-ArchEngine AI operates a four-agent pipeline with a closed-loop audit engine:
+---
+
+## 🏛 Architecture & Multi-Agent Pipeline
+
+Amblysomus operates a 5-agent pipeline with a closed-loop audit engine:
 
 ```
 [ INCOMING TELEMETRY LOGS / RFP BID DOCUMENTS ]
                          │
                          ▼
   ┌─────────────────────────────────────────────────────────────┐
-  │  AGENT 1: Dynamic Cloud Scraper & Provider Rate Crawler     │
+  │  AGENT 1: Multi-Cloud Telemetry & SLA Benchmark Scraper     │
   └──────────────────────────────┬──────────────────────────────┘
                                  │
                                  ▼
   ┌─────────────────────────────────────────────────────────────┐
-  │  AGENT 2: Multi-Cloud Traffic Simulator & Cost Engine       │
+  │  AGENT 2: Micro-Economic Impact & Stochastic Modeler        │
   └──────────────────────────────┬──────────────────────────────┘
                                  │
                                  ▼
   ┌─────────────────────────────────────────────────────────────┐
-  │  PILLAR 4: Subcontractor Teaming & Margin Procurement       │
+  │  AGENT 3: Autonomous RFP Proposal Synthesizer (Gemini)      │
   └──────────────────────────────┬──────────────────────────────┘
                                  │
                                  ▼
   ┌─────────────────────────────────────────────────────────────┐
-  │  AGENT 3: Vector RAG & Proposal Writer (Gemini 1.5 Pro)    │
+  │  AGENT 4: Closed-Loop Auditor & Win Probability Engine      │
   └──────────────────────────────┬──────────────────────────────┘
                                  │
                                  ▼
   ┌─────────────────────────────────────────────────────────────┐
-  │  PILLAR 1: Closed-Loop Agent 4 Auditor & Self-Correction    │
-  └──────────────────────────────┬──────────────────────────────┘
-                                 │
-                                 ▼
-  ┌─────────────────────────────────────────────────────────────┐
-  │  PILLAR 5: Monte Carlo Risk Simulation (1,000 Scenarios)     │
-  └──────────────────────────────┬──────────────────────────────┘
-                                 │
-                                 ▼
-  ┌─────────────────────────────────────────────────────────────┐
-  │  PILLAR 2: Post-Migration Telemetry & Verified Impact ROI   │
-  └──────────────────────────────┬──────────────────────────────┘
-                                 │
-                                 ▼
-  ┌─────────────────────────────────────────────────────────────┐
-  │  PILLAR 3: Enterprise Live IAM APIs & 1-Click Workspace Push│
+  │  AGENT 5: Subcontractor Procurement & Margin Optimizer      │
   └─────────────────────────────────────────────────────────────┘
 ```
 
-### The 4 Core Agents:
-1. **Agent 1 (The Scraper)**: Crawls live pricing, rate limits, and SLAs across AWS, GCP, Azure, Cloudflare, and Snowflake.
-2. **Agent 2 (The Simulator)**: Stress-tests client workload metrics against provider rate cards to output migration blueprints.
-3. **Agent 3 (The Writer)**: Leverages Google Gemini 1.5 Pro & vector RAG to synthesize section-structured RFP proposals.
-4. **Agent 4 (The Auditor)**: Independently audits proposals for SOC 2, PCI-DSS, HIPAA, and SLA compliance. If the score is < 90%, Agent 4 automatically self-corrects the draft.
-
 ---
 
-## 5 XPRIZE Strategic Pillars
-
-| Pillar | Focus | Implementation | Impact |
-| :--- | :--- | :--- | :--- |
-| **Pillar 1** | **Closed-Loop Self-Correction** | Agent 4 Auditor auto-patches proposal gaps before human review | Eliminates manual compliance errors |
-| **Pillar 2** | **Verifiable Micro-Economic Impact** | 30/60/90-Day post-migration billing telemetry vs AI predictions | **95.8% prediction accuracy score** |
-| **Pillar 3** | **Live Enterprise API Connectors** | Read-only AWS CloudWatch IAM, GCP Stackdriver & SAM.gov listener | Native workflow integration |
-| **Pillar 4** | **Subcontractor Teaming Engine** | Procures sub-vendor quotes (pen-testing, hardware, labor) + margins | Enables SMEs to win enterprise tenders |
-| **Pillar 5** | **Monte Carlo Risk Stress-Test** | 1,000-scenario stochastic simulation (P50/P95/worst-case spend) | Explainable, trustworthy AI modeling |
-
----
-
-##  Key Features
-
-- **Multi-Currency Native (ZAR & USD)**: Built with South African Rand (ZAR) as default display currency, converting dynamically to USD, EUR, GBP, AUD, NGN, and KES via live exchange rates.
-- **B2B Lead Enrichment & Outreach Agent**: Autonomous Python & Node.js service using Google GenAI SDK Function Calling (`enrich_lead_profile`) to research prospect domains and craft high-converting pitch emails.
-- **Win Probability Scoring Engine**: Calculates an objective 0–100 Win Probability score and letter grade (A–F) based on NLP keyword alignment, past performance strength, and section completeness.
-- **11-Point Pre-Submission Quality Checklist**: Blocks proposal export until all mandatory quality criteria pass.
-- **Executive PDF Exporter**: Generates executive PDF packages complete with cover page, TOC, audit badges, and legal disclaimers.
-- **Stripe Subscription Billing**: Integrated 7-day trial manager, monthly/annual sliding toggle, self-service Customer Portal, and Stripe Webhooks.
-
----
-
-##  Project Structure
-
-```
-b2b-growth-platform/
-├── backend/                        # Node.js Express API Server & Services
-│   ├── db/
-│   │   └── schema.sql              # Supabase PostgreSQL Schema & RLS Policies
-│   ├── middleware/
-│   │   ├── authMiddleware.js       # Supabase JWT Authorization Guard
-│   │   └── rbacMiddleware.js       # Role-Based Access Control (Owner/Admin/Analyst/Viewer)
-│   ├── routes/
-│   │   ├── billing.js              # Stripe Checkout, Portal & Webhooks
-│   │   ├── cloudPricing.js         # Live AWS/GCP/Azure Pricing Proxy & Cache
-│   │   ├── connectors.js           # Cloud Credential Store (IAM / Service Accounts)
-│   │   ├── exchangeRates.js        # Open Exchange Rates FX Proxy
-│   │   ├── organisations.js        # Team Management & User Invites
-│   │   ├── proposals.js            # Gemini 1.5 Pro Proposal Generator & Outreach API
-│   │   └── rfpSearch.js            # Live SAM.gov Opportunities Search
-│   ├── services/
-│   │   ├── lead_outreach_agent.py  # Python B2B Lead Enrichment Agent (GenAI SDK)
-│   │   ├── pricingCache.js         # Database Cache TTL Manager
-│   │   ├── pricingFetcher.js       # Nightly Cron Job Pricing Crawler
-│   │   └── userService.js          # User Profile CRUD & GDPR Delete
-│   ├── .env.example                # Environment Variable Template
-│   ├── package.json                # Backend Dependencies
-│   └── server.js                   # Express Server Entry Point
-│
-├── frontend/                       # Vanilla ES6 Modular Frontend
-│   ├── js/
-│   │   ├── auth/
-│   │   │   ├── authClient.js       # Auth Client & Glassmorphism Login Modal
-│   │   │   └── orgAdmin.js         # Team & Organization Management UI
-│   │   ├── billing/
-│   │   │   └── trialManager.js     # Trial Countdown & Upgrade Modal
-│   │   ├── pdf/
-│   │   │   └── proposalExporter.js # jsPDF Document Generator
-│   │   ├── proposals/
-│   │   │   ├── preSubmitChecklist.js  # 11-Point Quality Gate Blocker
-│   │   │   └── winProbabilityEngine.js # Win Score Gauge & Factor Breakdown
-│   │   └── utils/
-│   │       └── currencyFormatter.js   # ZAR / USD FX Converter & Dropdown
-│   └── pages/
-│       └── pricing.html            # Public Pricing Page (ZAR/USD switch + annual toggle)
-│
-├── js/                             # Main Core Engines & Datasets
-│   ├── app.js                      # Main App Controller & Event Handlers
-│   ├── data/                       # Sample Presets & Vector Knowledge Base
-│   └── engine/                     # Agents 1-4 & Pillars 1-5 Modules
-│
-├── index.html                      # Main Platform Single-Page Application (SPA)
-├── styles.css                      # Obsidian Glassmorphism Design System
-└── README.md                       # Documentation
-```
-
----
-
-##  Quick Start Guide
+## 🚀 Local Development Guide
 
 ### Prerequisites
-- **Node.js**: v18+ 
-- **Python**: 3.9+ (for `lead_outreach_agent.py`)
-- **API Keys**: Supabase, Google Gemini API, Stripe, SAM.gov (Optional)
+* **Node.js**: v18.x or v20+ LTS ([Download](https://nodejs.org/))
+* **npm**: v9+ (bundled with Node.js)
+* **Git**: Installed and configured
+* **Python**: 3.9+ *(optional, for Python lead outreach script)*
 
 ---
 
-### 1. Frontend Setup (Standalone Demo Mode)
-
-You can launch the frontend immediately in full demo mode without backend dependencies:
-
+### Step 1: Clone the Repository
 ```bash
 git clone https://github.com/Tsholi-Belle/b2b-growth-platform.git
 cd b2b-growth-platform
-
-# Serve the application on port 8888
-python3 -m http.server 8888
 ```
-Open **[http://localhost:8888](http://localhost:8888)** in your browser and click **"Try Demo (no signup)"**.
 
 ---
 
-### 2. Backend Setup (Live Production Server)
+### Step 2: Backend Setup & Local API Server
 
-To enable live AWS/GCP pricing, Gemini AI proposal generation, SAM.gov bid search, and Stripe billing:
+1. Navigate to the backend directory and install dependencies:
+   ```bash
+   cd backend
+   npm install
+   ```
+
+2. Create your local environment file:
+   ```bash
+   cp .env.example .env
+   ```
+
+3. Start the backend in development mode:
+   ```bash
+   npm start
+   # Server running at http://localhost:3001
+   ```
+
+---
+
+### Step 3: Running the Frontend
+
+You can run the frontend in two ways:
+
+#### Option A: Direct Single-Container / Full-Stack Mode (Recommended)
+The Node.js backend serves the frontend automatically at `http://localhost:3001`:
+```bash
+cd backend
+npm start
+```
+Open **[http://localhost:3001](http://localhost:3001)** in your browser.
+
+#### Option B: Standalone Frontend Dev Server (with hot reload / static server)
+```bash
+# In the project root directory
+npx serve . -p 8888
+# OR using Python:
+python3 -m http.server 8888
+```
+Open **[http://localhost:8888](http://localhost:8888)**. Click **"Try Demo (no signup)"** to test all features in interactive client simulation mode.
+
+---
+
+## 🔑 How to Get Your API Keys
+
+### 1. Google Gemini & Vertex AI API Key
+1. **Google AI Studio (Fastest for testing):**
+   * Visit [https://aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey).
+   * Sign in with your Google account.
+   * Click **"Create API Key"** and select or create a Google Cloud project.
+   * Copy the key and set in `.env`: `GEMINI_API_KEY=AIzaSy...`
+2. **Google Cloud Vertex AI (Production in South Africa / africa-south1):**
+   * Go to [Google Cloud Console](https://console.cloud.google.com/).
+   * Enable the **Vertex AI API**.
+   * Create a Service Account with the `Vertex AI User` role.
+   * Generate a JSON key or use Application Default Credentials (`gcloud auth application-default login`).
+
+### 2. Supabase API Keys (Database & Auth)
+1. Go to [https://supabase.com/](https://supabase.com/) and create a free project.
+2. Under **Project Settings > API**, find:
+   * **Project URL**: `https://xyzcompany.supabase.co`
+   * **Anon / Public Key**: `anon_key_string...` (safe for browser)
+   * **service_role Key**: `service_role_string...` (**SECRET** — backend only)
+3. Under **SQL Editor**, run the database migration schema from [`backend/db/schema.sql`](backend/db/schema.sql).
+4. Set in `.env`:
+   ```env
+   SUPABASE_URL=https://your-project.supabase.co
+   SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+   SUPABASE_ANON_KEY=your_anon_key
+   ```
+
+### 3. Stripe API Keys (International Billing)
+1. Go to [https://dashboard.stripe.com/register](https://dashboard.stripe.com/register).
+2. Toggle on **Test Mode** in the top-right corner.
+3. Go to **Developers > API Keys**:
+   * **Publishable key**: `pk_test_...`
+   * **Secret key**: `sk_test_...`
+4. For webhooks, go to **Developers > Webhooks > Add destination** (`http://your-domain/api/billing/webhook`) and copy the **Signing secret** (`whsec_...`).
+5. Set in `.env`:
+   ```env
+   STRIPE_SECRET_KEY=sk_test_...
+   STRIPE_PUBLISHABLE_KEY=pk_test_...
+   STRIPE_WEBHOOK_SECRET=whsec_...
+   ```
+
+### 4. PayFast API Keys (South African Rand & Instant EFT Payments)
+1. Register a free Sandbox or Live merchant account at [https://www.payfast.co.za/](https://www.payfast.co.za/).
+2. Go to **Settings > Integration**:
+   * **Merchant ID**: e.g. `10000100` (Sandbox default)
+   * **Merchant Key**: e.g. `46f0cd694581a` (Sandbox default)
+   * **Passphrase**: Set a secure secret passphrase under security settings.
+3. Set in `.env`:
+   ```env
+   PAYFAST_MERCHANT_ID=10000100
+   PAYFAST_MERCHANT_KEY=46f0cd694581a
+   PAYFAST_PASSPHRASE=your_passphrase
+   PAYFAST_LIVE=false
+   ```
+
+---
+
+## 🛡️ How to Store API Keys Securely
+
+To prevent API keys from leaking publicly (which can lead to unauthorized billing and security breaches), follow these core security practices:
+
+### 1. Never Commit `.env` or Credentials to Git
+* The `.gitignore` file is configured to exclude all `.env`, `service-account*.json`, and credential files:
+  ```gitignore
+  .env
+  .env.*
+  *.pem
+  *.key
+  service-account*.json
+  ```
+* Before every git commit, check `git status` to verify no secret files are staged.
+
+### 2. Differentiate Client Keys vs. Server Secret Keys
+* **Public / Client-Safe Keys**: Stripe Publishable Key (`pk_...`), Supabase Anon Key. These only have restricted read/write permissions governed by Row-Level Security (RLS).
+* **Private / Server-Only Secrets**: Stripe Secret Key (`sk_...`), Supabase Service Role Key, Gemini API Key, PayFast Passphrase. **These must NEVER be bundled in client JavaScript, HTML, or mobile apps.**
+
+### 3. Use Cloud Secret Managers in Production
+* On Google Cloud Platform (GCE / Cloud Run):
+  * Store keys in **Google Secret Manager** (`gcloud secrets create gemini-key --data-file=...`).
+  * Grant the VM service account the `Secret Manager Secret Accessor` role.
+  * Access secrets at runtime without writing plaintext keys to disks.
+* On GitHub Actions CI/CD:
+  * Store credentials under **Repository Settings > Secrets and variables > Actions**.
+
+### 4. Apply API Key Restrictions & Quotas
+* In Google Cloud Console, restrict your Gemini API key to specific HTTP referrers, IP addresses, and enabled APIs (`Generative Language API` only).
+* Set spending limits / quota caps in Stripe, Google Cloud, and OpenAI/Gemini dashboards.
+
+### 5. Emergency Incident Response: If a Key is Leaked
+1. **Revoke immediately:** Go to the provider's dashboard (Google AI Studio, Stripe, Supabase) and click **"Revoke / Delete Key"**.
+2. **Generate replacement:** Create a new key and update your production environment.
+3. **Audit access logs:** Review API usage logs for anomalous requests or unexpected billing.
+
+---
+
+## 🇿🇦 South African Payments & Data Sovereignty
+
+* **In-Country Data Residency**: Production deployments are anchored in **`africa-south1` (Johannesburg, South Africa)** to comply with **POPIA Section 72** (Transborder Personal Data Flow Regulations).
+* **South African Payment Rails**: Natively integrated with **PayFast South Africa**, supporting:
+  * **Instant EFT**: Capitec Pay, Nedbank, Standard Bank, FNB, Absa, Investec.
+  * **Cards & Digital Wallets**: Visa, Mastercard (ZAR `R`), Masterpass, SnapScan, Zapper.
+
+---
+
+## 📜 Legal Policies & Compliance Suite
+
+Amblysomus includes full standalone legal disclosures accessible in the app footer and settings:
+* 📄 **Terms of Service**: [`frontend/pages/terms.html`](frontend/pages/terms.html)
+* 🔒 **Privacy Policy (POPIA & GDPR)**: [`frontend/pages/privacy.html`](frontend/pages/privacy.html)
+* 🍪 **Cookie Policy**: [`frontend/pages/cookies.html`](frontend/pages/cookies.html)
+* 🏷️ **Pricing & Payments (ZAR & USD)**: [`frontend/pages/pricing.html`](frontend/pages/pricing.html)
+
+---
+
+## 🧪 Running Tests & Evaluation Suite
+
+Amblysomus features a comprehensive unit testing suite:
 
 ```bash
 cd backend
 
-# Install dependencies
-npm install
+# Run all unit tests (Auth, MFA, Guardrails, POPIA, Payments, Proposal Engine)
+npm test
 
-# Copy environment template
-cp .env.example .env
-```
-
-Edit `.env` with your API credentials:
-```env
-PORT=3001
-SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_SERVICE_ROLE_KEY=your_supabase_key
-GEMINI_API_KEY=your_gemini_api_key
-STRIPE_SECRET_KEY=sk_test_...
-STRIPE_WEBHOOK_SECRET=whsec_...
-```
-
-Run database migrations:
-1. Open your Supabase Dashboard → SQL Editor.
-2. Paste and run the contents of [`backend/db/schema.sql`](backend/db/schema.sql).
-
-Start the Node.js API server:
-```bash
-npm run dev
-# Server running at http://localhost:3001
+# Run AI diagnostic evaluation benchmarks
+npm run eval
 ```
 
 ---
 
-### 3. Running the Python Lead Outreach Agent
+## 📄 License & Support
 
-To run the standalone B2B Lead Enrichment & Outreach script:
+Distributed under the **MIT License**.
 
-```bash
-# Install Google GenAI SDK
-pip install google-genai
-
-# Set your API Key
-export GEMINI_API_KEY="your_gemini_api_key"
-
-# Run the agent
-python3 backend/services/lead_outreach_agent.py
-```
-
----
-
-
-##  Security & Privacy
-
-- **Zero-Retention AI Policy**: Proprietary business data and RFP inputs are never stored or used to train foundational AI models.
-- **AES-256 Encryption**: Encrypted data at rest and TLS 1.3 in transit.
-- **Row-Level Security (RLS)**: Strict database tenant isolation ensured by Supabase PostgreSQL RLS policies.
-- **GDPR Compliance**: Built-in 1-click user data export (`GET /api/users/me/export`) and complete account erasure (`DELETE /api/users/me`).
-
----
-
-##  License
-
-Distributed under the MIT License. See `LICENSE` for more information.
-
----
-
-<p align="center">
-  <b>ArchEngine AI</b> · Built in South Africa · Built for Global Enterprise Growth
-</p>
+* 📧 **Advisory & Support Contact:** `hello@kalixara.com`
+* 📍 **Data Protection & Legal Officer:** Johannesburg, South Africa
+* 🌐 **Live Website:** [https://tsholi-belle.github.io/b2b-growth-platform/](https://tsholi-belle.github.io/b2b-growth-platform/)

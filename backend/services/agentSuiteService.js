@@ -1,5 +1,5 @@
 /**
- * ArchEngine AI Agent Suite for Proactive Co-Creator Integration
+ * Amblysomus Solutions Agent Suite for Proactive Co-Creator Integration
  * Replaces generic AI Studio demo agents with 5 domain-bounded, guardrailed advisory agents.
  */
 const { evaluateInputGuardrails, evaluateOutputGuardrails } = require('./guardrailsService');

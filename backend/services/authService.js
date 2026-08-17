@@ -193,7 +193,7 @@ function verifyEmailToken(token) {
 function setupGoogleMFA(email) {
   const normalizedEmail = email.toLowerCase().trim();
   const secret = generateMFASecret();
-  const issuer = 'ArchEngine Solutions (South Africa)';
+  const issuer = 'Amblysomus Solutions (South Africa)';
   const otpauthUrl = `otpauth://totp/${encodeURIComponent(issuer)}:${encodeURIComponent(normalizedEmail)}?secret=${secret}&issuer=${encodeURIComponent(issuer)}&algorithm=SHA1&digits=6&period=30`;
 
   mfaSecretsDb.set(normalizedEmail, secret);

@@ -68,7 +68,7 @@ const MODAL_CSS = `
 .auth-divider::after { right: 0; }
 `;
 
-let currentUser = { role: 'demo', org: 'ArchEngine Solutions', currency: 'ZAR', name: 'Advisory Lead' };
+let currentUser = { role: 'demo', org: 'Amblysomus Solutions', currency: 'ZAR', name: 'Advisory Lead' };
 let currentSession = null;
 
 function injectCSS() {
@@ -132,7 +132,7 @@ function renderModal(initialTab = 'login') {
     overlay.innerHTML = `
         <div class="auth-card">
             <button class="auth-close-btn" id="btn-close-auth">✕</button>
-            <h2 style="text-align:center; margin-top:0; margin-bottom:1.5rem; font-weight:700;">ArchEngine Solutions</h2>
+            <h2 style="text-align:center; margin-top:0; margin-bottom:1.5rem; font-weight:700;">Amblysomus Solutions</h2>
             <div class="auth-tabs">
                 <div class="auth-tab ${initialTab === 'login' ? 'active' : ''}" id="tab-login">Login</div>
                 <div class="auth-tab ${initialTab === 'signup' ? 'active' : ''}" id="tab-signup">Sign Up</div>
@@ -197,7 +197,7 @@ function renderModal(initialTab = 'login') {
 
     document.getElementById('btn-demo').onclick = () => {
         sessionStorage.setItem('demo_mode', 'true');
-        currentUser = { role: 'demo', org: 'ArchEngine Solutions', currency: 'ZAR', name: 'Demo User' };
+        currentUser = { role: 'demo', org: 'Amblysomus Solutions', currency: 'ZAR', name: 'Demo User' };
         overlay.classList.remove('show');
         setTimeout(() => overlay.remove(), 250);
         renderUserMenu();

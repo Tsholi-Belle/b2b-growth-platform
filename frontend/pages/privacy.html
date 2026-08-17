@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy (POPIA & GDPR) | Amblysomus Solutions</title>
+  <meta name="description" content="Privacy Policy and POPIA Data Protection Compliance for Amblysomus Solutions.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css?v=2026">
+  <style>
+    body { background: #F8FAFC; color: #0F172A; font-family: 'Plus Jakarta Sans', sans-serif; line-height: 1.7; margin: 0; padding: 0; }
+    .legal-container { max-width: 860px; margin: 3rem auto; padding: 2.5rem; background: #FFFFFF; border: 1px solid #CBD5E1; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+    .legal-header { border-bottom: 1px solid #E2E8F0; padding-bottom: 1.5rem; margin-bottom: 2rem; }
+    .legal-header h1 { font-size: 2rem; font-weight: 800; color: #0F172A; margin: 0 0 0.5rem 0; }
+    .legal-meta { font-size: 0.85rem; color: #64748B; }
+    h2 { font-size: 1.25rem; font-weight: 700; color: #0F172A; margin-top: 2rem; }
+    p, li { font-size: 0.925rem; color: #334155; }
+    .back-nav { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; font-weight: 700; color: #0284C7; text-decoration: none; margin-bottom: 1.5rem; }
+    .back-nav:hover { text-decoration: underline; }
+    .popia-badge { display: inline-block; background: rgba(16,231,104,0.15); border: 1px solid rgba(16,231,104,0.3); color: #059669; padding: 0.35rem 0.75rem; border-radius: 6px; font-weight: 700; font-size: 0.82rem; margin-bottom: 1rem; }
+    .legal-box { background: #F1F5F9; border-left: 4px solid #10B981; padding: 1rem 1.25rem; border-radius: 0 8px 8px 0; margin: 1.5rem 0; font-size: 0.88rem; }
+  </style>
+</head>
+<body>
+  <div class="legal-container">
+    <a href="../../index.html" class="back-nav">← Back to Amblysomus Platform</a>
+    
+    <div class="legal-header">
+      <div class="popia-badge">📍 POPIA Act No. 4 of 2013 & GDPR Compliant</div>
+      <h1>Privacy Policy & Data Protection</h1>
+      <div class="legal-meta">Last Updated: August 17, 2026 | Information Officer: hello@kalixara.com | Jurisdiction: Republic of South Africa</div>
+    </div>
+
+    <div class="legal-box">
+      <strong>Commitment to Data Privacy:</strong> Amblysomus Solutions respects your privacy and is strictly committed to protecting personal information in accordance with the Protection of Personal Information Act, 2013 (POPIA) and the General Data Protection Regulation (GDPR).
+    </div>
+
+    <h2>1. Information Officer & Contact</h2>
+    <p>In terms of Section 55 of POPIA, Amblysomus Solutions has appointed an Information Officer responsible for ensuring compliance:</p>
+    <ul>
+      <li><strong>Information Officer Contact:</strong> <a href="mailto:hello@kalixara.com" style="color:#0284C7;">hello@kalixara.com</a></li>
+      <li><strong>Physical Location:</strong> Johannesburg, Gauteng, South Africa</li>
+      <li><strong>Data Residency:</strong> South Africa (Google Cloud <code>africa-south1</code>)</li>
+    </ul>
+
+    <h2>2. Categories of Information We Process</h2>
+    <ul>
+      <li><strong>Account Information:</strong> Name, professional email address, organization name, role, and hashed authentication credentials.</li>
+      <li><strong>Cloud Infrastructure Telemetry:</strong> Anonymized workload metrics (vCPU, RAM, storage, egress bandwidth) provided for cost simulation.</li>
+      <li><strong>Bid & Proposal Content:</strong> RFP requirements and draft proposal responses.</li>
+      <li><strong>Technical Diagnostic Telemetry:</strong> Browser user-agent, operating system, and viewport data collected during beta feedback submissions.</li>
+    </ul>
+
+    <h2>3. Automated POPIA PII Redaction & AI Guardrails</h2>
+    <p>Amblysomus employs automated AI safety guardrails that scan incoming RFP texts and logs to automatically redact sensitive Personal Identifiable Information (PII) before LLM inference, including:</p>
+    <ul>
+      <li>13-Digit South African National ID Numbers (validated via Luhn algorithm)</li>
+      <li>South African telephone and mobile numbers (+27, 082, 072, 061)</li>
+      <li>Credit card and banking details</li>
+      <li>Personal email addresses</li>
+    </ul>
+
+    <h2>4. South Africa In-Country Data Residency (POPIA Section 72)</h2>
+    <p>All user databases, proposal repositories, and telemetry traces are stored within the Republic of South Africa in the Google Cloud <code>africa-south1</code> (Johannesburg) region, ensuring zero unauthorized transborder personal data transfers.</p>
+
+    <h2>5. Your Rights as a Data Subject (POPIA Section 23)</h2>
+    <p>Under POPIA, you have the right to:</p>
+    <ol>
+      <li><strong>Request Access:</strong> Request confirmation of whether we hold personal information about you and obtain a full export (available via the Governance tab in the app).</li>
+      <li><strong>Request Correction:</strong> Request the correction of personal information that is inaccurate, irrelevant, or out of date.</li>
+      <li><strong>Request Erasure:</strong> Request the permanent deletion or destruction of personal information we are no longer authorized to retain.</li>
+      <li><strong>Lodge a Complaint:</strong> Lodge a complaint with the South African Information Regulator (complaints.IR@justice.gov.za).</li>
+    </ol>
+
+    <h2>6. Zero-Data Retention AI Inference Policy</h2>
+    <p>System logs, proposal text, and cloud credentials ingested into Amblysomus are never used to train foundational AI models. All API communications are secured with TLS 1.3 in transit and AES-256 at rest.</p>
+  </div>
+</body>
+</html>

@@ -56,6 +56,7 @@ const exchangeRatesRoutes = require('./routes/exchangeRates');
 const contactRoutes = require('./routes/contact');
 const feedbackRoutes = require('./routes/feedback');
 const authRoutes = require('./routes/auth');
+const paymentsSARoutes = require('./routes/paymentsSA');
 
 app.use('/api/cloud-pricing', cloudPricingRoutes);
 app.use('/api/proposals', proposalsRoutes);
@@ -66,6 +67,7 @@ app.use('/api/exchange-rates', exchangeRatesRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/feedback', feedbackRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/payments', paymentsSARoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
