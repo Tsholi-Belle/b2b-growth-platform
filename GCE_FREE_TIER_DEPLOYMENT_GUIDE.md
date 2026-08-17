@@ -1,27 +1,41 @@
-# Google Cloud Free Tier VM Deployment Guide (GCE `e2-micro`)
+# Google Cloud VM & South Africa POPIA Deployment Guide
 
-This guide provides step-by-step instructions to deploy **ArchEngine Solutions** to a permanently free-tier eligible **Google Compute Engine (GCE) `e2-micro` VM instance**.
+This guide provides instructions to deploy **ArchEngine Solutions** to a **Google Compute Engine (GCE) VM instance** with:
+1. **Free-Tier US Deployment** (`us-central1`, `us-east1`, or `us-west1` for $0/mo free tier).
+2. **South Africa In-Country Data Residency Deployment** (`africa-south1` Johannesburg) for complete **POPIA compliance**.
+3. **Open-Source Database Layer** (PostgreSQL 16 / Encrypted Local Storage with Zero-Retention AI governance).
 
 ---
 
-## 1. Google Cloud Free Tier Specifications
+## 1. Google Cloud Deployment Options
 
-Google Cloud provides the following permanent free-tier compute resources:
-* **Machine Type:** `e2-micro` (2 vCPUs, 1 GB RAM, 30 GB standard disk).
-* **Eligible Regions:** Must be located in one of these US regions:
-  * `us-central1` (Iowa)
-  * `us-east1` (South Carolina)
-  * `us-west1` (Oregon)
-* **Monthly Cost:** **$0.00 / month** (within free tier usage limits).
+| Deployment Mode | Region | Cost Tier | Compliance & Best Use |
+| :--- | :--- | :--- | :--- |
+| **Option A: South Africa POPIA In-Country VM** *(Recommended for SA)* | `africa-south1-a` (Johannesburg) | Low Cost (~$4 - $7/mo) | **100% POPIA Section 72 In-Country Data Sovereignty**. Open-Source PostgreSQL. |
+| **Option B: Google Cloud Free Tier VM** | `us-central1-a` (Iowa) | **$0.00 / month** (Permanently Free) | Free Tier eligible (`e2-micro`, 30 GB standard disk, 1 GB egress). |
 
 ---
 
 ## 2. 1-Command Deployment via `gcloud` CLI
 
-Run this single command in Google Cloud Shell or your local terminal to create the VM and automatically deploy the application:
-
+### Deploying to South Africa (`africa-south1` Johannesburg - POPIA Compliant):
 ```bash
-gcloud compute instances create archengine-vm \
+gcloud compute instances create archengine-sa-vm \
+    --project="YOUR_GCP_PROJECT_ID" \
+    --zone="africa-south1-a" \
+    --machine-type="e2-micro" \
+    --image-family="ubuntu-2204-lts" \
+    --image-project="ubuntu-os-cloud" \
+    --boot-disk-size="30GB" \
+    --boot-disk-type="pd-standard" \
+    --tags="http-server,https-server" \
+    --scopes="cloud-platform" \
+    --metadata-from-file=startup-script=scripts/gce_startup_script.sh
+```
+
+### Deploying to US Free Tier Region (`us-central1` Iowa - $0/mo):
+```bash
+gcloud compute instances create archengine-free-vm \
     --project="YOUR_GCP_PROJECT_ID" \
     --zone="us-central1-a" \
     --machine-type="e2-micro" \
