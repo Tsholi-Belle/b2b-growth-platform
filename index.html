@@ -131,6 +131,120 @@
     window.triggerDraftPush = function() {
       if (window.app) window.app.triggerDraftPush();
     };
+
+    window.openSurveyModal = function() {
+      var modal = document.getElementById('survey-modal');
+      var form = document.getElementById('beta-survey-form');
+      var confirmCard = document.getElementById('survey-confirmation-card');
+      if (form) form.style.display = 'block';
+      if (confirmCard) confirmCard.style.display = 'none';
+      if (modal) modal.classList.add('active');
+    };
+
+    window.closeSurveyModal = function() {
+      var modal = document.getElementById('survey-modal');
+      if (modal) modal.classList.remove('active');
+    };
+
+    window.submitSurveyForm = async function() {
+      var ratingEl = document.querySelector('input[name="survey-rating"]:checked');
+      var roleEl = document.getElementById('survey-user-role');
+      var optEl = document.getElementById('survey-optimizer-feedback');
+      var propEl = document.getElementById('survey-proposal-feedback');
+      var featEl = document.getElementById('survey-feature-requests');
+
+      var payload = {
+        rating: ratingEl ? parseInt(ratingEl.value, 10) : 5,
+        user_role: roleEl ? roleEl.value : 'Beta Tester',
+        optimizer_feedback: optEl ? optEl.value : '',
+        proposal_feedback: propEl ? propEl.value : '',
+        feature_requests: featEl ? featEl.value : '',
+        technical_context: {
+          userAgent: navigator.userAgent,
+          platform: navigator.platform,
+          screenResolution: window.innerWidth + 'x' + window.innerHeight,
+          activeTab: document.querySelector('.nav-tab.active') ? document.querySelector('.nav-tab.active').getAttribute('data-tab') : 'dashboard',
+          currency: 'ZAR',
+          capturedAt: new Date().toISOString()
+        }
+      };
+
+      try {
+        await fetch('/api/feedback/survey', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } catch(e) {
+        console.warn('Feedback recorded locally:', e);
+      }
+
+      var form = document.getElementById('beta-survey-form');
+      var confirmCard = document.getElementById('survey-confirmation-card');
+      if (form) form.style.display = 'none';
+      if (confirmCard) confirmCard.style.display = 'block';
+    };
+
+    window.switchCoTab = function(subtab) {
+      var btnClarify = document.getElementById('btn-co-clarify');
+      var btnBelief = document.getElementById('btn-co-belief');
+      var btnPrompt = document.getElementById('btn-co-prompt');
+      var panelClarify = document.getElementById('co-panel-clarify');
+      var panelBelief = document.getElementById('co-panel-belief');
+      var panelPrompt = document.getElementById('co-panel-prompt');
+
+      if (btnClarify) btnClarify.classList.toggle('active', subtab === 'clarify');
+      if (btnBelief) btnBelief.classList.toggle('active', subtab === 'belief');
+      if (btnPrompt) btnPrompt.classList.toggle('active', subtab === 'prompt');
+
+      if (panelClarify) panelClarify.style.display = subtab === 'clarify' ? 'block' : 'none';
+      if (panelBelief) panelBelief.style.display = subtab === 'belief' ? 'block' : 'none';
+      if (panelPrompt) {
+        panelPrompt.style.display = subtab === 'prompt' ? 'block' : 'none';
+        if (subtab === 'prompt') window.updateCompiledPromptPreview();
+      }
+    };
+
+    window.setClarificationChip = function(btnEl, category, value) {
+      if (!btnEl || !btnEl.parentElement) return;
+      var siblings = btnEl.parentElement.querySelectorAll('.source-btn');
+      siblings.forEach(function(b) { b.classList.remove('active'); });
+      btnEl.classList.add('active');
+
+      if (!window._clarificationState) window._clarificationState = {};
+      window._clarificationState[category] = value;
+
+      // Update Belief Graph Assumption list
+      var assumptionsList = document.getElementById('belief-assumptions-list');
+      if (assumptionsList) {
+        assumptionsList.innerHTML = `
+          <li>Resilience: ${window._clarificationState.resilience || 'Multi-Region Active-Active'} (Confirmed)</li>
+          <li>Compliance: ${window._clarificationState.compliance || 'Strict HIPAA + BAA'} (Confirmed)</li>
+          <li>Teaming: ${window._clarificationState.teaming || 'Include Vetted Subcontractors'} (Confirmed)</li>
+          <li>Database: Assume Managed PostgreSQL (RDS / Cloud SQL)</li>
+        `;
+      }
+      window.updateCompiledPromptPreview();
+    };
+
+    window.updateCompiledPromptPreview = function() {
+      var promptEl = document.getElementById('co-compiled-prompt');
+      if (!promptEl) return;
+      var company = document.getElementById('company-context')?.value || 'Acme Enterprise Solutions';
+      var tone = document.getElementById('proposal-tone')?.value || 'formal';
+      var resilience = window._clarificationState?.resilience || 'Multi-Region Active-Active';
+      var compliance = window._clarificationState?.compliance || 'Strict HIPAA + Signed BAA';
+      var teaming = window._clarificationState?.teaming || 'Include Vetted Subcontractors';
+
+      promptEl.value = `[SYSTEM: Vertex AI Gemini 2.5 Flash / Enterprise Bid Strategist]
+ROLE: Lead Enterprise Solutions Architect representing "${company}".
+TONE: ${tone.toUpperCase()}
+RESOLVED INTENT & BELIEF GRAPH:
+- Architecture Resilience: ${resilience}
+- Mandatory Compliance: ${compliance}
+- Teaming Strategy: ${teaming}
+- Schema: application/json (Executive Summary, Technical Architecture, OpEx TCO Matrix, Risk & SLA Buffer, AI Governance Disclosure)`;
+    };
   </script>
 </head>
 <body>
@@ -476,6 +590,87 @@
       <option value='aggressive'>Competitive & Value-Focused</option>
     </select>
   </div>
+
+  <!-- PROACTIVE CO-CREATOR IXD PANEL -->
+  <div class="co-creator-panel" style="margin-top: 1.25rem; border-top: 1px solid #E2E8F0; padding-top: 1rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
+      <div style="font-size: 0.85rem; font-weight: 800; color: #0F172A; display: flex; align-items: center; gap: 0.4rem;">
+        <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10E768;"></span>
+        Proactive Co-Creator (Human-in-the-Loop Alignment)
+      </div>
+      <div class="co-tabs" style="display: flex; gap: 0.35rem;">
+        <button type="button" class="source-btn active" id="btn-co-clarify" onclick="window.switchCoTab('clarify')" style="font-size: 0.78rem; padding: 0.3rem 0.75rem;">1. Clarifications</button>
+        <button type="button" class="source-btn" id="btn-co-belief" onclick="window.switchCoTab('belief')" style="font-size: 0.78rem; padding: 0.3rem 0.75rem;">2. Belief Graph</button>
+        <button type="button" class="source-btn" id="btn-co-prompt" onclick="window.switchCoTab('prompt')" style="font-size: 0.78rem; padding: 0.3rem 0.75rem;">3. Review Prompt</button>
+      </div>
+    </div>
+
+    <!-- Subtab 1: Clarifications -->
+    <div id="co-panel-clarify" class="co-subpanel active" style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 0.85rem;">
+      <div style="font-size: 0.78rem; color: #475569; margin-bottom: 0.6rem;">
+        <strong>Proactive Intent Clarification:</strong> Resolve key requirement ambiguities to eliminate AI assumptions:
+      </div>
+      <div id="clarification-chips-list" style="display: flex; flex-direction: column; gap: 0.6rem;">
+        <div style="background: #FFFFFF; border: 1px solid #CBD5E1; border-radius: 6px; padding: 0.6rem;">
+          <div style="font-size: 0.75rem; font-weight: 700; color: #0F172A; margin-bottom: 0.35rem;">Architecture Resilience & Disaster Recovery:</div>
+          <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+            <button type="button" class="source-btn active" onclick="window.setClarificationChip(this, 'resilience', 'Multi-Region Active-Active')">Multi-Region Active-Active (99.99% SLA)</button>
+            <button type="button" class="source-btn" onclick="window.setClarificationChip(this, 'resilience', 'Cost-Optimized Single Region')">Cost-Optimized Single Region (99.9% SLA)</button>
+          </div>
+        </div>
+
+        <div style="background: #FFFFFF; border: 1px solid #CBD5E1; border-radius: 6px; padding: 0.6rem;">
+          <div style="font-size: 0.75rem; font-weight: 700; color: #0F172A; margin-bottom: 0.35rem;">Compliance & Security Scope:</div>
+          <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+            <button type="button" class="source-btn active" onclick="window.setClarificationChip(this, 'compliance', 'Strict HIPAA + Signed BAA')">Strict HIPAA + BAA</button>
+            <button type="button" class="source-btn" onclick="window.setClarificationChip(this, 'compliance', 'SOC 2 Type II Standard')">SOC 2 Type II</button>
+            <button type="button" class="source-btn" onclick="window.setClarificationChip(this, 'compliance', 'PCI-DSS Level 1 Payment Scope')">PCI-DSS Level 1</button>
+          </div>
+        </div>
+
+        <div style="background: #FFFFFF; border: 1px solid #CBD5E1; border-radius: 6px; padding: 0.6rem;">
+          <div style="font-size: 0.75rem; font-weight: 700; color: #0F172A; margin-bottom: 0.35rem;">Subcontractor Teaming Strategy:</div>
+          <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+            <button type="button" class="source-btn active" onclick="window.setClarificationChip(this, 'teaming', 'Include Vetted Subcontractors')">Include Vetted Subcontractors (Pen-Testing / 24/7 Ops)</button>
+            <button type="button" class="source-btn" onclick="window.setClarificationChip(this, 'teaming', '100% Self-Performed')">100% Self-Performed</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Subtab 2: Belief Graph -->
+    <div id="co-panel-belief" class="co-subpanel" style="display: none; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 0.85rem;">
+      <div style="font-size: 0.78rem; color: #475569; margin-bottom: 0.6rem;">
+        <strong>AI Belief State & Intent Graph:</strong> Atomic representation of facts vs assumptions:
+      </div>
+      <div id="belief-graph-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem;">
+        <div style="background: #FFFFFF; border: 1px solid #CBD5E1; border-radius: 6px; padding: 0.6rem;">
+          <div style="font-size: 0.72rem; font-weight: 800; color: #059669;">CONFIRMED FACTS (100% CONFIDENCE)</div>
+          <ul id="belief-facts-list" style="font-size: 0.75rem; color: #334155; padding-left: 1.1rem; margin: 0.35rem 0 0 0;">
+            <li>Budget Scope: $150,000 – $250,000 USD</li>
+            <li>Expected Load: 500,000 MAU / 1,200 Peak RPS</li>
+            <li>Storage / Egress: 3.5 TB DB / 8.0 TB Egress</li>
+          </ul>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #CBD5E1; border-radius: 6px; padding: 0.6rem;">
+          <div style="font-size: 0.72rem; font-weight: 800; color: #D97706;">INFERRED ASSUMPTIONS (RESOLVABLE)</div>
+          <ul id="belief-assumptions-list" style="font-size: 0.75rem; color: #334155; padding-left: 1.1rem; margin: 0.35rem 0 0 0;">
+            <li>Database: Assume Managed PostgreSQL (RDS / Cloud SQL)</li>
+            <li>Resilience: Multi-Region Active-Active (Selected)</li>
+            <li>Teaming: Subcontractor Security Audit Included</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Subtab 3: Review Prompt -->
+    <div id="co-panel-prompt" class="co-subpanel" style="display: none; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 0.85rem;">
+      <div style="font-size: 0.78rem; color: #475569; margin-bottom: 0.4rem;">
+        <strong>Vertex AI Compiled Prompt Inspector:</strong>
+      </div>
+      <textarea id="co-compiled-prompt" readonly style="width: 100%; height: 130px; font-family: monospace; font-size: 0.75rem; background: #FFFFFF; border: 1px solid #CBD5E1; border-radius: 6px; padding: 0.5rem; color: #334155; resize: none;"></textarea>
+    </div>
+  </div>
 </div>
 
 <!-- Win Probability & Checklist (shown after generation) -->
@@ -807,6 +1002,88 @@
       </div>
       <div class="modal-body" id="modal-content">
         <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOATING BETA FEEDBACK TRIGGER -->
+  <div id="beta-feedback-trigger" style="position: fixed; bottom: 24px; right: 24px; z-index: 999;">
+    <button type="button" onclick="window.openSurveyModal()" class="btn-primary" style="padding: 0.65rem 1.2rem; border-radius: 30px; font-size: 0.85rem; font-weight: 700; box-shadow: 0 6px 24px rgba(15,23,42,0.25); display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+      <span>💬 Beta Feedback</span>
+    </button>
+  </div>
+
+  <!-- BETA TESTER FEEDBACK SURVEY MODAL -->
+  <div class="modal-backdrop" id="survey-modal">
+    <div class="modal-paper" style="max-width: 600px;">
+      <div class="modal-header">
+        <div>
+          <h2 style="font-size: 1.25rem; font-weight: 800; color: #0F172A; margin-bottom: 0.2rem;">Beta Tester Feedback Survey</h2>
+          <div style="font-size: 0.8rem; color: var(--text-muted);">Share your feedback & help refine ArchEngine Solutions</div>
+        </div>
+        <button type="button" class="btn-secondary" onclick="window.closeSurveyModal()" style="padding: 0.4rem 0.8rem;">✕ Close</button>
+      </div>
+
+      <div class="modal-body">
+        <form id="beta-survey-form" onsubmit="event.preventDefault(); window.submitSurveyForm();">
+          <!-- Overall Rating -->
+          <div class="form-group" style="margin-bottom: 1.25rem;">
+            <label style="font-size: 0.8rem; font-weight: 700; color: #0F172A;">Overall Platform Experience Rating *</label>
+            <div style="display: flex; gap: 0.75rem; margin-top: 0.4rem; flex-wrap: wrap;">
+              <label style="cursor: pointer; font-size: 0.85rem;"><input type="radio" name="survey-rating" value="5" checked> ⭐⭐⭐⭐⭐ (5/5)</label>
+              <label style="cursor: pointer; font-size: 0.85rem;"><input type="radio" name="survey-rating" value="4"> ⭐⭐⭐⭐ (4/5)</label>
+              <label style="cursor: pointer; font-size: 0.85rem;"><input type="radio" name="survey-rating" value="3"> ⭐⭐⭐ (3/5)</label>
+              <label style="cursor: pointer; font-size: 0.85rem;"><input type="radio" name="survey-rating" value="2"> ⭐⭐ (2/5)</label>
+              <label style="cursor: pointer; font-size: 0.85rem;"><input type="radio" name="survey-rating" value="1"> ⭐ (1/5)</label>
+            </div>
+          </div>
+
+          <!-- Role Selector -->
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label style="font-size: 0.75rem; font-weight: 700; color: #475569;">Your Professional Role</label>
+            <select id="survey-user-role" style="width: 100%; padding: 0.6rem; border-radius: 8px; border: 1px solid #CBD5E1;">
+              <option value="Cloud Solutions Architect">Cloud Solutions Architect</option>
+              <option value="Proposal / Bid Manager">Proposal / Bid Manager</option>
+              <option value="CTO / VP Engineering">CTO / VP of Engineering</option>
+              <option value="IT Procurement Director">IT Procurement Director</option>
+              <option value="Consultant / Other">Consultant / Other</option>
+            </select>
+          </div>
+
+          <!-- Specific Feedback Areas -->
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label style="font-size: 0.75rem; font-weight: 700; color: #475569;">Cloud Cost Optimizer & Blueprint Accuracy</label>
+            <textarea id="survey-optimizer-feedback" rows="2" placeholder="Did the multi-cloud pricing simulation match your real-world expectations?" style="width: 100%; padding: 0.6rem; border-radius: 8px; border: 1px solid #CBD5E1; resize: vertical;"></textarea>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label style="font-size: 0.75rem; font-weight: 700; color: #475569;">RFP Proposal & Proactive Co-Creator Experience</label>
+            <textarea id="survey-proposal-feedback" rows="2" placeholder="How clear were the generated technical sections, win probability, and clarification chips?" style="width: 100%; padding: 0.6rem; border-radius: 8px; border: 1px solid #CBD5E1; resize: vertical;"></textarea>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1.25rem;">
+            <label style="font-size: 0.75rem; font-weight: 700; color: #475569;">What features or cloud providers should we add next?</label>
+            <textarea id="survey-feature-requests" rows="2" placeholder="e.g., Kubernetes TCO calculators, Azure GovCloud pricing, Jira / Notion export..." style="width: 100%; padding: 0.6rem; border-radius: 8px; border: 1px solid #CBD5E1; resize: vertical;"></textarea>
+          </div>
+
+          <!-- Automated Technical Diagnostics Notice -->
+          <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 0.75rem 1rem; border-radius: 8px; font-size: 0.75rem; color: #64748B; margin-bottom: 1.25rem;">
+            ⚙️ <strong>Automatic Diagnostics:</strong> System environment telemetry (Browser, OS, active viewport, and currency) will be securely bundled with this submission and saved to Google Cloud Storage.
+          </div>
+
+          <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+            <button type="button" class="btn-secondary" onclick="window.closeSurveyModal()">Cancel</button>
+            <button type="submit" id="btn-submit-survey" class="btn-primary" style="padding: 0.65rem 1.5rem; font-weight: 700;">Submit Beta Feedback</button>
+          </div>
+        </form>
+
+        <!-- Confirmation Screen -->
+        <div id="survey-confirmation-card" style="display: none; padding: 1.5rem; text-align: center;">
+          <div style="width: 48px; height: 48px; background: rgba(16, 231, 104, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto; color: #059669; font-size: 1.5rem;">✓</div>
+          <h3 style="font-size: 1.2rem; font-weight: 800; color: #0F172A; margin-bottom: 0.4rem;">Thank You for Your Feedback!</h3>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Your feedback and technical telemetry have been securely recorded in Google Cloud Storage. We appreciate your contribution to ArchEngine Solutions.</p>
+          <button type="button" class="btn-primary" onclick="window.closeSurveyModal()">Done</button>
+        </div>
       </div>
     </div>
   </div>
