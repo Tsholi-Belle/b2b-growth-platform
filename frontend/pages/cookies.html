@@ -9,24 +9,58 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles.css?v=2026">
+  <script>
+    (function() {
+      var saved = localStorage.getItem('amblysomus_theme');
+      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      var theme = saved || (prefersDark ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+
+    window.toggleTheme = function() {
+      var current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('amblysomus_theme', next);
+      window.updateThemeButtonUI();
+    };
+
+    window.updateThemeButtonUI = function() {
+      var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      var icon = document.getElementById('theme-icon');
+      var text = document.getElementById('theme-text');
+      if (icon) icon.textContent = isDark ? '☀️' : '🌙';
+      if (text) text.textContent = isDark ? 'Light' : 'Dark';
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+      window.updateThemeButtonUI();
+    });
+  </script>
   <style>
-    body { background: #F8FAFC; color: #0F172A; font-family: 'Plus Jakarta Sans', sans-serif; line-height: 1.7; margin: 0; padding: 0; }
-    .legal-container { max-width: 860px; margin: 3rem auto; padding: 2.5rem; background: #FFFFFF; border: 1px solid #CBD5E1; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
-    .legal-header { border-bottom: 1px solid #E2E8F0; padding-bottom: 1.5rem; margin-bottom: 2rem; }
-    .legal-header h1 { font-size: 2rem; font-weight: 800; color: #0F172A; margin: 0 0 0.5rem 0; }
-    .legal-meta { font-size: 0.85rem; color: #64748B; }
-    h2 { font-size: 1.25rem; font-weight: 700; color: #0F172A; margin-top: 2rem; }
-    p, li { font-size: 0.925rem; color: #334155; }
-    .back-nav { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; font-weight: 700; color: #0284C7; text-decoration: none; margin-bottom: 1.5rem; }
+    body { background: var(--bg-dark); color: var(--text-main); font-family: 'Plus Jakarta Sans', sans-serif; line-height: 1.7; margin: 0; padding: 0; transition: background-color 0.3s ease, color 0.3s ease; }
+    .legal-container { max-width: 860px; margin: 3rem auto; padding: 2.5rem; background: var(--card-bg-solid); border: 1px solid var(--border-medium); border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+    .legal-header { border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.5rem; margin-bottom: 2rem; }
+    .legal-header h1 { font-size: 2rem; font-weight: 800; color: var(--text-main); margin: 0 0 0.5rem 0; }
+    .legal-meta { font-size: 0.85rem; color: var(--text-dim); }
+    h2 { font-size: 1.25rem; font-weight: 700; color: var(--text-main); margin-top: 2rem; }
+    p, li { font-size: 0.925rem; color: var(--text-muted); }
+    .legal-top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+    .back-nav { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; font-weight: 700; color: var(--primary-cyan); text-decoration: none; }
     .back-nav:hover { text-decoration: underline; }
     table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.85rem; }
-    th, td { border: 1px solid #E2E8F0; padding: 0.75rem 1rem; text-align: left; }
-    th { background: #F1F5F9; font-weight: 700; }
+    th, td { border: 1px solid var(--border-subtle); padding: 0.75rem 1rem; text-align: left; color: var(--text-main); }
+    th { background: var(--table-th-bg); font-weight: 700; }
   </style>
 </head>
 <body>
   <div class="legal-container">
-    <a href="../../index.html" class="back-nav">← Back to Amblysomus Platform</a>
+    <div class="legal-top-nav">
+      <a href="../../index.html" class="back-nav">← Back to Amblysomus Platform</a>
+      <button id="theme-toggle-btn" class="theme-toggle-btn" onclick="window.toggleTheme()" title="Toggle Light / Dark Mode" aria-label="Toggle Theme">
+        <span id="theme-icon">🌙</span> <span id="theme-text" class="theme-text">Dark</span>
+      </button>
+    </div>
     
     <div class="legal-header">
       <h1>Cookie & Local Storage Policy</h1>

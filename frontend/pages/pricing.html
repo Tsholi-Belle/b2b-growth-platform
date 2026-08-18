@@ -117,16 +117,166 @@
         .faq-q { font-weight: 700; color: #0F172A; margin-bottom: 0.5rem; font-size: 1.05rem; }
         .faq-a { color: #475569; line-height: 1.6; font-size: 0.95rem; }
 
-        footer { text-align: center; padding: 3rem 0; border-top: 1px solid #E2E8F0; color: #64748B; background: #FFFFFF; }
-        footer a { color: #475569; text-decoration: none; margin: 0 1rem; font-size: 0.9rem; }
-        footer a:hover { color: #0F172A; }
+    <link rel="stylesheet" href="../../styles.css?v=2026">
+    <script>
+        (function() {
+            var saved = localStorage.getItem('amblysomus_theme');
+            var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            var theme = saved || (prefersDark ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+
+        window.toggleTheme = function() {
+            var current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+            var next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('amblysomus_theme', next);
+            window.updateThemeButtonUI();
+        };
+
+        window.updateThemeButtonUI = function() {
+            var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            var icon = document.getElementById('theme-icon');
+            var text = document.getElementById('theme-text');
+            if (icon) icon.textContent = isDark ? '☀️' : '🌙';
+            if (text) text.textContent = isDark ? 'Light' : 'Dark';
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            window.updateThemeButtonUI();
+        });
+    </script>
+    <style>
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0; padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1.25rem 5%; border-bottom: 1px solid var(--border-subtle);
+            background: var(--bg-glass); backdrop-filter: blur(12px);
+            position: sticky; top: 0; z-index: 50;
+        }
+        .logo { font-size: 1.35rem; font-weight: 800; color: var(--text-main); }
+        .logo span { color: var(--primary-cyan); }
+        .header-nav { display: flex; align-items: center; gap: 1rem; }
+        
+        .hero { text-align: center; padding: 3.5rem 1rem 2rem 1rem; max-width: 800px; margin: 0 auto; }
+        .hero h1 { font-size: 2.8rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 0.75rem; color: var(--text-main); }
+        .hero p { color: var(--text-muted); font-size: 1.1rem; }
+        
+        .controls-row {
+            display: flex; justify-content: center; align-items: center;
+            gap: 2rem; margin-top: 2rem; flex-wrap: wrap;
+        }
+        
+        .currency-selector {
+            display: flex; background: var(--badge-bg); border: 1px solid var(--border-medium);
+            border-radius: 30px; padding: 4px; gap: 4px;
+        }
+        .curr-btn {
+            background: transparent; border: none; color: var(--text-muted); padding: 0.45rem 1.2rem;
+            border-radius: 20px; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: all 0.2s;
+        }
+        .curr-btn.active { background: var(--text-main); color: var(--bg-dark); box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+
+        .toggle-wrapper { display: flex; align-items: center; gap: 1rem; }
+        .toggle-label { font-weight: 700; font-size: 0.95rem; color: var(--text-dim); transition: color 0.2s; }
+        .toggle-label.active { color: var(--text-main); }
+        
+        /* Custom Switch */
+        .switch { position: relative; display: inline-block; width: 56px; height: 30px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: var(--border-subtle); transition: .3s; border-radius: 30px;
+            border: 1px solid var(--border-medium);
+        }
+        .slider:before {
+            position: absolute; content: ""; height: 22px; width: 22px; left: 3px; bottom: 3px;
+            background-color: var(--text-main); transition: .3s; border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--border-medium); border-color: var(--primary-cyan); }
+        input:checked + .slider:before { transform: translateX(26px); }
+
+        .discount-badge {
+            background: rgba(16, 231, 104, 0.1); color: var(--accent-emerald); border: 1px solid rgba(16, 231, 104, 0.4);
+            padding: 0.2rem 0.65rem; border-radius: 12px; font-size: 0.75rem; font-weight: 800; margin-left: 0.4rem;
+        }
+        
+        /* Pricing Cards */
+        .pricing-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 2rem; max-width: 1200px; margin: 0 auto; padding: 0 5%;
+        }
+        .pricing-card {
+            background: var(--bg-card); backdrop-filter: blur(16px);
+            border: 1px solid var(--border-medium); border-radius: 20px;
+            padding: 2.5rem 2rem; display: flex; flex-direction: column;
+            position: relative; transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            color: var(--text-main);
+        }
+        .pricing-card:hover { transform: translateY(-4px); border-color: var(--primary-cyan); box-shadow: var(--shadow-glow); }
+        
+        .popular-badge {
+            position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+            background: var(--primary-cyan); color: #FFFFFF; padding: 0.35rem 1.25rem;
+            border-radius: 20px; font-weight: 800; font-size: 0.78rem; letter-spacing: 0.05em; text-transform: uppercase;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .pricing-card.popular { border-color: var(--primary-cyan); box-shadow: 0 12px 35px rgba(2, 132, 199, 0.15); }
+        
+        .plan-name { font-size: 1.35rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.75rem; }
+        .price-container { margin-bottom: 0.5rem; min-height: 70px; }
+        .original-price { text-decoration: line-through; opacity: 0.5; font-size: 1.4rem; font-weight: 600; color: var(--text-dim); margin-right: 0.4rem; }
+        .plan-price { font-size: 2.8rem; font-weight: 800; color: var(--text-main); display: inline-block; letter-spacing: -0.5px; }
+        .price-period { font-size: 1rem; color: var(--text-dim); font-weight: 500; }
+        .billing-note { font-size: 0.8rem; color: var(--accent-emerald); margin-top: 0.2rem; font-weight: 600; }
+        .billing-note.monthly { color: var(--text-dim); font-weight: 500; }
+
+        .feature-list { list-style: none; padding: 0; margin: 2rem 0; flex-grow: 1; }
+        .feature-list li { margin-bottom: 0.9rem; font-size: 0.92rem; display: flex; align-items: center; gap: 0.6rem; color: var(--text-main); }
+        .feature-list li.cross { opacity: 0.4; text-decoration: line-through; color: var(--text-dim); }
+        
+        .btn {
+            background: var(--btn-primary-bg); color: var(--btn-primary-text); border: none; padding: 0.9rem 1.25rem;
+            border-radius: 10px; font-weight: 800; cursor: pointer; text-align: center;
+            text-decoration: none; display: block; transition: all 0.2s; font-size: 0.95rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .btn:hover { opacity: 0.92; transform: translateY(-1px); }
+        .btn-outline { background: var(--btn-secondary-bg); border: 1px solid var(--btn-secondary-border); color: var(--btn-secondary-text); box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+        .btn-outline:hover { background: var(--bg-card-hover); border-color: var(--primary-cyan); color: var(--text-main); }
+        
+        .currency-note { text-align: center; color: var(--text-dim); font-size: 0.85rem; margin-top: 3rem; }
+        
+        .comparison-table, .faq { max-width: 1000px; margin: 5rem auto; padding: 0 5%; }
+        .comparison-table h2, .faq h2 { text-align: center; color: var(--text-main); margin-bottom: 2rem; font-size: 2rem; font-weight: 800; }
+        table { width: 100%; border-collapse: collapse; background: var(--card-bg-solid); border-radius: 14px; overflow: hidden; border: 1px solid var(--border-medium); box-shadow: 0 4px 16px rgba(0,0,0,0.04); }
+        th, td { padding: 1.1rem 1.25rem; text-align: left; border-bottom: 1px solid var(--border-subtle); color: var(--text-main); }
+        th { background: var(--table-th-bg); color: var(--text-main); font-weight: 700; }
+        
+        .faq-item { margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.5rem; }
+        .faq-q { font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem; font-size: 1.05rem; }
+        .faq-a { color: var(--text-muted); line-height: 1.6; font-size: 0.95rem; }
+
+        footer { text-align: center; padding: 3rem 0; border-top: 1px solid var(--border-subtle); color: var(--text-muted); background: var(--card-bg-solid); }
+        footer a { color: var(--primary-cyan); text-decoration: none; margin: 0 1rem; font-size: 0.9rem; font-weight: 600; }
+        footer a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
     <header>
         <div class="logo">Amblysomus <span>Solutions</span></div>
         <div class="header-nav">
-            <a href="../../index.html" style="color:#0F172A; text-decoration:none; font-weight: 700; font-size: 0.9rem;">← Back to Advisory Platform</a>
+            <button id="theme-toggle-btn" class="theme-toggle-btn" onclick="window.toggleTheme()" title="Toggle Light / Dark Mode" aria-label="Toggle Theme">
+                <span id="theme-icon">🌙</span> <span id="theme-text" class="theme-text">Dark</span>
+            </button>
+            <a href="../../index.html" style="color:var(--text-main); text-decoration:none; font-weight: 700; font-size: 0.9rem;">← Back to Advisory Platform</a>
         </div>
     </header>
 

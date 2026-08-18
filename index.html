@@ -14,6 +14,34 @@
   <script type='module' src='frontend/js/auth/authClient.js'></script>
   <script type='module' src='frontend/js/utils/currencyFormatter.js'></script>
   <script>
+    // Initialize theme before DOM renders to prevent flash of light/dark mode
+    (function() {
+      var saved = localStorage.getItem('amblysomus_theme');
+      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      var theme = saved || (prefersDark ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+
+    window.toggleTheme = function() {
+      var current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('amblysomus_theme', next);
+      window.updateThemeButtonUI();
+    };
+
+    window.updateThemeButtonUI = function() {
+      var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      var icon = document.getElementById('theme-icon');
+      var text = document.getElementById('theme-text');
+      if (icon) icon.textContent = isDark ? '☀️' : '🌙';
+      if (text) text.textContent = isDark ? 'Light' : 'Dark';
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+      window.updateThemeButtonUI();
+    });
+
     window.switchTab = function(tabName) {
       console.log('Switching to tab:', tabName);
       var tabs = document.querySelectorAll('.nav-tab');
@@ -309,6 +337,9 @@ RESOLVED INTENT & BELIEF GRAPH:
         <span class="pulse-dot"></span>
         <span>Guardrails Active</span>
       </div>
+      <button id="theme-toggle-btn" class="theme-toggle-btn" onclick="window.toggleTheme()" title="Toggle Light / Dark Mode" aria-label="Toggle Theme">
+        <span id="theme-icon">🌙</span> <span id="theme-text" class="theme-text">Dark</span>
+      </button>
     </div>
     <div id='currency-switcher-container'></div>
     <div id='user-menu'></div>
