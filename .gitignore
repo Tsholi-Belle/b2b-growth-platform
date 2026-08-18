@@ -13,3 +13,6 @@ __pycache__/
 backend/.env
 .idea/
 .vscode/
+backend/data/
+*.log
+.github/
